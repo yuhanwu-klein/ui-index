@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Engage select</title>
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    :root{--ease:cubic-bezier(.4,0,.2,1);}
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#fff;}
+    body{display:grid;place-items:center;}
+
+    .row{display:flex;gap:28px;align-items:center;padding:40px;}
+
+    /* flat radio — perfect circle */
+    .radio{position:relative;width:84px;height:84px;border:0;padding:0;cursor:pointer;outline:0;background:transparent;isolation:isolate;border-radius:50%;}
+    .ring-clip{position:absolute;inset:0;border-radius:50%;overflow:hidden;}
+    .ring{position:absolute;inset:0;background:#e4e4e8;transition:background 650ms var(--ease);}
+    .radio[aria-checked="true"] .ring{
+      background:radial-gradient(ellipse at 50% 60%, #1e7cff 0%, #0f3680 55%, #061534 100%);
+    }
+    /* rays INSIDE the circle, clipped */
+    .rays{position:absolute;top:50%;left:50%;width:260px;height:260px;transform:translate(-50%,-50%);
+      pointer-events:none;opacity:0;transition:opacity .55s var(--ease);}
+    .radio[aria-checked="true"] .rays{opacity:1;}
+    .rays svg{width:100%;height:100%;display:block;animation:spin 40s linear infinite;}
+    .rays path{fill:url(#rayg);mix-blend-mode:screen;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+
+    /* inner dot — flat white, scales in */
+    .dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:3;
+      width:34%;height:34%;border-radius:50%;background:#fff;
+      transition:transform .35s var(--ease);}
+    .radio[aria-checked="true"] .dot{transform:translate(-50%,-50%) scale(1);}
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute">
+    <defs>
+      <linearGradient id="rayg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#4ad8ff" stop-opacity=".55"/>
+        <stop offset=".55" stop-color="#4ad8ff" stop-opacity=".1"/>
+        <stop offset="1" stop-color="#4ad8ff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="row" id="row" role="radiogroup"></div>
+
+  <script>
+    const count = 3;
+    const row = document.getElementById('row');
+    row.innerHTML = Array.from({length:count}, (_, i) => `
+      <button class="radio" type="button" role="radio" aria-checked="${i===0?'true':'false'}" aria-label="Option ${i+1}">
+        <span class="ring-clip">
+          <span class="ring"></span>
+          <span class="rays" aria-hidden="true"><svg viewBox="-50 -50 100 100"><g class="rg"></g></svg></span>
+        </span>
+        <span class="dot" aria-hidden="true"></span>
+      </button>`).join('');
+
+    let paths = '';
+    for (let i = 0; i < 36; i++) {
+      const a = (i * 10) * Math.PI / 180;
+      const r = 55;
+      const x1 = Math.cos(a - 0.012) * 3, y1 = Math.sin(a - 0.012) * 3;
+      const x2 = Math.cos(a + 0.012) * 3, y2 = Math.sin(a + 0.012) * 3;
+      const x3 = Math.cos(a + 0.02) * r, y3 = Math.sin(a + 0.02) * r;
+      const x4 = Math.cos(a - 0.02) * r, y4 = Math.sin(a - 0.02) * r;
+      paths += `<path d="M${x1} ${y1} L${x2} ${y2} L${x3} ${y3} L${x4} ${y4} Z"/>`;
+    }
+    document.querySelectorAll('.rg').forEach(g => g.innerHTML = paths);
+
+    row.addEventListener('click', (e) => {
+      const el = e.target.closest('.radio');
+      if (!el || el.getAttribute('aria-checked') === 'true') return;
+      row.querySelectorAll('.radio').forEach(r => r.setAttribute('aria-checked', String(r === el)));
+    });
+
+    if (new URLSearchParams(location.search).has('preview')) {
+      const radios = [...row.querySelectorAll('.radio')];
+      let i = 1;
+      window.setInterval(() => { radios[i % radios.length].click(); i += 1; }, 1400);
+    }
+  </script>
+</body>
+</html>

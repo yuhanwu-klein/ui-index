@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mood switch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    :root{
+      --font:"Space Mono","SF Mono","Courier New",monospace;
+      --pixel:"VT323","Space Mono",monospace;
+      --pink:#ff5aa0;
+      --green:#2eb86a;
+      --yellow:#ffe340;
+      --blue:#2d5bff;
+      --ink:#000;
+      --cream:#f3eac4;
+      --ease:cubic-bezier(.22,1,.32,1);
+    }
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;}
+    body{
+      display:grid;place-items:center;font-family:var(--font);color:var(--ink);
+      background:
+        conic-gradient(var(--pink) 25%, var(--green) 0 50%, var(--pink) 0 75%, var(--green) 0);
+      background-size:8px 8px;
+      image-rendering:pixelated;
+      transition:background-color 500ms var(--ease);
+    }
+    body.on{
+      background:
+        conic-gradient(var(--yellow) 25%, var(--blue) 0 50%, var(--yellow) 0 75%, var(--blue) 0);
+      background-size:8px 8px;
+    }
+    /* subtle scanlines overlay */
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
+      background:repeating-linear-gradient(0deg,rgba(0,0,0,.09) 0 1px, transparent 1px 3px);mix-blend-mode:multiply;}
+
+    .stage{display:flex;flex-direction:column;align-items:center;gap:30px;padding:40px 24px;position:relative;z-index:1;}
+    .eyebrow{font-family:var(--pixel);font-size:22px;letter-spacing:.26em;color:var(--ink);text-transform:uppercase;background:var(--cream);padding:4px 12px 2px;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);}
+    .title{font-family:var(--pixel);font-size:46px;line-height:1;letter-spacing:.02em;color:var(--ink);text-transform:uppercase;text-align:center;background:var(--cream);padding:6px 16px 2px;border:2.5px solid var(--ink);box-shadow:6px 6px 0 var(--ink);}
+
+    /* ---- the switch ---- */
+    .switch{position:relative;width:min(78vw,340px);aspect-ratio:2/1;border:3px solid var(--ink);padding:0;cursor:pointer;outline:0;background:var(--cream);border-radius:999px;box-shadow:8px 8px 0 var(--ink);overflow:hidden;transform-origin:50% 50%;}
+    .track{position:absolute;inset:0;border-radius:999px;
+      background:
+        conic-gradient(var(--ink) 25%, var(--cream) 0 50%, var(--ink) 0 75%, var(--cream) 0);
+      background-size:5px 5px;
+      transition:background-color 650ms var(--ease);}
+    body.on .track{background:
+        conic-gradient(var(--ink) 25%, var(--yellow) 0 50%, var(--ink) 0 75%, var(--yellow) 0);
+      background-size:5px 5px;}
+
+    .deco{position:absolute;inset:0;overflow:hidden;border-radius:999px;pointer-events:none;}
+    .zee,.spark{position:absolute;font-family:var(--pixel);color:var(--cream);text-shadow:2px 2px 0 var(--ink);font-size:22px;opacity:0;transition:opacity .4s var(--ease);}
+    body:not(.on) .zee{opacity:1;}
+    body.on .spark{opacity:1;color:var(--blue);text-shadow:2px 2px 0 var(--ink);}
+
+    /* thumb */
+    .thumb{position:absolute;top:6%;left:3%;width:46%;height:88%;border-radius:50%;background:var(--cream);
+      border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);
+      transition:background 650ms var(--ease), left .72s cubic-bezier(.4,-.1,.25,1.35);
+      display:grid;place-items:center;transform-origin:50% 50%;touch-action:none;cursor:grab;}
+    .switch.dragging .thumb{transition:background 650ms var(--ease);cursor:grabbing;}
+    body.on .thumb{background:var(--blue);left:51%;}
+
+    .switch.changing.to-right .thumb{animation:squash-right .72s cubic-bezier(.5,-.1,.3,1.4);}
+    .switch.changing.to-left  .thumb{animation:squash-left  .72s cubic-bezier(.5,-.1,.3,1.4);}
+    @keyframes squash-right{
+       0%  {transform:scaleX(1)    scaleY(1)    rotate(0deg);}
+       15% {transform:scaleX(1.18) scaleY(.82)  rotate(20deg);}
+       45% {transform:scaleX(.92)  scaleY(1.08) rotate(10deg);}
+       72% {transform:scaleX(1.04) scaleY(.97)  rotate(-3deg);}
+       100%{transform:scaleX(1)    scaleY(1)    rotate(0deg);}
+    }
+    @keyframes squash-left{
+       0%  {transform:scaleX(1)    scaleY(1)    rotate(0deg);}
+       15% {transform:scaleX(1.18) scaleY(.82)  rotate(-20deg);}
+       45% {transform:scaleX(.92)  scaleY(1.08) rotate(-10deg);}
+       72% {transform:scaleX(1.04) scaleY(.97)  rotate(3deg);}
+       100%{transform:scaleX(1)    scaleY(1)    rotate(0deg);}
+    }
+
+    /* face */
+    .face{width:60%;height:60%;position:relative;}
+    .eye{position:absolute;top:34%;width:14%;aspect-ratio:1;background:var(--ink);transition:transform .35s var(--ease);}
+    .eye.l{left:18%;} .eye.r{right:18%;}
+    body:not(.on) .eye{transform:scaleY(.18);}
+    body.on .thumb .eye{animation:blink 4.5s infinite;}
+    @keyframes blink{0%,92%,100%{transform:scaleY(1);}95%,98%{transform:scaleY(.14);}}
+
+    .mouth{position:absolute;left:50%;bottom:14%;transform:translateX(-50%);width:50%;height:20%;}
+    .mouth svg{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible;transition:opacity .3s var(--ease);shape-rendering:crispEdges;}
+    .mouth path{fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:square;stroke-linejoin:miter;}
+    .mouth .m-on{opacity:0;}
+    body.on .mouth .m-off{opacity:0;}
+    body.on .mouth .m-on{opacity:1;}
+
+    /* caption */
+    .cap-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;}
+    .caption{font-family:var(--pixel);font-size:32px;letter-spacing:.04em;color:var(--ink);text-transform:uppercase;background:var(--cream);padding:4px 14px 2px;border:2.5px solid var(--ink);box-shadow:4px 4px 0 var(--ink);min-height:40px;transition:transform .4s var(--ease), opacity .3s var(--ease);}
+    .caption.swap{opacity:0;transform:translateY(4px);}
+    .hint{font-family:var(--pixel);font-size:18px;letter-spacing:.2em;color:var(--ink);text-transform:uppercase;background:var(--pink);padding:3px 10px 1px;border:2px solid var(--ink);}
+    body.on .hint{background:var(--yellow);color:var(--ink);}
+
+    @media (prefers-reduced-motion:reduce){
+      .switch.changing .thumb{animation:none;}
+      body.on .thumb .eye{animation:none;}
+    }
+  </style>
+</head>
+<body>
+  <main class="stage" aria-label="Mood switch">
+    <span class="eyebrow">Mood_Switch.exe</span>
+    <span class="title">How r u today?</span>
+
+    <button class="switch" id="sw" type="button" role="switch" aria-checked="false" aria-label="Toggle mood">
+      <span class="track">
+        <span class="deco">
+          <span class="zee" style="top:22%;left:18%;">Z</span>
+          <span class="zee" style="top:40%;left:28%;font-size:16px;">z</span>
+          <span class="spark" style="top:26%;right:14%;">*</span>
+          <span class="spark" style="top:60%;right:30%;font-size:16px;">+</span>
+        </span>
+      </span>
+      <span class="thumb">
+        <span class="face" aria-hidden="true">
+          <span class="eye l"></span>
+          <span class="eye r"></span>
+          <span class="mouth">
+            <svg class="m-off" viewBox="0 0 100 40" preserveAspectRatio="xMidYMid meet"><path d="M 24 22 L 76 22"/></svg>
+            <svg class="m-on"  viewBox="0 0 100 40" preserveAspectRatio="xMidYMid meet"><path d="M 20 14 Q 50 40 80 14"/></svg>
+          </span>
+        </span>
+      </span>
+    </button>
+
+    <div class="cap-wrap">
+      <span class="caption" id="cap">404_SLEEPY</span>
+      <span class="hint">&gt;&gt; drag to boot</span>
+    </div>
+  </main>
+
+  <script>
+    const sw = document.getElementById('sw');
+    const thumb = sw.querySelector('.thumb');
+    const cap = document.getElementById('cap');
+    const COPY = { off:'404_SLEEPY', on:'LET\'S_GO!' };
+    const OFF_LEFT = 3, ON_LEFT = 51, MID = (OFF_LEFT + ON_LEFT) / 2;
+
+    function setCaption(on) {
+      cap.classList.add('swap');
+      window.setTimeout(() => { cap.textContent = on ? COPY.on : COPY.off; cap.classList.remove('swap'); }, 160);
+    }
+    function set(on, {animate = true} = {}) {
+      const wasOn = sw.getAttribute('aria-checked') === 'true';
+      document.body.classList.toggle('on', on);
+      sw.setAttribute('aria-checked', String(on));
+      thumb.style.left = '';
+      if (animate) {
+        sw.classList.remove('changing','to-right','to-left');
+        void sw.offsetWidth;
+        sw.classList.add('changing', on ? 'to-right' : 'to-left');
+        window.setTimeout(() => sw.classList.remove('changing','to-right','to-left'), 760);
+      }
+      if (wasOn !== on) setCaption(on);
+    }
+
+    let drag = null;
+    const px2pct = (dx) => (dx / sw.getBoundingClientRect().width) * 100;
+    function onDown(e){
+      if (e.button != null && e.button !== 0) return;
+      const base = (sw.getAttribute('aria-checked') === 'true') ? ON_LEFT : OFF_LEFT;
+      drag = { startX:e.clientX, base, lastX:e.clientX, lastT:performance.now(), v:0, moved:false, pid:e.pointerId };
+      sw.classList.add('dragging');
+      sw.setPointerCapture?.(e.pointerId);
+    }
+    function onMove(e){
+      if (!drag || e.pointerId !== drag.pid) return;
+      const now=performance.now();
+      drag.v = (e.clientX - drag.lastX) / Math.max(1, now-drag.lastT) * 1000;
+      drag.lastX = e.clientX; drag.lastT = now;
+      const d = e.clientX - drag.startX;
+      if (Math.abs(d) > 3) drag.moved = true;
+      thumb.style.left = Math.min(ON_LEFT, Math.max(OFF_LEFT, drag.base + px2pct(d))) + '%';
+    }
+    function onUp(e){
+      if (!drag || e.pointerId !== drag.pid) return;
+      sw.classList.remove('dragging');
+      sw.releasePointerCapture?.(e.pointerId);
+      if (!drag.moved) { set(sw.getAttribute('aria-checked') !== 'true'); drag = null; return; }
+      const rect = sw.getBoundingClientRect();
+      const cur = parseFloat(thumb.style.left) || OFF_LEFT;
+      const vp = (drag.v / rect.width) * 100;
+      let on;
+      if (vp > 40) on = true;
+      else if (vp < -40) on = false;
+      else on = cur > MID;
+      set(on);
+      drag = null;
+    }
+    sw.addEventListener('pointerdown', onDown);
+    sw.addEventListener('pointermove', onMove);
+    sw.addEventListener('pointerup', onUp);
+    sw.addEventListener('pointercancel', onUp);
+    sw.addEventListener('dragstart', (e) => e.preventDefault());
+
+    if (new URLSearchParams(location.search).has('preview')) {
+      let state = false;
+      window.setInterval(() => { state = !state; set(state); }, 2600);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Appearance</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root { color-scheme:light; --ink:#1c1c1e; --ivory:#f1f1f3; --soft:#f1f1f3; --page:#fff; --panel:#f1f1f3; --copy:#1c1c1e; --muted:#8e8e93; --line:#ececef; --ease:cubic-bezier(.22,.9,.28,1); --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+    html[data-theme="night"] { color-scheme:dark; --page:#131312; --panel:#242422; --copy:#f1f1f3; --muted:#aaa79e; --line:#3a3a37; }
+    html,body { width:100%; height:100%; margin:0; overflow:hidden; background:var(--page); transition:background-color 520ms var(--ease); }
+    body { display:grid; place-items:center; font-family:var(--font); }
+    .ui { position:relative; width:min(100vw,150vh); aspect-ratio:3/2; background:var(--page); overflow:hidden; transition:background-color 520ms var(--ease); }
+    html.is-preview .ui { transform:scale(1.28); }
+
+    .control { position:absolute; border:0; padding:0; background:transparent; cursor:pointer; outline:0; }
+    .control:focus-visible { outline:2px solid var(--ink); outline-offset:7px; border-radius:999px; }
+    .hero-group { position:absolute; left:12%; top:26%; width:76%; height:22%; display:grid; grid-template-columns:1fr 1fr; gap:6%; transform:scale(.75); transform-origin:center top; }
+    .hero { position:relative; inset:auto; width:auto; height:auto; }
+    .bar-control { position:absolute; right:16px; top:14px; width:88px; height:44px; }
+    .bar-control .track { border-width:1px; box-shadow:0 4px 12px rgba(0,0,0,.1); }
+    .bar-control .thumb { border-width:1px; }
+    html[data-theme="night"] .bar-control .track { border-color:rgba(255,255,255,.62); box-shadow:0 5px 16px rgba(0,0,0,.28); }
+
+    .track { position:absolute; inset:0; overflow:hidden; border:clamp(2px,.2vw,3px) solid var(--ink); border-radius:999px; background:var(--ink); box-shadow:0 7px 16px rgba(0,0,0,.09); }
+    .track::after { content:""; position:absolute; top:25%; left:42%; width:clamp(2px,.32vw,5px); aspect-ratio:1; border-radius:50%; background:var(--ivory); box-shadow:2.4vw 1.7vw 0 -1px var(--ivory),5.1vw -.45vw 0 -1px var(--ivory); opacity:0; transform:translateY(5px); transition:opacity 320ms ease 160ms,transform 420ms var(--ease) 100ms; }
+    .control[data-state="night"] .track::after { opacity:.62; transform:translateY(0); }
+
+    .thumb { position:absolute; z-index:2; top:6%; left:2.4%; width:auto; height:88%; aspect-ratio:1; display:grid; place-items:center; overflow:visible; clip-path:circle(50% at 50% 50%); border:clamp(2px,.18vw,3px) solid var(--ink); border-radius:50%; background:var(--ivory); color:var(--ink); transition:left 520ms var(--ease), transform 520ms var(--ease); }
+    .control[data-state="night"] .thumb { left:97.6%; transform:translateX(-100%); }
+    .language-control .thumb { transform:translateX(0) rotate(0deg); transition:left 620ms var(--ease),transform 620ms var(--ease); }
+    .language-control[data-state="en"] .thumb { left:97.6%; transform:translateX(-100%) rotate(360deg); }
+    .control.is-changing .thumb { animation:soft-squish 520ms var(--ease); }
+    .thumb::before { content:""; position:absolute; z-index:3; top:41%; left:41%; width:18%; aspect-ratio:1; border-radius:50%; background:var(--ink); transform:rotate(-38deg) translateX(262%); transform-origin:50% 50%; transition:transform 520ms var(--ease); pointer-events:none; }
+    .control[data-state="night"] .thumb::before { transform:rotate(142deg) translateX(262%); }
+    .thumb::after { content:""; position:absolute; z-index:2; top:24%; left:24%; width:52%; aspect-ratio:1; border-radius:50%; background:var(--ink); box-shadow:0 0 0 clamp(2px,.18vw,3px) rgba(247,243,232,.72); opacity:0; pointer-events:none; }
+    .control.is-changing[data-state="night"] .thumb::after { animation:eclipse-right 520ms var(--ease); }
+    .control.is-changing[data-state="day"] .thumb::after { animation:eclipse-left 520ms var(--ease); }
+    .thumb svg { position:absolute; z-index:1; top:50%; left:50%; width:38%; height:38%; transition:opacity 220ms ease,transform 520ms var(--ease); }
+    .thumb-sun { opacity:1; transform:translate(-50%,-50%) rotate(0) scale(1); }
+    .thumb-moon { opacity:0; transform:translate(-50%,-50%) rotate(-32deg) scale(.58); }
+    .control[data-state="night"] .thumb-sun { opacity:0; transform:translate(-50%,-50%) rotate(80deg) scale(.58); }
+    .control[data-state="night"] .thumb-moon { opacity:1; transform:translate(-50%,-50%) rotate(0) scale(1); }
+    .side-icon { position:absolute; z-index:1; top:50%; width:12%; height:38%; color:var(--ivory); transform:translateY(-50%); transition:opacity 180ms ease; }
+    .side-icon svg { width:100%; height:100%; }
+    .side-sun { left:13%; }
+    .side-moon { right:13%; }
+    .control[data-state="day"] .side-sun { opacity:0; }
+    .control[data-state="night"] .side-moon { opacity:0; }
+
+    .language-control .track::after,.language-control .thumb::before { display:none; }
+    .side-label { position:absolute; z-index:1; top:50%; color:var(--ivory); font-size:clamp(14px,1.6vw,22px); font-weight:700; letter-spacing:-.03em; transform:translateY(-50%); transition:opacity 180ms ease; }
+    .side-zh { left:16%; }
+    .side-en { right:14%; }
+    .language-control[data-state="zh"] .side-zh { opacity:0; }
+    .language-control[data-state="en"] .side-en { opacity:0; }
+    .thumb-language { position:absolute; top:50%; left:50%; font-size:clamp(15px,1.8vw,24px); font-weight:700; letter-spacing:-.03em; transform:translate(-50%,-50%); transition:opacity 220ms ease,transform 520ms var(--ease); }
+    .hero.language-control .side-label,.hero.language-control .thumb-language { font-size:clamp(36px,3.8vw,52px); font-weight:800; letter-spacing:-.02em; }
+    .bar-control .side-label,.bar-control .thumb-language { font-size:12px; }
+    .thumb-en { opacity:0; transform:translate(-50%,-50%) rotate(-25deg) scale(.65); }
+    .language-control[data-state="en"] .thumb-zh { opacity:0; transform:translate(-50%,-50%) rotate(25deg) scale(.65); }
+    .language-control[data-state="en"] .thumb-en { opacity:1; transform:translate(-50%,-50%) rotate(0) scale(1); }
+
+    .settings-stack { position:absolute; left:50%; top:62%; width:360px; max-width:calc(100vw - 32px); display:grid; gap:12px; transform:translateX(-50%); }
+    .setting-row { position:relative; width:100%; height:72px; padding:0 16px; display:flex; align-items:center; justify-content:space-between; border:1px solid var(--line); border-radius:18px; background:var(--panel); box-shadow:0 7px 18px rgba(0,0,0,.065); transition:background-color 520ms var(--ease),border-color 520ms var(--ease),box-shadow 520ms var(--ease); }
+    html[data-theme="night"] .setting-row { box-shadow:0 8px 22px rgba(0,0,0,.26); }
+    .appearance-copy { display:flex; flex-direction:column; align-items:flex-start; gap:6px; }
+    .appearance-label { color:var(--copy); font-size:15px; font-weight:600; line-height:1; letter-spacing:-.015em; transition:color 520ms var(--ease); }
+    .status { color:var(--muted); font:700 9px/1 "SF Mono","Courier New",monospace; letter-spacing:.14em; text-transform:uppercase; transition:color 520ms var(--ease); }
+
+    @media (max-width:600px) {
+      body { display:block; }
+      .ui { width:100vw; height:100vh; aspect-ratio:auto; }
+      .hero-group { left:12%; top:8%; width:76%; height:auto; grid-template-columns:1fr; grid-auto-rows:104px; gap:14px; }
+      .settings-stack { left:16px; right:16px; top:auto; bottom:24px; width:auto; max-width:none; transform:none; }
+      .appearance-copy { gap:6px; }
+      .appearance-label { font-size:16px; letter-spacing:-.02em; }
+      .status { font-size:9px; }
+      .bar-control { right:16px; top:14px; width:88px; height:44px; }
+      .bar-control .side-icon { width:12%; height:36%; }
+      .side-label { font-size:13px; }
+      .thumb-language { font-size:14px; }
+      .hero.language-control .side-label,.hero.language-control .thumb-language { font-size:18px; }
+    }
+
+    @keyframes eclipse-right {
+      0% { opacity:0; transform:translateX(-185%) scale(.82); }
+      32%,62% { opacity:1; }
+      100% { opacity:0; transform:translateX(185%) scale(.82); }
+    }
+    @keyframes eclipse-left {
+      0% { opacity:0; transform:translateX(185%) scale(.82); }
+      32%,62% { opacity:1; }
+      100% { opacity:0; transform:translateX(-185%) scale(.82); }
+    }
+    @keyframes soft-squish {
+      0% { scale:1 1; }
+      28% { scale:1.055 .955; }
+      68% { scale:.982 1.018; }
+      100% { scale:1 1; }
+    }
+    @media (prefers-reduced-motion:reduce) { .thumb,.thumb::before,.thumb svg,.side-icon,.track::after { transition-duration:.01ms; } .thumb,.thumb::after { animation:none!important; } }
+  </style>
+</head>
+<body>
+  <main class="ui" aria-label="Preference controls">
+    <div class="hero-group">
+      <button id="hero" class="control hero appearance-control" data-control="appearance" type="button" role="switch" aria-checked="false" aria-label="Day appearance, switch to night" data-state="day">
+        <span class="track"></span>
+        <span class="side-icon side-sun"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"><circle cx="50" cy="50" r="16" fill="currentColor" stroke="none"/><path d="M50 5v14M50 81v14M5 50h14M81 50h14M18 18l10 10M72 72l10 10M82 18 72 28M28 72 18 82"/></svg></span>
+        <span class="side-icon side-moon"><svg viewBox="0 0 100 100" fill="currentColor"><path d="M84 63A40 40 0 0 1 37 16 40 40 0 1 0 84 63Z"/></svg></span>
+        <span class="thumb"><svg class="thumb-sun" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"><circle cx="50" cy="50" r="16" fill="currentColor" stroke="none"/><path d="M50 5v14M50 81v14M5 50h14M81 50h14M18 18l10 10M72 72l10 10M82 18 72 28M28 72 18 82"/></svg><svg class="thumb-moon" viewBox="0 0 100 100" fill="currentColor"><path d="M84 63A40 40 0 0 1 37 16 40 40 0 1 0 84 63Z"/></svg></span>
+      </button>
+
+      <button id="languageHero" class="control hero language-control" data-control="language" type="button" role="switch" aria-checked="true" aria-label="English language, switch to Chinese" data-state="en">
+        <span class="track"></span>
+        <span class="side-label side-zh">中</span>
+        <span class="side-label side-en">EN</span>
+        <span class="thumb"><span class="thumb-language thumb-zh">中</span><span class="thumb-language thumb-en">EN</span></span>
+      </button>
+    </div>
+
+    <div class="settings-stack">
+      <section class="setting-row" aria-label="Appearance setting">
+        <span class="appearance-copy"><span id="appearanceLabel" class="appearance-label">Appearance</span></span>
+        <button id="bar" class="control bar-control appearance-control" data-control="appearance" type="button" role="switch" aria-checked="false" aria-label="Day appearance, switch to night" data-state="day">
+          <span class="track"></span>
+          <span class="side-icon side-sun"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"><circle cx="50" cy="50" r="16" fill="currentColor" stroke="none"/><path d="M50 5v14M50 81v14M5 50h14M81 50h14M18 18l10 10M72 72l10 10M82 18 72 28M28 72 18 82"/></svg></span>
+          <span class="side-icon side-moon"><svg viewBox="0 0 100 100" fill="currentColor"><path d="M84 63A40 40 0 0 1 37 16 40 40 0 1 0 84 63Z"/></svg></span>
+          <span class="thumb"><svg class="thumb-sun" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"><circle cx="50" cy="50" r="16" fill="currentColor" stroke="none"/><path d="M50 5v14M50 81v14M5 50h14M81 50h14M18 18l10 10M72 72l10 10M82 18 72 28M28 72 18 82"/></svg><svg class="thumb-moon" viewBox="0 0 100 100" fill="currentColor"><path d="M84 63A40 40 0 0 1 37 16 40 40 0 1 0 84 63Z"/></svg></span>
+        </button>
+      </section>
+
+      <section class="setting-row" aria-label="Language setting">
+        <span class="appearance-copy"><span id="languageLabel" class="appearance-label">Language</span></span>
+        <button id="languageBar" class="control bar-control language-control" data-control="language" type="button" role="switch" aria-checked="true" aria-label="English language, switch to Chinese" data-state="en">
+          <span class="track"></span>
+          <span class="side-label side-zh">中</span>
+          <span class="side-label side-en">EN</span>
+          <span class="thumb"><span class="thumb-language thumb-zh">中</span><span class="thumb-language thumb-en">EN</span></span>
+        </button>
+      </section>
+    </div>
+  </main>
+  <script>
+    const appearanceLabel = document.querySelector('#appearanceLabel');
+    const languageLabel = document.querySelector('#languageLabel');
+    let currentNight = false;
+    let currentLanguage = 'en';
+
+    function animateControl(control) {
+      control.classList.remove('is-changing');
+      void control.offsetWidth;
+      control.classList.add('is-changing');
+      window.setTimeout(() => control.classList.remove('is-changing'), 560);
+    }
+
+    function renderCopy() {
+      const chinese = currentLanguage === 'zh';
+      document.documentElement.lang = currentLanguage;
+      document.title = chinese ? '偏好设置' : 'Preferences';
+      appearanceLabel.textContent = chinese ? '外观' : 'Appearance';
+      languageLabel.textContent = chinese ? '语言' : 'Language';
+    }
+
+    function setAppearance(night) {
+      currentNight = night;
+      document.documentElement.dataset.theme = night ? 'night' : 'day';
+      document.querySelectorAll('[data-control="appearance"]').forEach((control) => {
+        animateControl(control);
+        control.dataset.state = night ? 'night' : 'day';
+        control.setAttribute('aria-checked', String(night));
+        control.setAttribute('aria-label', night ? 'Night appearance, switch to day' : 'Day appearance, switch to night');
+      });
+      renderCopy();
+    }
+
+    function setLanguage(language) {
+      currentLanguage = language;
+      const english = language === 'en';
+      document.querySelectorAll('[data-control="language"]').forEach((control) => {
+        animateControl(control);
+        control.dataset.state = language;
+        control.setAttribute('aria-checked', String(english));
+        control.setAttribute('aria-label', english ? 'English language, switch to Chinese' : 'Chinese language, switch to English');
+      });
+      renderCopy();
+    }
+
+    document.querySelectorAll('[data-control="appearance"]').forEach((control) => {
+      control.addEventListener('click', () => setAppearance(control.dataset.state !== 'night'));
+    });
+    document.querySelectorAll('[data-control="language"]').forEach((control) => {
+      control.addEventListener('click', () => setLanguage(control.dataset.state === 'en' ? 'zh' : 'en'));
+    });
+
+    if (new URLSearchParams(window.location.search).has('preview')) {
+      document.documentElement.classList.add('is-preview');
+      const previewSteps = [
+        () => setAppearance(true),
+        () => setLanguage('zh'),
+        () => setAppearance(false),
+        () => setLanguage('en')
+      ];
+      let previewStep = 0;
+      window.setTimeout(() => {
+        previewSteps[previewStep++]();
+        window.setInterval(() => {
+          previewSteps[previewStep % previewSteps.length]();
+          previewStep += 1;
+        }, 1500);
+      }, 900);
+    }
+  </script>
+</body>
+</html>

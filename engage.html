@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Engage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    :root{
+      --serif:"Instrument Serif",ui-serif,Georgia,serif;
+      --sans:"Inter",-apple-system,"SF Pro Text",system-ui,sans-serif;
+      --ink:#e9f2ff;
+      --dim:#6a7a99;
+      --cyan:#4ad8ff;
+      --cyan-deep:#1e7cff;
+      --blue:#0d2a66;
+      --space:#02050e;
+      --ease:cubic-bezier(.22,1,.32,1);
+      --squish:cubic-bezier(.5,-.2,.3,1.5);
+    }
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#fff;color:#111;font-family:var(--sans);}
+    body{display:grid;place-items:center;}
+
+    .stage{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:28px;padding:48px 24px;}
+    .eyebrow{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.4em;color:#8e8e93;text-transform:uppercase;}
+    .title{font-family:var(--serif);font-size:46px;line-height:1;letter-spacing:-.02em;color:#111;text-align:center;font-weight:400;font-style:italic;}
+    .title em{font-style:italic;color:#1e7cff;}
+
+    /* ---- the switch: FLAT iOS form, thumb pokes out of the pill ---- */
+    .switch{position:relative;width:300px;aspect-ratio:2/1;border:0;padding:0;cursor:pointer;outline:0;background:transparent;isolation:isolate;}
+    /* this inner mask clips track + rays to the pill shape; thumb lives OUTSIDE it so it can stick out */
+    .track-clip{position:absolute;inset:0;border-radius:999px;overflow:hidden;}
+    .track{position:absolute;inset:0;background:#e4e4e8;transition:background 650ms var(--ease);}
+    body.on .track{
+      background:radial-gradient(ellipse at 50% 60%, #1e7cff 0%, #0f3680 55%, #061534 100%);
+    }
+
+    /* rays INSIDE the pill — clipped by .track-clip */
+    .rays{position:absolute;top:50%;left:50%;width:800px;height:800px;transform:translate(-50%,-50%);pointer-events:none;opacity:0;transition:opacity .9s var(--ease);}
+    .switch.on-rays .rays{opacity:1;}
+    .rays svg{width:100%;height:100%;display:block;animation:spin 40s linear infinite;}
+    .rays path{fill:url(#rayg);mix-blend-mode:screen;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+
+    /* side labels inside track */
+    .side{position:absolute;top:50%;transform:translateY(-50%);font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.3em;color:rgba(255,255,255,.35);transition:color .5s var(--ease);}
+    .side.off{left:22px;}
+    .side.on{right:22px;color:var(--cyan);}
+    body.on .side.off{color:rgba(255,255,255,.25);}
+    body.on .side.on{color:#eaf7ff;text-shadow:0 0 10px rgba(74,216,255,.6);}
+
+    /* FLAT white thumb — sits inside the pill */
+    .thumb{position:absolute;top:8%;left:4%;width:44%;height:84%;border-radius:50%;z-index:3;background:#fff;
+      box-shadow:0 2px 5px rgba(0,0,0,.18);
+      transition:left .4s cubic-bezier(.4,0,.2,1);
+      transform-origin:50% 50%;cursor:grab;touch-action:none;}
+    .switch.dragging .thumb{cursor:grabbing;}
+    body.on .thumb{left:52%;}
+
+    /* linear slide — no squash, no rotation */
+
+    /* status readout */
+    .status{display:flex;flex-direction:column;align-items:center;gap:6px;min-height:48px;}
+    .state{font-family:var(--serif);font-style:italic;font-size:24px;color:#111;letter-spacing:-.01em;transition:color .5s var(--ease), transform .5s var(--squish), opacity .3s var(--ease);}
+    .state.swap{opacity:0;transform:translateY(4px);}
+    body.on .state{color:#1e7cff;}
+    .hint{font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.35em;color:#8e8e93;text-transform:uppercase;}
+
+    @media (prefers-reduced-motion:reduce){
+      .rays svg{animation:none;}
+      .switch.changing .thumb{animation:none;}
+    }
+  </style>
+</head>
+<body>
+  <!-- rays gradient def -->
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute">
+    <defs>
+      <linearGradient id="rayg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#4ad8ff" stop-opacity=".55"/>
+        <stop offset=".55" stop-color="#4ad8ff" stop-opacity=".1"/>
+        <stop offset="1" stop-color="#4ad8ff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <main class="stage" aria-label="System engage">
+    <button class="switch" id="sw" type="button" role="switch" aria-checked="false" aria-label="Engage system">
+      <span class="track-clip">
+        <span class="track"></span>
+        <span class="rays" aria-hidden="true"><svg viewBox="-50 -50 100 100"><g id="r"></g></svg></span>
+      </span>
+      <span class="thumb"></span>
+    </button>
+  </main>
+
+  <script>
+    // generate radiating light rays
+    const g = document.getElementById('r');
+    let paths = '';
+    for (let i = 0; i < 36; i++) {
+      const a = (i * 10) * Math.PI / 180;
+      const w = 1.4 + (i % 3) * 0.8;
+      const r = 55;
+      const x1 = Math.cos(a - 0.012) * 3, y1 = Math.sin(a - 0.012) * 3;
+      const x2 = Math.cos(a + 0.012) * 3, y2 = Math.sin(a + 0.012) * 3;
+      const x3 = Math.cos(a + 0.02) * r, y3 = Math.sin(a + 0.02) * r;
+      const x4 = Math.cos(a - 0.02) * r, y4 = Math.sin(a - 0.02) * r;
+      paths += `<path d="M${x1} ${y1} L${x2} ${y2} L${x3} ${y3} L${x4} ${y4} Z"/>`;
+    }
+    g.innerHTML = paths;
+
+    const sw = document.getElementById('sw');
+    const thumb = sw.querySelector('.thumb');
+    const OFF_LEFT = 4, ON_LEFT = 52, MID = (OFF_LEFT + ON_LEFT) / 2;
+
+    function set(on, {animate = true} = {}) {
+      document.body.classList.toggle('on', on);
+      sw.classList.toggle('on-rays', on);
+      sw.setAttribute('aria-checked', String(on));
+      thumb.style.left = '';
+      if (animate) {
+        sw.classList.remove('changing','to-right','to-left');
+        void sw.offsetWidth;
+        sw.classList.add('changing', on ? 'to-right' : 'to-left');
+        window.setTimeout(() => sw.classList.remove('changing','to-right','to-left'), 760);
+      }
+    }
+
+    // drag + inertia
+    let drag = null;
+    const px2pct = (dx) => (dx / sw.getBoundingClientRect().width) * 100;
+    function onDown(e){
+      if (e.button != null && e.button !== 0) return;
+      const base = (sw.getAttribute('aria-checked') === 'true') ? ON_LEFT : OFF_LEFT;
+      drag = { startX:e.clientX, base, lastX:e.clientX, lastT:performance.now(), v:0, moved:false, pid:e.pointerId };
+      sw.classList.add('dragging');
+      sw.setPointerCapture?.(e.pointerId);
+    }
+    function onMove(e){
+      if (!drag || e.pointerId !== drag.pid) return;
+      const now = performance.now();
+      drag.v = (e.clientX - drag.lastX) / Math.max(1, now - drag.lastT) * 1000;
+      drag.lastX = e.clientX; drag.lastT = now;
+      const d = e.clientX - drag.startX;
+      if (Math.abs(d) > 3) drag.moved = true;
+      thumb.style.left = Math.min(ON_LEFT, Math.max(OFF_LEFT, drag.base + px2pct(d))) + '%';
+    }
+    function onUp(e){
+      if (!drag || e.pointerId !== drag.pid) return;
+      sw.classList.remove('dragging');
+      sw.releasePointerCapture?.(e.pointerId);
+      if (!drag.moved) { set(sw.getAttribute('aria-checked') !== 'true'); drag = null; return; }
+      const rect = sw.getBoundingClientRect();
+      const cur = parseFloat(thumb.style.left) || OFF_LEFT;
+      const vp = (drag.v / rect.width) * 100;
+      let on;
+      if (vp > 40) on = true;
+      else if (vp < -40) on = false;
+      else on = cur > MID;
+      set(on);
+      drag = null;
+    }
+    sw.addEventListener('pointerdown', onDown);
+    sw.addEventListener('pointermove', onMove);
+    sw.addEventListener('pointerup', onUp);
+    sw.addEventListener('pointercancel', onUp);
+    sw.addEventListener('dragstart', e => e.preventDefault());
+
+    if (new URLSearchParams(location.search).has('preview')) {
+      let state2 = false;
+      window.setInterval(() => { state2 = !state2; set(state2); }, 2600);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkbox</title>
+  <style>
+    * { box-sizing:border-box; }
+    :root {
+      color-scheme:light;
+      --ink:#1c1c1e; --ivory:#f1f1f3; --page:#fff; --panel:#f1f1f3;
+      --copy:#1c1c1e; --muted:#8e8e93; --line:#ececef;
+      --ease:cubic-bezier(.22,.9,.28,1);
+      --pop:cubic-bezier(.34,1.56,.64,1);   /* overshoot for the checkmark */
+      --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    }
+    html,body { width:100%; height:100%; margin:0; overflow:hidden; background:var(--page); }
+    body { display:grid; place-items:center; font-family:var(--font); }
+    .ui { position:relative; width:min(100vw,150vh); aspect-ratio:3/2; background:var(--page); overflow:hidden; }
+
+    .check { --bx:30px; position:relative; width:var(--bx); height:var(--bx); border:0; padding:0; background:transparent; cursor:pointer; outline:0; }
+    .check:focus-visible { outline:1.5px solid var(--ink); outline-offset:9px; border-radius:50%; }
+
+    /* ripple that radiates on click */
+    .ripple { position:absolute; inset:0; border-radius:50%; border:1px solid var(--ink); opacity:0; transform:scale(.5); pointer-events:none; }
+    .check[data-state="checking"] .ripple { animation:ripple 640ms ease-out; }
+
+    /* the box: morphs square -> circle, then collapses away */
+    .box { position:absolute; inset:0; border:1.5px solid var(--ink); border-radius:32%; background:var(--page);
+           transition:border-radius 420ms var(--ease), transform 420ms var(--ease), opacity 320ms var(--ease); }
+    .check[data-state="checking"] .box { border-radius:50%; transform:scale(.9); opacity:.24; }
+    .check[data-state="on"] .box { border-radius:50%; transform:scale(.55); opacity:0; }
+
+    /* spinner arc (shown only while verifying) */
+    .ring { position:absolute; inset:0; width:100%; height:100%; opacity:0; transform-origin:50% 50%; }
+    .ring circle { fill:none; stroke:var(--ink); stroke-width:5.5; stroke-linecap:round; stroke-dasharray:52 240; }
+    .check[data-state="checking"] .ring { opacity:1; animation:spin 760ms linear infinite; }
+
+    /* checkmark */
+    .tick { position:absolute; inset:0; width:100%; height:100%; opacity:0; transform:scale(.5); transform-origin:50% 55%; }
+    .tick path { fill:none; stroke:var(--ink); stroke-width:7; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:90; stroke-dashoffset:90; }
+    .check[data-state="on"] .tick { opacity:1; transform:scale(1); animation:pop 420ms var(--pop); }
+    .check[data-state="on"] .tick path { stroke-dashoffset:0; transition:stroke-dashoffset 300ms var(--ease) 40ms; }
+
+    @keyframes ripple { 0% { opacity:.34; transform:scale(.55); } 100% { opacity:0; transform:scale(1.95); } }
+    @keyframes spin   { to { transform:rotate(360deg); } }
+    @keyframes pop    { 0% { transform:scale(.5); } 60% { transform:scale(1.14); } 100% { transform:scale(1); } }
+
+    /* ---------- settings-stack checklist ---------- */
+    .settings-stack { position:absolute; left:50%; top:50%; width:356px; max-width:calc(100vw - 32px); display:grid; gap:10px; transform:translate(-50%,-50%); }
+    html.is-preview .settings-stack { transform:translate(-50%,-50%) scale(2.85); }
+    .setting-row { position:relative; width:100%; height:66px; padding:0 22px; display:flex; align-items:center; justify-content:space-between; border:1px solid rgba(32,32,31,.08); border-radius:16px; background:var(--panel); box-shadow:0 4px 14px rgba(32,32,31,.045); transition:transform 560ms var(--ease), opacity 420ms var(--ease); }
+    .settings-stack .setting-row:has(.check[data-state="on"]) { opacity:.6; box-shadow:0 3px 10px rgba(32,32,31,.03); }
+    .row-copy { position:relative; }
+    .row-label { display:block; color:var(--copy); font-size:14.5px; font-weight:600; line-height:1; letter-spacing:-.015em; }
+    .setting-row .check { --bx:30px; }
+    .setting-row .box { background:var(--panel); }
+
+    @media (max-width:600px) {
+      body { display:block; }
+      .ui { width:100vw; height:100vh; aspect-ratio:auto; }
+      .settings-stack { left:16px; right:16px; top:50%; width:auto; max-width:none; transform:translateY(-50%); }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .ripple, .check[data-state="checking"] .ring, .check[data-state="on"] .tick { animation:none!important; }
+      .box { transition-duration:.01ms; }
+    }
+  </style>
+</head>
+<body>
+  <main class="ui" aria-label="Verify checkbox">
+    <div class="settings-stack">
+      <section class="setting-row">
+        <span class="row-copy"><span class="row-label">Write today's entry</span></span>
+        <button class="check" type="button" role="checkbox" aria-checked="true" aria-label="Write today's entry" data-state="on">
+          <span class="ripple"></span><span class="box"></span>
+          <svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="37"/></svg>
+          <svg class="tick" viewBox="0 0 100 100" aria-hidden="true"><path d="M26 53 L44 71 L77 31"/></svg>
+        </button>
+      </section>
+      <section class="setting-row">
+        <span class="row-copy"><span class="row-label">Note today's mood</span></span>
+        <button class="check" type="button" role="checkbox" aria-checked="false" aria-label="Note today's mood" data-state="off">
+          <span class="ripple"></span><span class="box"></span>
+          <svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="37"/></svg>
+          <svg class="tick" viewBox="0 0 100 100" aria-hidden="true"><path d="M26 53 L44 71 L77 31"/></svg>
+        </button>
+      </section>
+      <section class="setting-row">
+        <span class="row-copy"><span class="row-label">Add a photo memory</span></span>
+        <button class="check" type="button" role="checkbox" aria-checked="false" aria-label="Add a photo memory" data-state="off">
+          <span class="ripple"></span><span class="box"></span>
+          <svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="37"/></svg>
+          <svg class="tick" viewBox="0 0 100 100" aria-hidden="true"><path d="M26 53 L44 71 L77 31"/></svg>
+        </button>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const SPIN = 760; // verify duration before the check resolves
+    const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+    const stack = document.querySelector('.settings-stack');
+
+    function syncRow(el, on) {
+      const row = el.closest('.setting-row');
+      /* status removed */
+    }
+
+    // finished rows sink to the bottom; pending rows stay on top (FLIP animated)
+    function reorder(animate = true) {
+      const rows = [...stack.children];
+      const first = new Map(rows.map((r) => [r, r.getBoundingClientRect().top]));
+      const pending = rows.filter((r) => r.querySelector('.check').dataset.state !== 'on');
+      const done = rows.filter((r) => r.querySelector('.check').dataset.state === 'on');
+      [...pending, ...done].forEach((r) => stack.appendChild(r));
+      if (!animate || reduce) return;
+      stack.querySelectorAll('.setting-row').forEach((r) => {
+        const delta = first.get(r) - r.getBoundingClientRect().top;
+        if (Math.abs(delta) < 0.5) return;
+        r.style.transition = 'none';
+        r.style.transform = `translateY(${delta}px)`;
+        requestAnimationFrame(() => {
+          r.style.transition = 'transform 560ms var(--ease), opacity 420ms var(--ease)';
+          r.style.transform = '';
+        });
+      });
+    }
+    function check(el) {
+      if (el.dataset.state !== 'off') return;
+      syncRow(el, true);
+      if (reduce) { el.dataset.state = 'on'; el.setAttribute('aria-checked', 'true'); reorder(false); return; }
+      el.dataset.state = 'checking';
+      el.setAttribute('aria-busy', 'true');
+      window.clearTimeout(el._t);
+      el._t = window.setTimeout(() => {
+        el.dataset.state = 'on';
+        el.setAttribute('aria-checked', 'true');
+        el.removeAttribute('aria-busy');
+        reorder();            // sink to the bottom once verified
+      }, SPIN);
+    }
+    function uncheck(el) {
+      window.clearTimeout(el._t);
+      el.removeAttribute('aria-busy');
+      el.dataset.state = 'off';
+      el.setAttribute('aria-checked', 'false');
+      syncRow(el, false);
+      reorder();              // float back up to the pending group
+    }
+    function toggle(el) {
+      if (el.dataset.state === 'on') uncheck(el);
+      else if (el.dataset.state === 'off') check(el);
+    }
+
+    document.querySelectorAll('.check').forEach((el) => {
+      el.addEventListener('click', () => toggle(el));
+    });
+
+    reorder(false); // start with finished items already resting at the bottom
+
+    if (new URLSearchParams(location.search).has('preview')) {
+      document.documentElement.classList.add('is-preview');
+      const boxes = [...document.querySelectorAll('.check')];
+      let i = 0;
+      window.setTimeout(() => {
+        check(boxes[0]);
+        window.setInterval(() => { toggle(boxes[i % boxes.length]); i += 1; }, 1500);
+      }, 700);
+    }
+  </script>
+</body>
+</html>

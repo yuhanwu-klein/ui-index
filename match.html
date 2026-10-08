@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Find your match</title>
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    :root{
+      --bg:#ffffff; --ink:#1c1c1e; --muted:#8e8e93; --soft:#f1f1f3; --line:#ececef;
+      --cta:linear-gradient(135deg,#9d4fe0 0%,#5d20a6 100%);
+      --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      --ease:cubic-bezier(.22,1,.32,1);
+      --pop:cubic-bezier(.34,1.4,.5,1);
+    }
+    html,body{margin:0;height:100%;}
+    body{background:#fff;display:grid;place-items:center;font-family:var(--font);color:var(--ink);padding:28px;min-height:100vh;box-sizing:border-box;}
+    .screen{position:relative;width:402px;height:874px;background:var(--bg);
+      border-radius:54px;overflow:hidden;display:flex;flex-direction:column;
+      box-shadow:0 24px 70px rgba(0,0,0,.28);zoom:.86;}
+    html.is-preview{overflow:hidden;}
+    html.is-preview body{padding:0;}
+    html.is-preview .screen{zoom:1;transform:scale(1.34);}
+
+    /* ---- iOS status bar ---- */
+    .statusbar{position:relative;flex:0 0 auto;height:54px;display:flex;align-items:center;
+      justify-content:space-between;padding:5px 22px 0 33px;z-index:5;}
+    .time{font-size:17px;font-weight:600;letter-spacing:-.2px;color:#000;font-variant-numeric:tabular-nums;}
+    .sbicons{display:flex;align-items:center;gap:7px;}
+    .island{position:absolute;top:12px;left:50%;transform:translateX(-50%);
+      width:125px;height:37px;background:#000;border-radius:20px;}
+
+    /* ---- header ---- */
+    .head{flex:0 0 auto;padding:4px 20px 10px;background:var(--bg);z-index:4;}
+    .head-top{display:flex;align-items:flex-start;justify-content:space-between;margin:2px 0 14px;}
+    .h-copy{display:flex;flex-direction:column;gap:4px;}
+    .h-eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;}
+    .h1{font-size:26px;font-weight:800;letter-spacing:-.6px;color:var(--ink);}
+    .skip{align-self:flex-start;margin-top:16px;font-size:13px;font-weight:600;color:var(--muted);padding:6px 10px;border-radius:12px;cursor:pointer;}
+
+    /* step dots */
+    .steps{display:flex;gap:5px;margin:0 2px 12px;}
+    .steps span{flex:1;height:4px;border-radius:3px;background:var(--line);transition:background .3s var(--ease);}
+    .steps span.on{background:var(--ink);}
+
+    /* ---- questions ---- */
+    .list{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;padding:4px 20px 190px;-webkit-overflow-scrolling:touch;}
+    .q{margin-bottom:22px;}
+    .q-h{font-size:17px;font-weight:800;color:var(--ink);letter-spacing:-.3px;margin:4px 2px 10px;line-height:1.3;}
+
+    /* ---- radio options ---- */
+    .opt{position:relative;display:flex;flex-direction:column;padding:0;border-radius:16px;background:var(--soft);cursor:pointer;
+      transition:background .3s var(--ease), transform .4s var(--pop);overflow:hidden;}
+    .opt + .opt{margin-top:8px;}
+    .opt:active{transform:scale(.995);}
+    .opt[aria-checked="true"]{background:#fff;box-shadow:0 0 0 1.5px #1c1c1e inset;}
+    .opt-row{display:flex;align-items:center;gap:14px;padding:14px 16px;}
+    /* small icon tile */
+    .ic{flex:0 0 auto;width:34px;height:34px;border-radius:11px;background:#fff;display:grid;place-items:center;color:#1c1c1e;transition:background .3s var(--ease);}
+    .ic svg{width:20px;height:20px;}
+    .opt[aria-checked="true"] .ic{background:var(--soft);}
+    .opt-copy{min-width:0;flex:1;}
+    .opt-t{font-size:14.5px;font-weight:700;color:var(--ink);letter-spacing:-.1px;line-height:1.3;}
+    .opt-s{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.35;}
+
+    /* custom radio — liquid fill in purple when chosen */
+    .rd{position:relative;flex:0 0 auto;width:24px;height:24px;border:1.8px solid #c4c4cc;border-radius:50%;background:#fff;overflow:hidden;transition:border-color .25s var(--ease);}
+    .rd .fillclip{position:absolute;inset:0;background:var(--cta);transform:scale(0);transform-origin:center;border-radius:50%;transition:transform .4s var(--pop);z-index:1;}
+    .rd .dot{position:absolute;inset:0;z-index:2;display:grid;place-items:center;opacity:0;transition:opacity .22s var(--ease) .14s;}
+    .rd .dot::after{content:"";width:8px;height:8px;border-radius:50%;background:#fff;}
+    .opt[aria-checked="true"] .rd{border-color:transparent;background:#5d20a6;}
+    .opt[aria-checked="true"] .rd .fillclip{transform:scale(1);}
+    .opt[aria-checked="true"] .rd .dot{opacity:1;}
+
+    /* ---- expanded match area ---- */
+    .expand{max-height:0;opacity:0;transition:max-height .5s var(--ease), opacity .35s var(--ease), padding .5s var(--ease);padding:0 16px;border-top:0 solid var(--line);}
+    .opt[aria-checked="true"] .expand{max-height:160px;opacity:1;padding:12px 16px 14px;border-top-width:1px;}
+    .exp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+    .exp-h{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;}
+    .refresh{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border:0;border-radius:11px;background:var(--soft);color:var(--ink);font:600 11px/1 var(--font);cursor:pointer;}
+    .refresh svg{width:12px;height:12px;transition:transform .5s var(--pop);}
+    .refresh.spin svg{transform:rotate(360deg);}
+    .dogs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;transition:opacity .25s var(--ease);}
+    .dogs.swap{opacity:0;}
+    .dog{display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px;border-radius:12px;background:#f7f6fa;}
+    .dog .av{width:46px;height:46px;border-radius:50%;object-fit:cover;background:#eee;}
+    .dog .nm{font-size:11.5px;font-weight:700;color:var(--ink);line-height:1.1;text-align:center;letter-spacing:-.1px;}
+    .dog .br{font-size:10px;color:var(--muted);line-height:1.1;text-align:center;}
+
+    /* ---- sticky CTA ---- */
+    .cta-wrap{position:absolute;left:0;right:0;bottom:108px;z-index:7;padding:28px 20px 10px;
+      background:linear-gradient(to top,#fff 55%,rgba(255,255,255,0));pointer-events:none;}
+    .cta-wrap > *{pointer-events:auto;}
+    .cta{width:100%;height:52px;border:0;border-radius:16px;background:var(--cta);color:#fff;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;
+      opacity:.4;pointer-events:none;transition:opacity .3s var(--ease), transform .4s var(--pop);display:flex;align-items:center;justify-content:center;gap:8px;}
+    .cta.ready{opacity:1;pointer-events:auto;}
+    .cta.ready:active{transform:scale(.98);}
+    .cta svg{width:17px;height:17px;}
+
+    /* ---- floating pill nav bar ---- */
+    .tabbar{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);
+      display:inline-flex;align-items:center;gap:4px;padding:7px;border-radius:32px;
+      background:rgba(244,244,246,.78);backdrop-filter:blur(22px);
+      box-shadow:0 12px 28px rgba(0,0,0,.13),0 1px 0 rgba(255,255,255,.7) inset;z-index:7;}
+    .tab{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 22px 6px;
+      border-radius:24px;color:#9a9a9f;transition:background .2s,box-shadow .2s;}
+    .tab .ic-t{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:#e6e6ea;color:#5a5a60;}
+    .tab .lb{font-size:11px;font-weight:600;letter-spacing:-.1px;}
+    .tab.on{background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.1);color:var(--ink);}
+    .tab.on .ic-t{background:transparent;color:var(--ink);}
+    .homebar{position:absolute;left:50%;bottom:9px;transform:translateX(-50%);width:138px;height:5px;border-radius:3px;background:#1c1c1e;opacity:.9;z-index:6;}
+  </style>
+</head>
+<body>
+  <main class="screen" aria-label="Find your match app">
+    <!-- status bar -->
+    <div class="statusbar">
+      <span class="time">9:41</span>
+      <div class="island"></div>
+      <div class="sbicons" aria-hidden="true">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="#000"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="#000"><path d="M8.5 2.7c2.55 0 5 .98 6.84 2.74a.6.6 0 0 0 .84-.01l.64-.66a.6.6 0 0 0-.01-.86A12 12 0 0 0 8.5.7 12 12 0 0 0 .19 3.9a.6.6 0 0 0-.01.86l.64.66c.23.24.6.25.84.01A9.86 9.86 0 0 1 8.5 2.7Z"/><path d="M8.5 6.3c1.6 0 3.13.62 4.28 1.72a.6.6 0 0 0 .83-.02l.64-.67a.6.6 0 0 0-.02-.86 8.4 8.4 0 0 0-11.46 0 .6.6 0 0 0-.02.86l.64.67c.22.23.6.24.83.02A5.9 5.9 0 0 1 8.5 6.3Z"/><circle cx="8.5" cy="10.3" r="1.6"/></svg>
+        <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="23.2" height="12" rx="3.6" fill="none" stroke="#000" stroke-opacity=".35"/><rect x="2" y="2" width="18.5" height="9" rx="2.3" fill="#000"/><path d="M25.1 4.4c1 .35 1.7 1.3 1.7 2.35s-.7 2-1.7 2.35V4.4Z" fill="#000" fill-opacity=".4"/></svg>
+      </div>
+    </div>
+
+    <!-- header -->
+    <div class="head">
+      <div class="head-top">
+        <div class="h-copy">
+          <span class="h-eyebrow">Find your match</span>
+          <span class="h1">What's your vibe?</span>
+        </div>
+        <span class="skip">Skip</span>
+      </div>
+      <div class="steps" aria-hidden="true"><span class="on"></span><span></span><span></span></div>
+    </div>
+
+    <!-- 3 radio-group questions -->
+    <div class="list" id="list"></div>
+
+    <!-- CTA -->
+    <div class="cta-wrap"><button class="cta" id="cta">Show my matches
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button></div>
+
+    <!-- floating tab bar -->
+    <nav class="tabbar" aria-label="Tabs">
+      <div class="tab">
+        <span class="ic-t"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.1 3.3 10v10.2c0 .5.4.9.9.9h4.7v-6.2h6.2v6.2h4.7c.5 0 .9-.4.9-.9V10L12 3.1Z"/></svg></span>
+        <span class="lb">Home</span>
+      </div>
+      <div class="tab on">
+        <span class="ic-t"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l8 7-8 7"/><circle cx="7" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></span>
+        <span class="lb">Match</span>
+      </div>
+      <div class="tab">
+        <span class="ic-t"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.7"/><path d="M5 20c0-3.7 3.1-6.2 7-6.2s7 2.5 7 6.2" stroke-linecap="round"/></svg></span>
+        <span class="lb">Profile</span>
+      </div>
+    </nav>
+    <div class="homebar" aria-hidden="true"></div>
+  </main>
+
+  <script>
+    const questions = [
+      { id:'energy', q:'Energy level you can match', opts:[
+          { id:'low',  t:'Chill at home',    s:'Short walks, lots of naps',  icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c0-4 3-7 7-7"/><path d="M20 10c0 4-3 7-7 7"/><circle cx="12" cy="12" r="1.8" fill="currentColor" stroke="none"/></svg>' },
+          { id:'mid',  t:'Just right',       s:'Daily walks, backyard play', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M8 12h8"/></svg>' },
+          { id:'hi',   t:'Always on',        s:'Hikes, runs, games all day', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L4 14h7l-1 7 9-11h-7l1-7Z"/></svg>' },
+        ]},
+      { id:'home', q:'Where will your pup live?', opts:[
+          { id:'apt',  t:'Apartment',       s:'Smaller breeds fit best',     icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="1.5"/><path d="M9 8h.01M15 8h.01M9 12h.01M15 12h.01M9 16h.01M15 16h.01" stroke-linecap="round"/></svg>' },
+          { id:'hs',   t:'House with yard', s:'Great for most breeds',       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-9Z"/><path d="M10 21v-6h4v6"/></svg>' },
+          { id:'farm', t:'Big open space',  s:'Room to run — think farm',    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M3 20h18"/><path d="M5 20V9l7-5 7 5v11"/><path d="M9 20v-6h6v6"/></svg>' },
+        ]},
+      { id:'care', q:'How much grooming can you handle?', opts:[
+          { id:'none', t:'Low maintenance', s:'Short hair, rare brushing',  icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M4 12c3-6 13-6 16 0"/><path d="M4 16c3-3 13-3 16 0"/></svg>' },
+          { id:'some', t:'Weekly brush',    s:'A bit of coat care is fine', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M4 20l6-6"/><path d="M14 10l6-6"/><path d="M10 14l4 4"/><path d="M8 8l8 8"/></svg>' },
+          { id:'spa',  t:'Daily spa',       s:'Fluffy coats welcome',       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M12 3c3 4 3 6 0 10"/><path d="M8 7c-3 4 0 7 4 7"/><path d="M16 7c3 4 0 7-4 7"/><path d="M12 14v7"/></svg>' },
+        ]},
+    ];
+
+    const list = document.getElementById('list');
+    list.innerHTML = questions.map(q => `
+      <section class="q" data-q="${q.id}">
+        <div class="q-h">${q.q}</div>
+        <div role="radiogroup" aria-label="${q.q}">
+          ${q.opts.map(o => `
+            <div class="opt" role="radio" aria-checked="false" tabindex="0" data-id="${o.id}">
+              <div class="opt-row">
+                <span class="ic" aria-hidden="true">${o.icon}</span>
+                <div class="opt-copy">
+                  <div class="opt-t">${o.t}</div>
+                  <div class="opt-s">${o.s}</div>
+                </div>
+                <span class="rd" aria-hidden="true"><span class="fillclip"></span><span class="dot"></span></span>
+              </div>
+              <div class="expand" aria-hidden="true">
+                <div class="exp-head">
+                  <span class="exp-h">3 matches for you</span>
+                  <button class="refresh" type="button" aria-label="Shuffle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.5-6.3L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.3L3 16"/><path d="M3 21v-5h5"/></svg>
+                    Shuffle
+                  </button>
+                </div>
+                <div class="dogs" data-dogs></div>
+              </div>
+            </div>`).join('')}
+        </div>
+      </section>`).join('');
+
+    const stepsEls = document.querySelectorAll('.steps span');
+    const ctaBtn = document.getElementById('cta');
+    const answered = {};
+
+    const dogPool = [
+      {id:1,  name:'Mochi',   breed:'Corgi'},
+      {id:3,  name:'Luna',    breed:'Shiba'},
+      {id:5,  name:'Buddy',   breed:'Golden'},
+      {id:7,  name:'Nova',    breed:'Husky'},
+      {id:9,  name:'Pepper',  breed:'Lab'},
+      {id:11, name:'Biscuit', breed:'Beagle'},
+      {id:13, name:'Oliver',  breed:'Dachs'},
+      {id:15, name:'Hazel',   breed:'Spaniel'},
+      {id:17, name:'Finn',    breed:'Collie'},
+      {id:19, name:'Daisy',   breed:'Pom'},
+      {id:21, name:'Teddy',   breed:'Doodle'},
+      {id:23, name:'Juno',    breed:'Samoyed'},
+    ];
+    function shuffle(a){ const b=a.slice(); for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; }
+    function renderDogs(container){
+      const picks = shuffle(dogPool).slice(0,3);
+      container.innerHTML = picks.map(d => `
+        <div class="dog">
+          <img class="av" src="https://placedog.net/92/92?id=${d.id}" alt="">
+          <span class="nm">${d.name}</span>
+          <span class="br">${d.breed}</span>
+        </div>`).join('');
+    }
+
+    function updateUI() {
+      questions.forEach((q, i) => stepsEls[i].classList.toggle('on', !!answered[q.id]));
+      const total = questions.length;
+      const done  = Object.keys(answered).length;
+      ctaBtn.classList.toggle('ready', done === total);
+      ctaBtn.querySelector('svg')?.remove?.();
+      // regenerate the arrow svg (removed above) for consistency
+      const arrow = document.createElementNS('http://www.w3.org/2000/svg','svg');
+      arrow.setAttribute('viewBox','0 0 24 24'); arrow.setAttribute('fill','none');
+      arrow.setAttribute('stroke','currentColor'); arrow.setAttribute('stroke-width','2.2');
+      arrow.setAttribute('stroke-linecap','round'); arrow.setAttribute('stroke-linejoin','round');
+      arrow.innerHTML = '<path d="M5 12h14M13 6l6 6-6 6"/>';
+      ctaBtn.appendChild(arrow);
+    }
+
+    list.addEventListener('click', (e) => {
+      const refreshBtn = e.target.closest('.refresh');
+      if (refreshBtn) {
+        e.stopPropagation();
+        const dogs = refreshBtn.closest('.expand').querySelector('[data-dogs]');
+        refreshBtn.classList.remove('spin'); void refreshBtn.offsetWidth; refreshBtn.classList.add('spin');
+        dogs.classList.add('swap');
+        window.setTimeout(() => { renderDogs(dogs); dogs.classList.remove('swap'); }, 220);
+        return;
+      }
+      const opt = e.target.closest('.opt');
+      if (!opt) return;
+      const section = opt.closest('.q');
+      section.querySelectorAll('.opt').forEach(o => {
+        const picked = (o === opt);
+        o.setAttribute('aria-checked', String(picked));
+        if (picked) renderDogs(o.querySelector('[data-dogs]'));
+      });
+      answered[section.dataset.q] = opt.dataset.id;
+      updateUI();
+    });
+    list.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const opt = e.target.closest('.opt');
+      if (opt) { e.preventDefault(); opt.click(); }
+    });
+
+    updateUI();
+
+    if (new URLSearchParams(location.search).has('preview')) {
+      document.documentElement.classList.add('is-preview');
+      // auto-answer the three questions in turn, then refresh matches, then restart
+      const picks = [['energy','mid'],['home','hs'],['care','some']];
+      let i = 0;
+      window.setTimeout(function tick(){
+        const [qid, oid] = picks[i];
+        const target = list.querySelector(`.q[data-q="${qid}"] .opt[data-id="${oid}"]`);
+        if (target) target.click();
+        i += 1;
+        if (i < picks.length) window.setTimeout(tick, 1600);
+        else {
+          // shuffle each selected option twice to showcase the refresh
+          const sel = [...list.querySelectorAll('.opt[aria-checked="true"]')];
+          let r = 0;
+          window.setTimeout(function doRefresh(){
+            if (r < 4 && sel[r % sel.length]) {
+              sel[r % sel.length].querySelector('.refresh').click();
+              r += 1;
+              window.setTimeout(doRefresh, 1200);
+            } else {
+              window.setTimeout(() => {
+                list.querySelectorAll('.opt[aria-checked="true"]').forEach(o => o.setAttribute('aria-checked','false'));
+                for (const k in answered) delete answered[k];
+                updateUI();
+                i = 0; window.setTimeout(tick, 1200);
+              }, 1800);
+            }
+          }, 1600);
+        }
+      }, 1200);
+    }
+  </script>
+</body>
+</html>

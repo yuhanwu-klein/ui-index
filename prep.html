@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Puppy Prep</title>
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    :root{
+      --bg:#ffffff; --ink:#1c1c1e; --muted:#8e8e93; --soft:#f1f1f3; --line:#ececef;
+      --cta:linear-gradient(135deg,#9d4fe0 0%,#5d20a6 100%);
+      --cta-sh:rgba(93,32,166,.36);
+      --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      --ease:cubic-bezier(.22,1,.32,1);
+      --pop:cubic-bezier(.34,1.4,.5,1);
+    }
+    html,body{margin:0;height:100%;}
+    body{background:#fff;display:grid;place-items:center;font-family:var(--font);color:var(--ink);padding:28px;min-height:100vh;box-sizing:border-box;}
+    .screen{position:relative;width:402px;height:874px;background:var(--bg);
+      border-radius:54px;overflow:hidden;display:flex;flex-direction:column;
+      box-shadow:0 24px 70px rgba(0,0,0,.28);zoom:.86;}
+    html.is-preview{overflow:hidden;}
+    html.is-preview body{padding:0;}
+    html.is-preview .screen{zoom:1;transform:scale(1.34);}
+
+    /* ---- iOS status bar ---- */
+    .statusbar{position:relative;flex:0 0 auto;height:54px;display:flex;align-items:center;
+      justify-content:space-between;padding:5px 22px 0 33px;z-index:5;}
+    .time{font-size:17px;font-weight:600;letter-spacing:-.2px;color:#000;font-variant-numeric:tabular-nums;}
+    .sbicons{display:flex;align-items:center;gap:7px;}
+    .island{position:absolute;top:12px;left:50%;transform:translateX(-50%);
+      width:125px;height:37px;background:#000;border-radius:20px;}
+
+    /* ---- header ---- */
+    .head{flex:0 0 auto;padding:4px 20px 10px;background:var(--bg);z-index:4;}
+    .head-top{display:flex;align-items:flex-start;justify-content:space-between;margin:2px 0 14px;}
+    .h-copy{display:flex;flex-direction:column;gap:4px;}
+    .h-eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;}
+    .h1{font-size:26px;font-weight:800;letter-spacing:-.6px;color:var(--ink);}
+    .ava{width:38px;height:38px;border-radius:50%;object-fit:cover;background:var(--soft);}
+
+    /* progress block */
+    .prog{display:flex;align-items:center;gap:14px;padding:13px 15px;border-radius:18px;background:#faf7ff;border:1px solid #efe8fd;margin:0 0 12px;}
+    .ring{position:relative;width:46px;height:46px;flex:0 0 auto;}
+    .ring svg{width:100%;height:100%;transform:rotate(-90deg);}
+    .ring .track{stroke:#e4dcf9;}
+    .ring .fill{stroke:url(#g);stroke-linecap:round;transition:stroke-dashoffset .55s var(--ease);}
+    .ring .count{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;font-weight:800;letter-spacing:-.5px;color:#5d20a6;}
+    .prog-copy{min-width:0;flex:1;}
+    .prog-copy .l{font-size:13px;font-weight:700;color:var(--ink);line-height:1.2;}
+    .prog-copy .s{font-size:11.5px;color:var(--muted);margin-top:3px;}
+
+    /* ---- checklist ---- */
+    .list{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;padding:4px 20px 120px;-webkit-overflow-scrolling:touch;}
+    .section + .section{margin-top:22px;}
+    .sec-h{font-size:12px;font-weight:800;color:var(--ink);letter-spacing:-.1px;margin:4px 2px 10px;display:flex;align-items:center;justify-content:space-between;}
+    .sec-h .n{color:var(--muted);font:10px/1 "SF Mono","Courier New",monospace;letter-spacing:.1em;font-weight:700;}
+
+    .task{position:relative;display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:16px;background:var(--soft);
+      transition:background .3s var(--ease), transform .4s var(--ease), opacity .4s var(--ease);cursor:pointer;
+      max-height:120px;overflow:hidden;transform-origin:50% 0;}
+    .task + .task{margin-top:8px;}
+    .task:active{transform:scale(.985);}
+    /* ---- melt-away animation ---- */
+    .task.melting{pointer-events:none;animation:melt .9s cubic-bezier(.5,0,.6,1) forwards;}
+    @keyframes melt{
+       0%  {max-height:120px;padding-top:14px;padding-bottom:14px;margin-top:8px;opacity:1;filter:blur(0px);transform:translateY(0) scaleY(1);}
+       40% {opacity:1;filter:blur(2px);transform:translateY(6px) scaleY(.96);}
+       70% {opacity:.35;filter:blur(7px);transform:translateY(14px) scaleY(.5);}
+      100% {max-height:0;padding-top:0;padding-bottom:0;margin-top:0;opacity:0;filter:blur(14px);transform:translateY(26px) scaleY(0);}
+    }
+    .task.melting + .task{animation:slideUp .5s cubic-bezier(.22,1,.32,1) .35s both;}
+    @keyframes slideUp{from{transform:translateY(0);}to{transform:translateY(-6px);}}
+
+    /* custom checkbox — liquid fill, purple when checked */
+    .cb{position:relative;flex:0 0 auto;width:26px;height:26px;border:1.8px solid #c4c4cc;border-radius:9px;background:#fff;cursor:pointer;overflow:hidden;transition:border-color .25s var(--ease);}
+    .cb .fillclip{position:absolute;inset:0;background:var(--cta);transform:translateY(100%);transition:transform .5s var(--pop);z-index:1;}
+    .cb .surface{position:absolute;left:0;width:100%;height:6px;top:100%;z-index:2;overflow:hidden;opacity:0;transition:top .5s var(--pop),opacity .25s;}
+    .cb .surface svg{position:absolute;bottom:-1px;left:0;width:200%;height:100%;fill:#8e43db;}
+    .cb .surface .w1{animation:wave 2.1s linear infinite;}
+    .cb .surface .w2{animation:wave 3.3s linear infinite reverse;opacity:.55;}
+    .cb .tick{position:absolute;inset:0;z-index:3;display:grid;place-items:center;opacity:0;transform:scale(.6);transition:opacity .25s var(--ease) .22s,transform .35s var(--pop) .22s;}
+    .cb .tick svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;}
+    .task[data-done="true"] .cb{border-color:transparent;}
+    .task[data-done="true"] .cb .fillclip{transform:translateY(0);}
+    .task[data-done="true"] .cb .surface{top:0;opacity:1;}
+    .task[data-done="true"] .cb .tick{opacity:1;transform:scale(1);}
+    @keyframes wave{to{transform:translateX(-50%);}}
+
+    .task-copy{min-width:0;flex:1;}
+    .t-title{font-size:14.5px;font-weight:600;color:var(--ink);letter-spacing:-.1px;line-height:1.3;transition:color .3s var(--ease), text-decoration-color .3s var(--ease);}
+    .t-sub{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.3;}
+    .task[data-done="true"]{background:#f5f5f7;}
+    .task[data-done="true"] .t-title{color:var(--muted);text-decoration:line-through;text-decoration-color:#c7c7cc;}
+    .task[data-done="true"] .t-sub{opacity:.6;}
+
+    .tag{flex:0 0 auto;padding:5px 10px;border-radius:10px;background:#fff;font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.02em;border:1px solid var(--line);}
+    .task[data-done="true"] .tag{opacity:.4;}
+
+    /* ---- floating pill nav bar (Luma style) ---- */
+    .tabbar{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);
+      display:inline-flex;align-items:center;gap:4px;padding:7px;border-radius:32px;
+      background:rgba(244,244,246,.78);backdrop-filter:blur(22px);
+      box-shadow:0 12px 28px rgba(0,0,0,.13),0 1px 0 rgba(255,255,255,.7) inset;z-index:7;}
+    .tab{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 22px 6px;
+      border-radius:24px;color:#9a9a9f;transition:background .2s,box-shadow .2s;}
+    .tab .ic{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:#e6e6ea;color:#5a5a60;}
+    .tab .lb{font-size:11px;font-weight:600;letter-spacing:-.1px;}
+    .tab.on{background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.1);color:var(--ink);}
+    .tab.on .ic{background:transparent;color:var(--ink);}
+    .homebar{position:absolute;left:50%;bottom:9px;transform:translateX(-50%);width:138px;height:5px;border-radius:3px;background:#1c1c1e;opacity:.9;z-index:6;}
+
+    /* ---- end-of-prep celebration ---- */
+    .ring.pulse{animation:ringPulse .9s var(--pop);}
+    @keyframes ringPulse{0%{transform:scale(1);}40%{transform:scale(1.18);}100%{transform:scale(1);}}
+
+    .celebrate{position:absolute;inset:0;z-index:8;display:none;pointer-events:none;overflow:hidden;}
+    .celebrate.on{display:block;}
+    .celebrate .back{position:absolute;inset:0;background:rgba(255,255,255,.0);opacity:0;transition:opacity .5s ease;}
+    .celebrate.on .back{opacity:1;}
+    .celebrate .card{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%) scale(.6);opacity:0;
+      width:300px;padding:28px 24px 24px;text-align:center;border-radius:28px;background:#fff;
+      box-shadow:0 18px 44px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.05);
+      transition:opacity .5s var(--ease) .18s, transform .7s var(--pop) .18s;pointer-events:auto;}
+    .celebrate.on .card{opacity:1;transform:translate(-50%,-50%) scale(1);}
+    .celebrate .hero{width:92px;height:92px;border-radius:50%;object-fit:cover;margin:0 auto 10px;
+      border:4px solid #fff;background:#f1f1f3;}
+    .celebrate .title{font-size:23px;font-weight:800;letter-spacing:-.5px;margin:6px 0 6px;color:var(--ink);}
+    .celebrate .sub{font-size:13px;color:var(--muted);line-height:1.5;margin:0 0 18px;}
+    .celebrate .btn{display:inline-flex;align-items:center;justify-content:center;height:46px;padding:0 24px;border:0;border-radius:14px;background:var(--cta);color:#fff;font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+    /* confetti pieces */
+    .confetti{position:absolute;inset:0;pointer-events:none;}
+    .piece{position:absolute;top:-30px;left:var(--x);width:var(--w);height:var(--h);
+      background:var(--c);border-radius:var(--r);opacity:0;
+      animation:fall var(--d) cubic-bezier(.3,.7,.5,1) var(--dl) forwards;}
+    .piece.paw{background:transparent;color:var(--c);width:16px;height:16px;}
+    .piece.paw svg{width:100%;height:100%;fill:currentColor;}
+    @keyframes fall{
+       0%  {transform:translate(0,0) rotate(0);opacity:0;}
+       10% {opacity:1;}
+       100%{transform:translate(var(--dx),780px) rotate(var(--rot));opacity:0;}
+    }
+  </style>
+</head>
+<body>
+  <main class="screen" aria-label="Puppy Prep app">
+    <!-- status bar -->
+    <div class="statusbar">
+      <span class="time">9:41</span>
+      <div class="island"></div>
+      <div class="sbicons" aria-hidden="true">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="#000"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="#000"><path d="M8.5 2.7c2.55 0 5 .98 6.84 2.74a.6.6 0 0 0 .84-.01l.64-.66a.6.6 0 0 0-.01-.86A12 12 0 0 0 8.5.7 12 12 0 0 0 .19 3.9a.6.6 0 0 0-.01.86l.64.66c.23.24.6.25.84.01A9.86 9.86 0 0 1 8.5 2.7Z"/><path d="M8.5 6.3c1.6 0 3.13.62 4.28 1.72a.6.6 0 0 0 .83-.02l.64-.67a.6.6 0 0 0-.02-.86 8.4 8.4 0 0 0-11.46 0 .6.6 0 0 0-.02.86l.64.67c.22.23.6.24.83.02A5.9 5.9 0 0 1 8.5 6.3Z"/><circle cx="8.5" cy="10.3" r="1.6"/></svg>
+        <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="23.2" height="12" rx="3.6" fill="none" stroke="#000" stroke-opacity=".35"/><rect x="2" y="2" width="18.5" height="9" rx="2.3" fill="#000"/><path d="M25.1 4.4c1 .35 1.7 1.3 1.7 2.35s-.7 2-1.7 2.35V4.4Z" fill="#000" fill-opacity=".4"/></svg>
+      </div>
+    </div>
+
+    <!-- shared gradient for ring + fills -->
+    <svg width="0" height="0" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9d4fe0"/><stop offset="1" stop-color="#5d20a6"/></linearGradient></defs></svg>
+
+    <!-- header -->
+    <div class="head">
+      <div class="head-top">
+        <div class="h-copy">
+          <span class="h-eyebrow">New puppy</span>
+          <span class="h1">Bringing Mochi home</span>
+        </div>
+        <img class="ava" src="https://placedog.net/80/80?id=23" alt="">
+      </div>
+      <div class="prog" aria-label="Progress">
+        <div class="ring">
+          <svg viewBox="0 0 46 46"><circle class="track" cx="23" cy="23" r="19" fill="none" stroke-width="4"/><circle class="fill" cx="23" cy="23" r="19" fill="none" stroke-width="4" stroke-dasharray="119.4" stroke-dashoffset="119.4"/></svg>
+          <span class="count" data-count>0/8</span>
+        </div>
+        <div class="prog-copy">
+          <div class="l" data-prog-l>Just getting started</div>
+          <div class="s" data-prog-s>Tap each task to check it off.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- checklist -->
+    <div class="list" id="list"></div>
+
+    <!-- floating tab bar -->
+    <nav class="tabbar" aria-label="Tabs">
+      <div class="tab">
+        <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.1 3.3 10v10.2c0 .5.4.9.9.9h4.7v-6.2h6.2v6.2h4.7c.5 0 .9-.4.9-.9V10L12 3.1Z"/></svg></span>
+        <span class="lb">Home</span>
+      </div>
+      <div class="tab on">
+        <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="4.5" y="3.5" width="15" height="17" rx="3"/><path d="M9 10l2 2 4-4"/></svg></span>
+        <span class="lb">Checklist</span>
+      </div>
+      <div class="tab">
+        <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.7"/><path d="M5 20c0-3.7 3.1-6.2 7-6.2s7 2.5 7 6.2" stroke-linecap="round"/></svg></span>
+        <span class="lb">Profile</span>
+      </div>
+    </nav>
+    <div class="homebar" aria-hidden="true"></div>
+
+    <!-- celebration overlay -->
+    <div class="celebrate" id="celebrate" aria-live="polite">
+      <div class="back"></div>
+      <div class="confetti" id="confetti"></div>
+      <div class="card">
+        <img class="hero" src="https://placedog.net/120/120?id=23" alt="">
+        <div class="title">Mochi is ready 🎉</div>
+        <div class="sub">Every box is ticked. Bring her home and start the best chapter yet.</div>
+        <button class="btn" id="restart">Share the moment</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const sections = [
+      { title:'Before pickup', items:[
+        { id:'crate',   t:'Set up a cosy crate',       s:'Pick a corner, add soft bedding & a chew toy', tag:'Home',   done:true  },
+        { id:'food',    t:'Buy puppy food',            s:'Same brand the breeder/shelter is using',       tag:'Supply', done:true  },
+        { id:'vet',     t:'Register a vet nearby',     s:'Book first checkup within week one',            tag:'Health', done:false },
+      ]},
+      { title:'Day one', items:[
+        { id:'tags',    t:'Pick up ID tag & collar',   s:'Engrave with your phone number',                tag:'Gear',   done:true  },
+        { id:'bathrm',  t:'Puppy-proof the bathroom',  s:'Hide cables, close toilet lid, raise bins',     tag:'Home',   done:false },
+        { id:'potty',   t:'Choose a potty spot',       s:'Take Mochi there every 2 hours',                tag:'Train',  done:false },
+      ]},
+      { title:'First week', items:[
+        { id:'class',   t:'Book puppy class',          s:'Social skills + basic cues',                    tag:'Train',  done:false },
+        { id:'walk',    t:"Mochi's first walk",         s:'Keep it short, let her sniff everything',       tag:'Walk',   done:false },
+      ]},
+    ];
+
+    const totalItems = sections.flatMap(s => s.items).length;
+    let doneCount = sections.flatMap(s => s.items).filter(it => it.done).length;
+
+    const list = document.getElementById('list');
+    // only render NOT-YET-done tasks; already-done items contribute to the count without appearing in the list
+    list.innerHTML = sections.map(sec => {
+      const pending = sec.items.filter(it => !it.done);
+      if (!pending.length) return '';
+      return `<section class="section">
+        <div class="sec-h"><span>${sec.title}</span><span class="n">${pending.length} task${pending.length>1?'s':''}</span></div>
+        ${pending.map(it => `
+          <div class="task" data-id="${it.id}" role="button" aria-pressed="false">
+            <button class="cb" aria-label="Check off ${it.t}">
+              <span class="fillclip"></span>
+              <span class="surface" aria-hidden="true">
+                <svg class="w1" viewBox="0 0 200 6" preserveAspectRatio="none"><path d="M0 3 Q25 0 50 3 T100 3 T150 3 T200 3 V6 H0 Z"/></svg>
+                <svg class="w2" viewBox="0 0 200 6" preserveAspectRatio="none"><path d="M0 3 Q25 0 50 3 T100 3 T150 3 T200 3 V6 H0 Z"/></svg>
+              </span>
+              <span class="tick"><svg viewBox="0 0 24 24"><path d="M6 12.5 10.5 17 18 8.5"/></svg></span>
+            </button>
+            <div class="task-copy">
+              <div class="t-title">${it.t}</div>
+              <div class="t-sub">${it.s}</div>
+            </div>
+            <span class="tag">${it.tag}</span>
+          </div>`).join('')}
+      </section>`;
+    }).join('');
+
+    const ringEl = document.querySelector('.ring');
+    function updateProgress() {
+      const done = doneCount;
+      const circ = 2 * Math.PI * 19;
+      document.querySelector('.ring .fill').style.strokeDashoffset = (circ * (1 - done/totalItems)).toFixed(2);
+      document.querySelector('[data-count]').textContent = `${done}/${totalItems}`;
+      const left = totalItems - done;
+      const copy = document.querySelector('[data-prog-l]');
+      const sub = document.querySelector('[data-prog-s]');
+      if (left === 0) { copy.textContent = "Mochi's ready!"; sub.textContent = 'All set — enjoy day one 🐾'; }
+      else if (done === 0) { copy.textContent = 'Just getting started'; sub.textContent = 'Tap each task to check it off.'; }
+      else { copy.textContent = `${done} done, ${left} to go`; sub.textContent = "You and Mochi are nearly there."; }
+      // pulse the ring on every progress tick
+      ringEl.classList.remove('pulse'); void ringEl.offsetWidth; ringEl.classList.add('pulse');
+    }
+
+    // ---- celebration ----
+    const celebrate = document.getElementById('celebrate');
+    const confettiBox = document.getElementById('confetti');
+    const palette = ['#9d4fe0','#c89aff','#5d20a6','#efe8fd','#1c1c1e','#8e43db'];
+    const pawSVG = '<svg viewBox="0 0 24 24"><ellipse cx="6.5" cy="9" rx="1.9" ry="2.4"/><ellipse cx="17.5" cy="9" rx="1.9" ry="2.4"/><ellipse cx="9.8" cy="5.6" rx="1.7" ry="2.2"/><ellipse cx="14.2" cy="5.6" rx="1.7" ry="2.2"/><path d="M12 11.5c2.6 0 4.8 1.9 4.8 4.1 0 1.8-1.6 2.6-3 2.6-.8 0-1.3-.3-1.8-.3s-1 .3-1.8.3c-1.4 0-3-.8-3-2.6 0-2.2 2.2-4.1 4.8-4.1Z"/></svg>';
+    function spawnConfetti(count){
+      confettiBox.innerHTML = '';
+      const frag = document.createDocumentFragment();
+      for (let i=0;i<count;i++){
+        const p = document.createElement('span');
+        const isPaw = Math.random() < .22;
+        p.className = 'piece' + (isPaw ? ' paw' : '');
+        const w = isPaw ? 18 : (4 + Math.random()*7);
+        const h = isPaw ? 18 : (8 + Math.random()*10);
+        const x = Math.random()*100;
+        const dx = (Math.random()*120 - 60) + 'px';
+        const rot = (Math.random()*720 - 360) + 'deg';
+        const d  = (1.6 + Math.random()*1.4) + 's';
+        const dl = (Math.random()*.9) + 's';
+        const r  = isPaw ? '0' : (Math.random() < .3 ? '50%' : '2px');
+        const c  = palette[Math.floor(Math.random()*palette.length)];
+        p.style.cssText = `--x:${x}%;--w:${w}px;--h:${h}px;--dx:${dx};--rot:${rot};--d:${d};--dl:${dl};--r:${r};--c:${c};`;
+        if (isPaw) p.innerHTML = pawSVG;
+        frag.appendChild(p);
+      }
+      confettiBox.appendChild(frag);
+    }
+    function fireCelebration(){
+      celebrate.classList.add('on');
+      spawnConfetti(60);
+      // top-up a second burst to extend the shower
+      window.setTimeout(() => spawnConfetti(40), 900);
+    }
+    document.getElementById('restart').addEventListener('click', () => {
+      celebrate.classList.remove('on');
+    });
+
+    list.addEventListener('click', (e) => {
+      const task = e.target.closest('.task');
+      if (!task || task.classList.contains('melting')) return;
+      task.setAttribute('data-done', 'true');
+      task.setAttribute('aria-pressed', 'true');
+      doneCount += 1;
+      updateProgress();
+      // let the checkbox fill animation play, then melt the row away
+      window.setTimeout(() => {
+        task.classList.add('melting');
+        window.setTimeout(() => {
+          const sec = task.closest('.section');
+          task.remove();
+          if (sec && !sec.querySelector('.task')) sec.remove();
+          if (doneCount === totalItems) window.setTimeout(fireCelebration, 300);
+        }, 900);
+      }, 520);
+    });
+
+    updateProgress();
+
+    if (new URLSearchParams(location.search).has('preview')) {
+      document.documentElement.classList.add('is-preview');
+      // auto-check pending tasks one by one; last one triggers the celebration — hold on it, then reload the loop
+      const order = ['vet','bathrm','potty','class','walk'];
+      let i = 0;
+      window.setTimeout(function tick(){
+        const el = list.querySelector(`.task[data-id="${order[i]}"]`);
+        if (el) el.click();
+        i += 1;
+        if (i < order.length) window.setTimeout(tick, 1800);
+        else window.setTimeout(() => location.reload(), 5500);
+      }, 1400);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pets</title>
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    :root{
+      --bg:#ffffff; --feed:#ffffff; --ink:#1c1c1e; --muted:#8e8e93; --soft:#f1f1f3;
+      --line:#ececef;
+      --accent:#1c1c1e; --accent-ink:#1c1c1e; --accent-soft:#f1f1f3;
+      --cta:linear-gradient(135deg,#9d4fe0 0%,#5d20a6 100%);
+      --cta-sh:rgba(93,32,166,.36);
+      --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    }
+    html,body{margin:0;height:100%;}
+    body{background:#ffffff;display:grid;place-items:center;font-family:var(--font);color:var(--ink);padding:28px;min-height:100vh;box-sizing:border-box;}
+
+    /* ---- iPhone 17 screen (402 x 874 pt), interface only ---- */
+    .screen{
+      position:relative;width:402px;height:874px;background:var(--bg);
+      border-radius:54px;overflow:hidden;display:flex;flex-direction:column;
+      box-shadow:0 24px 70px rgba(0,0,0,.28);
+      zoom:.86;
+    }
+    html.is-preview{overflow:hidden;}
+    html.is-preview body{padding:0;}
+    html.is-preview .screen{zoom:1;transform:scale(1.34);}
+
+    /* ---- status bar ---- */
+    .statusbar{position:relative;flex:0 0 auto;height:54px;display:flex;align-items:center;
+      justify-content:space-between;padding:5px 22px 0 33px;z-index:5;}
+    .time{font-size:17px;font-weight:600;letter-spacing:-.2px;color:#000;font-variant-numeric:tabular-nums;}
+    .sbicons{display:flex;align-items:center;gap:7px;}
+    .island{position:absolute;top:12px;left:50%;transform:translateX(-50%);
+      width:125px;height:37px;background:#000;border-radius:20px;}
+
+    /* ---- feed header (search + chips) ---- */
+    .head{flex:0 0 auto;padding:4px 20px 10px;background:var(--bg);z-index:4;}
+    .head-top{display:flex;align-items:flex-start;justify-content:space-between;margin:2px 0 14px;}
+    .h-copy{display:flex;flex-direction:column;gap:4px;}
+    .h-eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;}
+    .h1{font-size:26px;font-weight:800;letter-spacing:-.6px;color:var(--ink);display:flex;align-items:center;gap:7px;}
+    .h1 svg{color:var(--ink);}
+    .ava{width:38px;height:38px;border-radius:50%;object-fit:cover;background:var(--soft);align-self:flex-start;}
+    .search{display:flex;align-items:center;gap:9px;height:44px;padding:0 14px;border-radius:22px;
+      background:var(--soft);color:var(--muted);font-size:16px;}
+    .search svg{flex:0 0 auto;}
+    .search .ph{flex:1;}
+    .chips{display:flex;gap:8px;margin-top:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+    .chips::-webkit-scrollbar{display:none;}
+    .chip{flex:0 0 auto;padding:8px 15px;border-radius:17px;background:var(--accent-soft);color:var(--accent-ink);
+      font-size:13.5px;font-weight:600;white-space:nowrap;}
+    .chip.on{background:var(--accent);color:#fff;}
+
+    /* ---- masonry feed ---- */
+    .scroll{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;background:var(--feed);
+      -webkit-overflow-scrolling:touch;}
+    .grid{columns:2;column-gap:10px;padding:8px 20px 120px;}
+    .card{break-inside:avoid;margin-bottom:12px;}
+    .thumb{position:relative;width:100%;border-radius:18px;overflow:hidden;
+      background:linear-gradient(135deg,#e7e7ec,#d8d8df);}
+    .thumb img{display:block;width:100%;height:auto;border:0;}
+    .meta{display:flex;align-items:center;gap:7px;padding:7px 4px 0;}
+    .meta .dot{width:18px;height:18px;border-radius:50%;flex:0 0 auto;background:#d4d4da;}
+    .meta .t{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.25;
+      overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+    .meta .by{font-size:11px;color:var(--muted);margin-top:1px;}
+    .save{position:absolute;right:8px;bottom:8px;height:30px;padding:0 15px;border-radius:15px;
+      background:var(--cta);color:#fff;font-size:12.5px;font-weight:700;display:flex;align-items:center;
+      box-shadow:0 5px 14px var(--cta-sh);}
+    .likes{position:absolute;left:8px;top:8px;height:26px;padding:0 10px 0 8px;border-radius:13px;
+      background:rgba(255,255,255,.92);display:flex;align-items:center;gap:4px;font-size:12px;font-weight:700;
+      color:var(--ink);backdrop-filter:blur(4px);box-shadow:0 2px 6px rgba(0,0,0,.08);}
+    .likes svg{color:var(--ink);}
+
+    /* ---- floating pill tab bar (Luma style) ---- */
+    .tabbar{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);
+      display:inline-flex;align-items:center;gap:4px;padding:7px;border-radius:32px;
+      background:rgba(244,244,246,.78);backdrop-filter:blur(22px);
+      box-shadow:0 12px 28px rgba(0,0,0,.13),0 1px 0 rgba(255,255,255,.7) inset;z-index:7;}
+    .tab{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 22px 6px;
+      border-radius:24px;color:#9a9a9f;transition:background .2s,box-shadow .2s;}
+    .tab .ic{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;
+      background:#e6e6ea;color:#5a5a60;}
+    .tab .ic svg{display:block;}
+    .tab .lb{font-size:11px;font-weight:600;letter-spacing:-.1px;}
+    .tab.on{background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.1);color:var(--ink);}
+    .tab.on .ic{background:transparent;color:var(--ink);}
+    .homebar{position:absolute;left:50%;bottom:9px;transform:translateX(-50%);
+      width:138px;height:5px;border-radius:3px;background:#1c1c1e;opacity:.9;z-index:6;}
+
+    /* ---- pet detail sheet — iOS-style presentation ---- */
+    .card{cursor:pointer;}
+    /* behind-content shrinks + corner radius grows as the sheet rises */
+    .stack{display:contents;}
+    .screen > .statusbar,
+    .screen > .head,
+    .screen > .scroll,
+    .screen > .tabbar,
+    .screen > .homebar{transform-origin:50% 0;transition:transform .55s cubic-bezier(.22,1,.32,1), border-radius .55s cubic-bezier(.22,1,.32,1), filter .55s ease;}
+    .screen.pushed > .scroll,
+    .screen.pushed > .head{transform:scale(.94) translateY(14px);border-radius:22px;overflow:hidden;filter:brightness(.86);}
+    .detail{position:absolute;inset:0;z-index:20;}
+    .d-backdrop{position:absolute;inset:0;background:rgba(10,8,20,.38);opacity:0;transition:opacity .5s ease;}
+    .detail.open .d-backdrop{opacity:1;}
+    .sheet{position:absolute;left:0;right:0;bottom:0;height:90%;background:#fff;border-radius:28px 28px 0 0;
+      display:flex;flex-direction:column;overflow:hidden;box-shadow:0 -16px 48px rgba(0,0,0,.22);
+      transform:translateY(100%);opacity:.85;
+      transition:transform .62s cubic-bezier(.22,1,.32,1), opacity .5s cubic-bezier(.22,1,.32,1);}
+    .detail.open .sheet{transform:translateY(0);opacity:1;}
+    /* content inside stages in one by one after the sheet starts rising */
+    .sheet .stg{opacity:0;transform:translateY(26px) scale(.96);
+      transition:opacity .36s cubic-bezier(.22,1,.32,1), transform .46s cubic-bezier(.34,1.4,.5,1);}
+    .detail.open .sheet .stg{opacity:1;transform:translateY(0) scale(1);}
+    .detail.open .sheet .stg:nth-child(1){transition-delay:.24s;}
+    .detail.open .sheet .stg:nth-child(2){transition-delay:.36s;}
+    .detail.open .sheet .stg:nth-child(3){transition-delay:.48s;}
+    .detail.open .sheet .stg:nth-child(4){transition-delay:.60s;}
+    .detail.open .sheet .stg:nth-child(5){transition-delay:.72s;}
+    .detail.open .sheet .stg:nth-child(6){transition-delay:.84s;}
+    .detail.open .sheet .stg:nth-child(7){transition-delay:.96s;}
+    .sheet .d-cta{opacity:0;transform:translateY(26px) scale(.96);
+      transition:opacity .36s cubic-bezier(.22,1,.32,1) 1.1s, transform .46s cubic-bezier(.34,1.4,.5,1) 1.1s;}
+    .detail.open .sheet .d-cta{opacity:1;transform:translateY(0) scale(1);}
+    .d-hero{opacity:0;transform:scale(1.06);transition:opacity .55s cubic-bezier(.22,1,.32,1) .1s, transform .7s cubic-bezier(.22,1,.32,1) .1s;}
+    .detail.open .d-hero{opacity:1;transform:scale(1);}
+    .d-handle{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:40px;height:5px;border-radius:3px;background:#d8d8dd;z-index:3;}
+    .d-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:0;cursor:pointer;
+      background:rgba(255,255,255,.9);backdrop-filter:blur(6px);color:#1c1c1e;font-size:19px;line-height:1;
+      display:grid;place-items:center;z-index:3;box-shadow:0 2px 8px rgba(0,0,0,.14);}
+    .d-scroll{flex:1;overflow-y:auto;}
+    .d-hero{width:100%;height:264px;background:#ececf0;}
+    .d-hero img{width:100%;height:100%;object-fit:cover;display:block;}
+    .d-body{padding:18px 20px 22px;}
+    .d-title{font-size:23px;font-weight:800;letter-spacing:-.4px;margin:0 0 12px;color:var(--ink);}
+    .d-owner{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+    .d-ava{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#e6e6ea;}
+    .d-owner .nm{font-size:14px;font-weight:700;color:var(--ink);}
+    .d-owner .rl{font-size:12px;color:var(--muted);margin-top:1px;}
+    .d-stats{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+    .d-stat{padding:8px 13px;border-radius:12px;background:var(--soft);font-size:12.5px;font-weight:700;
+      color:var(--ink);display:flex;align-items:center;gap:6px;}
+    .d-stat svg{color:var(--ink);}
+    .d-desc{font-size:14.5px;line-height:1.6;color:#44444a;margin:0;}
+    .d-prefs-h{font-size:12px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin:24px 0 2px;}
+    .d-row{display:flex;align-items:center;justify-content:space-between;padding:15px 0;border-top:1px solid var(--line);}
+    .d-row .lbl{font-size:15px;font-weight:500;color:var(--ink);}
+    .tgl{position:relative;width:50px;height:30px;border-radius:15px;background:#e4e4e9;cursor:pointer;
+      border:0;padding:0;flex:0 0 auto;transition:background .25s ease;}
+    .tgl::after{content:"";position:absolute;top:2px;left:2px;width:26px;height:26px;border-radius:50%;
+      background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.22);transition:transform .28s cubic-bezier(.3,1.3,.5,1);}
+    .tgl[aria-checked="true"]{background:var(--cta);}
+    .tgl[aria-checked="true"]::after{transform:translateX(20px);}
+    .tgl.flip::after{animation:knobFluid .44s cubic-bezier(.34,1.3,.5,1);}
+    @keyframes knobFluid{0%{width:26px}45%{width:32px}100%{width:26px}}
+    .d-cta{padding:12px 20px 16px;border-top:1px solid var(--line);background:#fff;}
+    /* liquid-fill CTA: outlined → half fill → full, driven by the toggles */
+    .d-btn{position:relative;width:100%;height:54px;border-radius:16px;border:2px solid #7c3aed;
+      background:#fff;color:#7c3aed;font-size:16px;font-weight:700;cursor:pointer;overflow:hidden;
+      display:grid;place-items:center;}
+    .d-btn .lbl{position:relative;z-index:2;}
+    .d-btn .fillclip{position:absolute;left:0;right:0;bottom:0;height:0;overflow:hidden;background:var(--cta);
+      z-index:3;transition:height .6s cubic-bezier(.34,1.28,.5,1);}
+    .d-btn .lbl2{position:absolute;left:0;right:0;bottom:0;height:54px;display:grid;place-items:center;
+      color:#fff;font-size:16px;font-weight:700;}
+    .d-btn .surface{position:absolute;left:0;width:100%;height:8px;bottom:0;z-index:1;overflow:hidden;
+      opacity:0;pointer-events:none;transition:bottom .6s cubic-bezier(.34,1.28,.5,1),opacity .3s;}
+    .d-btn .surface svg{position:absolute;bottom:-1px;left:0;width:200%;height:100%;fill:#8e43db;}
+    .d-btn .surface .w1{animation:wave 2.3s linear infinite;}
+    .d-btn .surface .w2{animation:wave 3.6s linear infinite reverse;opacity:.5;}
+    @keyframes wave{to{transform:translateX(-50%);}}
+    .d-btn[data-fill="50"] .fillclip{height:50%;}
+    .d-btn[data-fill="100"] .fillclip{height:100%;}
+    .d-btn[data-fill="50"] .surface{bottom:50%;opacity:1;}
+    .d-btn[data-fill="100"] .surface{bottom:100%;opacity:1;}
+    @media (prefers-reduced-motion:reduce){ .sheet{transition-duration:.01ms;} .d-backdrop{transition-duration:.01ms;} }
+  </style>
+</head>
+<body>
+  <main class="screen" aria-label="Discover app">
+    <!-- status bar -->
+    <div class="statusbar">
+      <span class="time">9:41</span>
+      <div class="island"></div>
+      <div class="sbicons" aria-hidden="true">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="#000"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="#000"><path d="M8.5 2.7c2.55 0 5 .98 6.84 2.74a.6.6 0 0 0 .84-.01l.64-.66a.6.6 0 0 0-.01-.86A12 12 0 0 0 8.5.7 12 12 0 0 0 .19 3.9a.6.6 0 0 0-.01.86l.64.66c.23.24.6.25.84.01A9.86 9.86 0 0 1 8.5 2.7Z"/><path d="M8.5 6.3c1.6 0 3.13.62 4.28 1.72a.6.6 0 0 0 .83-.02l.64-.67a.6.6 0 0 0-.02-.86 8.4 8.4 0 0 0-11.46 0 .6.6 0 0 0-.02.86l.64.67c.22.23.6.24.83.02A6.2 6.2 0 0 1 8.5 6.3Z"/><circle cx="8.5" cy="10.3" r="1.6"/></svg>
+        <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="23.2" height="12" rx="3.6" fill="none" stroke="#000" stroke-opacity=".35"/><rect x="2" y="2" width="18.5" height="9" rx="2.3" fill="#000"/><path d="M25.1 4.4c1 .35 1.7 1.3 1.7 2.35s-.7 2-1.7 2.35V4.4Z" fill="#000" fill-opacity=".4"/></svg>
+      </div>
+    </div>
+
+    <!-- header: title + avatar + search + chips -->
+    <div class="head">
+      <div class="head-top">
+        <div class="h-copy">
+          <span class="h-eyebrow">Discover</span>
+          <span class="h1">Pets near you</span>
+        </div>
+        <img class="ava" src="https://picsum.photos/seed/meava/80/80" alt="">
+      </div>
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 20 20"><circle cx="9" cy="9" r="6.2" fill="none" stroke="#8e8e93" stroke-width="2"/><line x1="13.6" y1="13.6" x2="18" y2="18" stroke="#8e8e93" stroke-width="2" stroke-linecap="round"/></svg>
+        <span class="ph">Search pets</span>
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/></svg>
+      </div>
+      <div class="chips">
+        <span class="chip on">All</span>
+        <span class="chip">Dogs</span>
+        <span class="chip">Cats</span>
+        <span class="chip">Puppies</span>
+        <span class="chip">Kittens</span>
+        <span class="chip">Small pets</span>
+        <span class="chip">Birds</span>
+      </div>
+    </div>
+
+    <!-- masonry feed -->
+    <div class="scroll">
+      <section class="grid" id="grid" aria-label="Ideas"></section>
+    </div>
+
+    <!-- floating tab bar -->
+    <nav class="tabbar" aria-label="Tabs">
+      <div class="tab on">
+        <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.1 3.3 10v10.2c0 .5.4.9.9.9h4.7v-6.2h6.2v6.2h4.7c.5 0 .9-.4.9-.9V10L12 3.1Z"/></svg></span>
+        <span class="lb">Home</span>
+      </div>
+      <div class="tab">
+        <span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6.5 4h11a1 1 0 0 1 1 1v15.2l-6.5-3.8L5.5 20.2V5a1 1 0 0 1 1-1Z"/></svg></span>
+        <span class="lb">Saved</span>
+      </div>
+      <div class="tab">
+        <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.7"/><path d="M5 20c0-3.7 3.1-6.2 7-6.2s7 2.5 7 6.2" stroke-linecap="round"/></svg></span>
+        <span class="lb">Profile</span>
+      </div>
+    </nav>
+    <div class="homebar" aria-hidden="true"></div>
+
+    <!-- pet detail sheet -->
+    <div class="detail" id="detail" role="dialog" aria-modal="true" aria-label="Pet details" hidden>
+      <div class="d-backdrop" data-close></div>
+      <div class="sheet">
+        <span class="d-handle"></span>
+        <button class="d-close" data-close aria-label="Close">&times;</button>
+        <div class="d-scroll">
+          <div class="d-hero"><img class="d-img" alt=""></div>
+          <div class="d-body">
+            <h2 class="d-title stg"></h2>
+            <div class="d-owner stg">
+              <img class="d-ava" src="https://picsum.photos/seed/owner9/60/60" alt="">
+              <div><div class="nm d-by"></div><div class="rl">Owner · Los Angeles, 2 mi</div></div>
+            </div>
+            <div class="d-stats stg">
+              <span class="d-stat"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.3S3.8 15.1 3.8 9.3A4.3 4.3 0 0 1 12 7.2a4.3 4.3 0 0 1 8.2 2.1c0 5.8-8.2 11-8.2 11Z"/></svg><b class="d-likes"></b></span>
+              <span class="d-stat d-breed"></span>
+              <span class="d-stat d-age"></span>
+            </div>
+            <p class="d-desc stg"></p>
+            <div class="d-prefs-h stg">Preferences</div>
+            <div class="d-row stg"><span class="lbl">Notify me about this pet</span>
+              <button class="tgl" role="switch" aria-checked="false" aria-label="Notify me about this pet"></button></div>
+            <div class="d-row stg"><span class="lbl">Add to my shortlist</span>
+              <button class="tgl" role="switch" aria-checked="false" aria-label="Add to my shortlist"></button></div>
+          </div>
+        </div>
+        <div class="d-cta">
+          <button class="d-btn" data-fill="0" aria-label="Follow me">
+            <span class="lbl">Follow me</span>
+            <span class="fillclip"><span class="lbl2">Follow me</span></span>
+            <span class="surface" aria-hidden="true">
+              <svg class="w1" viewBox="0 0 200 12" preserveAspectRatio="none"><path d="M0 6 Q25 0 50 6 T100 6 T150 6 T200 6 V12 H0 Z"/></svg>
+              <svg class="w2" viewBox="0 0 200 12" preserveAspectRatio="none"><path d="M0 6 Q25 0 50 6 T100 6 T150 6 T200 6 V12 H0 Z"/></svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const pins = [
+      {id:1,  w:400, h:560, k:'dog', t:'Sleepy corgi on the couch', by:'Mia',  b:'Corgi',             a:'8 weeks',  likes:'1.2k'},
+      {id:2,  w:400, h:320, k:'cat', t:'Cat in a sunbeam',          by:'Theo', b:'Orange Tabby',      a:'2 yrs',    likes:'842'},
+      {id:3,  w:400, h:520, k:'dog', t:'Husky’s first snow',        by:'Lena', b:'Siberian Husky',    a:'4 mo'},
+      {id:4,  w:400, h:400, k:'cat', t:'Kitten in a basket',        by:'Kai',  b:'Domestic Shorthair',a:'6 weeks',  likes:'2.4k'},
+      {id:5,  w:400, h:600, k:'dog', t:'Shiba smile',               by:'Yuki', b:'Shiba Inu',         a:'1 yr'},
+      {id:6,  w:400, h:340, k:'cat', t:'Tabby mid-stretch',         by:'Rosa', b:'Tabby',             a:'3 yrs',    likes:'509'},
+      {id:7,  w:400, h:500, k:'dog', t:'Lab puppy nap time',        by:'Omar', b:'Labrador',          a:'10 weeks'},
+      {id:8,  w:400, h:300, k:'cat', t:'Curious kitten',            by:'Noa',  b:'Shorthair kitten',  a:'5 mo',     likes:'3.1k'},
+      {id:9,  w:400, h:460, k:'dog', t:'Beagle puppy eyes',         by:'Dima', b:'Beagle',            a:'2 yrs'},
+      {id:10, w:400, h:380, k:'cat', t:'Fluffy ragdoll',           by:'Hale', b:'Ragdoll',           a:'1 yr',     likes:'721'},
+      {id:11, w:400, h:540, k:'dog', t:'Samoyed cloud',             by:'Juno', b:'Samoyed',           a:'7 weeks',  likes:'4.6k'},
+      {id:12, w:400, h:320, k:'cat', t:'Orange cat loaf',           by:'Kern', b:'Orange Tabby',      a:'3 yrs'},
+      {id:13, w:400, h:500, k:'dog', t:'Golden retriever pup',      by:'Sana', b:'Golden Retriever',  a:'12 weeks', likes:'988'},
+      {id:14, w:400, h:340, k:'cat', t:'Sleepy grey kitten',        by:'Mori', b:'Grey Shorthair',    a:'9 weeks'},
+    ];
+    const src = p => p.k === 'cat'
+      ? `https://cataas.com/cat?width=${p.w}&height=${p.h}&n=${p.id}`
+      : `https://placedog.net/${p.w}/${p.h}?id=${p.id}`;
+    const heart = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.3S3.8 15.1 3.8 9.3A4.3 4.3 0 0 1 12 7.2a4.3 4.3 0 0 1 8.2 2.1c0 5.8-8.2 11-8.2 11Z"/></svg>';
+    const grid = document.getElementById('grid');
+    grid.innerHTML = pins.map(p => `
+      <article class="card">
+        <div class="thumb" style="aspect-ratio:${p.w}/${p.h}">
+          <img src="${src(p)}" alt="${p.t}" onerror="this.style.display='none'">
+          ${p.likes ? `<span class="likes">${heart}${p.likes}</span>` : ''}
+        </div>
+        <div class="meta">
+          <span class="dot"></span>
+          <div><div class="t">${p.t}</div><div class="by">${p.by}</div></div>
+        </div>
+      </article>`).join('');
+
+    // ---- detail sheet open / close ----
+    const d = document.getElementById('detail');
+    function openDetail(p){
+      d.querySelector('.d-img').src = src(p);
+      d.querySelector('.d-title').textContent = p.t;
+      d.querySelector('.d-by').textContent = p.by;
+      d.querySelector('.d-likes').textContent = p.likes || '126';
+      d.querySelector('.d-breed').textContent = p.b;
+      d.querySelector('.d-age').textContent = p.a;
+      d.querySelector('.d-desc').textContent =
+        `Say hello to ${p.t.toLowerCase().startsWith('a ')?p.t:'this '+p.b.toLowerCase()}. `
+        + `${p.a} old, sweet and curious, great with people and other pets. Fully vaccinated, microchipped and ready to find a forever home.`;
+      d.querySelector('.d-scroll').scrollTop = 0;
+      d.querySelectorAll('.tgl').forEach(t => t.setAttribute('aria-checked', 'false'));
+      updateFollowFill();
+      d.hidden = false;
+      requestAnimationFrame(() => { d.classList.add('open'); document.querySelector('.screen').classList.add('pushed'); });
+    }
+    function closeDetail(){
+      d.classList.remove('open');
+      document.querySelector('.screen').classList.remove('pushed');
+      window.setTimeout(() => { d.hidden = true; }, 620);
+    }
+    function updateFollowFill(){
+      const on = [...d.querySelectorAll('.tgl')].filter(t => t.getAttribute('aria-checked') === 'true').length;
+      d.querySelector('.d-btn').dataset.fill = String(on * 50);
+    }
+    grid.addEventListener('click', (e) => {
+      const card = e.target.closest('.card');
+      if (!card) return;
+      const i = [...grid.children].indexOf(card);
+      if (pins[i]) openDetail(pins[i]);
+    });
+    d.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeDetail));
+    d.addEventListener('click', (e) => {
+      const t = e.target.closest('.tgl');
+      if (!t) return;
+      t.setAttribute('aria-checked', t.getAttribute('aria-checked') === 'true' ? 'false' : 'true');
+      updateFollowFill();
+      t.classList.remove('flip'); void t.offsetWidth; t.classList.add('flip');
+      window.setTimeout(() => t.classList.remove('flip'), 460);
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !d.hidden) closeDetail(); });
+
+    if (new URLSearchParams(location.search).has('preview')) {
+      document.documentElement.classList.add('is-preview');
+      const sc = document.querySelector('.scroll');
+      let dir = 1;
+      window.setInterval(() => {
+        if (d.classList.contains('open')) return;   // pause feed scroll while detail is open
+        sc.scrollTop += dir * 1.1;
+        if (sc.scrollTop >= sc.scrollHeight - sc.clientHeight - 1) dir = -1;
+        else if (sc.scrollTop <= 1) dir = 1;
+      }, 28);
+
+      // showcase: scroll the feed, then open a detail and flip the toggles, then close — loop
+      (function cycle(){
+        window.setTimeout(() => {
+          openDetail(pins[0]);
+          // let the full staged entry play (~1.6s) before touching anything
+          window.setTimeout(() => {
+            const sc2 = d.querySelector('.d-scroll');
+            const prefs = d.querySelector('.d-prefs-h');
+            sc2.scrollTop = Math.max(0, prefs.offsetTop - 300);
+          }, 1800);
+          const tgls = [...d.querySelectorAll('.tgl')];
+          let n = 0;
+          const ti = window.setTimeout(function flip(){
+            const t = tgls[n % tgls.length];
+            t.setAttribute('aria-checked', t.getAttribute('aria-checked') === 'true' ? 'false' : 'true');
+            updateFollowFill();
+            n += 1;
+            window._tglTimer = window.setTimeout(flip, 900);
+          }, 2300);
+          window.setTimeout(() => { window.clearTimeout(window._tglTimer); closeDetail(); window.setTimeout(cycle, 2200); }, 6400);
+        }, 2600);
+      })();
+    }
+  </script>
+</body>
+</html>

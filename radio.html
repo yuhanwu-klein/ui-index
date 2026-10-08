@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Radio</title>
+  <style>
+    * { box-sizing:border-box; }
+    :root {
+      color-scheme:light;
+      --ink:#1c1c1e; --ivory:#f1f1f3; --page:#fff; --panel:#f1f1f3;
+      --copy:#1c1c1e; --muted:#8e8e93; --line:#ececef;
+      --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      --ease:cubic-bezier(.22,.9,.28,1);
+      --pop:cubic-bezier(.34,1.56,.64,1);   /* overshoot for the dot */
+    }
+    html,body { width:100%; height:100%; margin:0; overflow:hidden; background:var(--page); }
+    body { display:grid; place-items:center; font-family:var(--font); }
+    .ui { position:relative; width:min(100vw,150vh); aspect-ratio:3/2; background:var(--page); overflow:hidden; display:grid; place-items:center; }
+
+    .stage { display:flex; flex-direction:column; align-items:center; gap:24px; }
+    html.is-preview .stage { transform:scale(2.4); }
+
+    /* illustration + explanation above the selector */
+    .intro { display:flex; flex-direction:column; align-items:center; gap:9px; text-align:center; width:320px; max-width:calc(100vw - 32px); }
+    .illo { width:58px; color:var(--ink); }
+    .illo svg { width:100%; height:auto; display:block; }
+    .age-c { opacity:0; transform:scale(.25); transform-box:fill-box; transform-origin:center; transition:opacity 300ms var(--ease), transform 480ms var(--pop); }
+    .age-c.on { opacity:1; transform:scale(1); }
+    .intro-title { color:var(--copy); font-size:16px; font-weight:700; letter-spacing:-.015em; }
+    .intro-sub { color:var(--muted); font-size:13px; line-height:1.45; letter-spacing:0; max-width:280px; }
+
+    /* one big panel holding the three bars */
+    .panel { width:320px; max-width:calc(100vw - 32px); padding:8px; border:1px solid rgba(32,32,31,.08); border-radius:20px; background:var(--panel); box-shadow:0 6px 20px rgba(32,32,31,.06); }
+    .panel-head { padding:12px 14px 10px; color:var(--muted); font:700 9px/1 "SF Mono","Courier New",monospace; letter-spacing:.2em; text-transform:uppercase; }
+
+    .option { position:relative; display:flex; align-items:center; gap:14px; padding:14px 14px; border-radius:13px; cursor:pointer; transition:background-color 240ms var(--ease), padding 300ms var(--ease), box-shadow 300ms var(--ease); }
+    .option + .option::before { content:""; position:absolute; left:14px; right:14px; top:-1px; height:1px; background:rgba(32,32,31,.08); }
+    .option:hover { background:#fff; padding-top:26px; padding-bottom:26px; box-shadow:0 8px 18px rgba(32,32,31,.09); z-index:2; }
+    .panel .option:has(.radio[aria-checked="true"]) { background:rgba(32,32,31,.06); }
+    .panel .option:has(.radio[aria-checked="true"]) + .option::before,
+    .option:hover::before { opacity:0; }
+
+    .row-label { color:var(--copy); font-size:14.5px; font-weight:600; line-height:1; letter-spacing:-.015em; }
+
+    /* radio on the LEFT */
+    .radio { --rd:26px; position:relative; flex:0 0 auto; width:var(--rd); height:var(--rd); border:0; padding:0; background:transparent; cursor:pointer; outline:0; }
+    .radio:focus-visible { outline:1.5px solid var(--ink); outline-offset:6px; border-radius:50%; }
+
+    .ripple { position:absolute; inset:0; border-radius:50%; border:1px solid var(--ink); opacity:0; transform:scale(.5); pointer-events:none; }
+    .radio.sel .ripple { animation:ripple 640ms ease-out; }
+
+    .ring { position:absolute; inset:0; border:1.5px solid var(--ink); border-radius:50%; background:transparent; }
+
+    .dot { position:absolute; inset:0; margin:auto; width:46%; height:46%; border-radius:50%; background:var(--ink); transform:scale(0); transition:transform 380ms var(--pop), opacity 200ms var(--ease); }
+    .radio[aria-checked="true"] .dot { transform:scale(1); }
+
+    /* fingerprint revealed on hover, inside the circle */
+    .print { position:absolute; inset:0; margin:auto; width:66%; height:66%; color:var(--ink); opacity:0; transform:scale(.55); transition:opacity 200ms var(--ease), transform 280ms var(--pop); pointer-events:none; }
+    .print svg { width:100%; height:100%; }
+    .option:hover .print, .option.peek .print { opacity:1; transform:scale(1); }
+    .option:hover .dot, .option.peek .dot { opacity:0; transform:scale(0); }
+
+    @keyframes ripple { 0% { opacity:.34; transform:scale(.55); } 100% { opacity:0; transform:scale(1.95); } }
+
+    @media (max-width:600px) {
+      body { display:block; }
+      .ui { width:100vw; height:100vh; aspect-ratio:auto; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .ripple { animation:none!important; }
+      .dot, .print { transition-duration:.01ms; }
+    }
+  </style>
+</head>
+<body>
+  <main class="ui" aria-label="Age range">
+    <div class="stage">
+      <div class="intro">
+        <span class="illo">
+          <svg viewBox="0 0 80 120" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path class="age-c" d="M40 78 L56 106 L24 106 Z"/>
+            <circle class="age-c" cx="40" cy="63" r="15"/>
+            <rect class="age-c" x="25" y="18" width="30" height="30" rx="3"/>
+          </svg>
+        </span>
+        <span class="intro-title">Age group</span>
+        <span class="intro-sub">Choose the age range that best describes you.</span>
+      </div>
+
+      <div class="panel">
+      <div class="options" role="radiogroup" aria-label="Age range">
+        <div class="option">
+          <button class="radio" type="button" role="radio" aria-checked="false" aria-label="18 to 24">
+            <span class="ripple"></span><span class="ring"></span><span class="dot"></span>
+            <span class="print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2c0 .47 0 1.17-.02 2"/></svg></span>
+          </button>
+          <span class="row-label">18 &ndash; 24</span>
+        </div>
+        <div class="option">
+          <button class="radio" type="button" role="radio" aria-checked="true" aria-label="25 to 34">
+            <span class="ripple"></span><span class="ring"></span><span class="dot"></span>
+            <span class="print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2c0 .47 0 1.17-.02 2"/></svg></span>
+          </button>
+          <span class="row-label">25 &ndash; 34</span>
+        </div>
+        <div class="option">
+          <button class="radio" type="button" role="radio" aria-checked="false" aria-label="35 to 49">
+            <span class="ripple"></span><span class="ring"></span><span class="dot"></span>
+            <span class="print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2c0 .47 0 1.17-.02 2"/></svg></span>
+          </button>
+          <span class="row-label">35 &ndash; 49</span>
+        </div>
+      </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const options = [...document.querySelectorAll('.option')];
+    const radios = options.map((o) => o.querySelector('.radio'));
+    const circles = [...document.querySelectorAll('.age-c')];
+
+    // illustration is strongly tied to the choice: show (index + 1) circles
+    function updateIllo(idx) {
+      circles.forEach((c, i) => c.classList.toggle('on', i <= idx));
+    }
+
+    function select(el) {
+      if (el.getAttribute('aria-checked') === 'true') return;
+      radios.forEach((r) => {
+        const on = r === el;
+        r.setAttribute('aria-checked', on ? 'true' : 'false');
+        r.tabIndex = on ? 0 : -1;
+        if (on) {
+          r.classList.remove('sel');
+          void r.offsetWidth;
+          r.classList.add('sel');
+          window.setTimeout(() => r.classList.remove('sel'), 660);
+        }
+      });
+      updateIllo(radios.indexOf(el));
+    }
+
+    options.forEach((o) => {
+      const r = o.querySelector('.radio');
+      r.tabIndex = r.getAttribute('aria-checked') === 'true' ? 0 : -1;
+      o.addEventListener('click', () => select(r));
+      r.addEventListener('keydown', (e) => {
+        if (!['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft'].includes(e.key)) return;
+        e.preventDefault();
+        const i = radios.indexOf(r);
+        const next = (e.key === 'ArrowDown' || e.key === 'ArrowRight') ? (i + 1) % radios.length : (i - 1 + radios.length) % radios.length;
+        select(radios[next]);
+        radios[next].focus();
+      });
+    });
+
+    updateIllo(Math.max(0, radios.findIndex((r) => r.getAttribute('aria-checked') === 'true')));
+
+    if (new URLSearchParams(location.search).has('preview')) {
+      document.documentElement.classList.add('is-preview');
+      let i = 0;
+      window.setTimeout(function cycle() {
+        const o = options[i % options.length];
+        o.classList.add('peek');                       // reveal the fingerprint
+        window.setTimeout(() => { o.classList.remove('peek'); select(o.querySelector('.radio')); }, 650);
+        i += 1;
+        window.setTimeout(cycle, 1700);
+      }, 800);
+    }
+  </script>
+</body>
+</html>

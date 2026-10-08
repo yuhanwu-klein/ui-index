@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UI Index</title>
+  <style>
+    * { box-sizing:border-box; }
+    :root {
+      --page:#e8e6dd;         /* warm cream */
+      --dot:#c2bfb2;          /* graph-paper dot */
+      --card:#f6f3eb;         /* soft off-white */
+      --ink:#1a1a18;
+      --muted:#8a8880;
+      --line:#dcd9ce;
+      --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      --mono:"SF Mono","Courier New",monospace;
+    }
+    html,body { min-height:100%; margin:0; color:var(--ink); font-family:var(--font); }
+    body {
+      padding:28px;
+      background-color:var(--page);
+      background-image:radial-gradient(var(--dot) 1.2px, transparent 1.4px);
+      background-size:18px 18px;
+      background-position:0 0;
+    }
+    main { width:min(100%,1440px); margin:0 auto; display:grid; grid-template-rows:60px auto 40px; gap:20px; min-height:calc(100vh - 56px); }
+    header { display:flex; align-items:center; justify-content:space-between; padding:4px 2px; }
+    .brand { display:flex; align-items:center; gap:10px; }
+    .mark { width:32px; height:32px; border-radius:9px; background:var(--ink); display:grid; place-items:center; color:#f6f3eb; font-weight:900; font-size:16px; letter-spacing:-.02em; }
+    h1 { margin:0; font-size:22px; font-weight:700; letter-spacing:-.02em; }
+    .count { color:var(--muted); font:600 11px/1 var(--mono); letter-spacing:.14em; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+    .slot,.project { min-width:0; aspect-ratio:1/1; overflow:hidden; border-radius:22px; background:var(--card); }
+    .slot { border:1.5px dashed #cfccc0; background:transparent; }
+    .project { position:relative; display:grid; grid-template-rows:minmax(0,1fr) 54px; color:inherit; text-decoration:none; box-shadow:0 10px 28px rgba(26,26,24,.07), 0 1px 0 rgba(26,26,24,.03); transition:transform 220ms cubic-bezier(.22,1,.32,1), box-shadow 220ms ease; border:1px solid rgba(26,26,24,.045); }
+    .project:hover { transform:translateY(-4px); box-shadow:0 18px 36px rgba(26,26,24,.12), 0 1px 0 rgba(26,26,24,.04); }
+    .project:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
+    .preview { position:relative; min-height:0; overflow:hidden; background:#fff; border-bottom:1px solid var(--line); }
+    .preview iframe { position:absolute; inset:0; width:400%; height:400%; border:0; transform:scale(.25); transform-origin:0 0; pointer-events:none; }
+    .meta { display:flex; align-items:center; gap:12px; padding:0 16px; }
+    .number { color:var(--muted); font:700 10px/1 var(--mono); letter-spacing:.1em; }
+    h2 { margin:0; overflow:hidden; font-size:14px; font-weight:600; letter-spacing:-.015em; white-space:nowrap; text-overflow:ellipsis; color:var(--ink); }
+    .arrow { margin-left:auto; color:var(--muted); font-size:15px; transition:transform 220ms ease,color 220ms ease; }
+    .project:hover .arrow { color:var(--ink); transform:translate(2px,-2px); }
+    .foot { display:flex; align-items:center; gap:6px; color:var(--muted); font:600 11px/1 var(--mono); letter-spacing:.1em; text-transform:uppercase; padding:4px 2px; }
+    .foot .d { width:6px; height:6px; border-radius:2px; background:var(--ink); opacity:.65; display:inline-grid; grid-template-columns:1fr 1fr; }
+
+    @media (max-width:900px) {
+      .grid { grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:none; grid-auto-rows:220px; }
+    }
+    @media (max-width:560px) {
+      body { padding:16px; }
+      main { min-height:calc(100vh - 32px); grid-template-rows:48px auto; gap:12px; }
+      h1 { font-size:20px; }
+      .grid { grid-template-columns:1fr; grid-auto-rows:228px; gap:12px; }
+      .slot:nth-of-type(n+7) { display:none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>UI Index</h1>
+      <span class="count">12 / 12</span>
+    </header>
+
+    <section class="grid" aria-label="Detail page previews">
+      <a class="project" href="eclipse-toggle.html" aria-label="Open Appearance Toggle detail page">
+        <span class="preview"><iframe src="eclipse-toggle.html?preview=1&r=8" title="Appearance Toggle animated preview" tabindex="-1"></iframe></span>
+        <span class="meta"><span class="number">01</span><h2>Appearance Toggle</h2><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <a class="project" href="checkbox.html" aria-label="Open Checkbox detail page">
+        <span class="preview"><iframe src="checkbox.html?preview=1&r=6" title="Checkbox animated preview" tabindex="-1"></iframe></span>
+        <span class="meta"><span class="number">02</span><h2>Checkbox</h2><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <a class="project" href="radio.html" aria-label="Open Radio detail page">
+        <span class="preview"><iframe src="radio.html?preview=1&r=5" title="Radio animated preview" tabindex="-1"></iframe></span>
+        <span class="meta"><span class="number">03</span><h2>Radio</h2><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <a class="project" href="discover.html" aria-label="Open Discover detail page">
+        <span class="preview"><iframe src="discover.html?preview=1&r=14" title="Pets animated preview" tabindex="-1"></iframe></span>
+        <span class="meta"><span class="number">04</span><h2>Pets</h2><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <a class="project" href="prep.html" aria-label="Open Puppy Prep detail page">
+        <span class="preview"><iframe src="prep.html?preview=1&r=5" title="Puppy Prep animated preview" tabindex="-1"></iframe></span>
+        <span class="meta"><span class="number">05</span><h2>Puppy Prep</h2><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <a class="project" href="match.html" aria-label="Open Find your match detail page">
+        <span class="preview"><iframe src="match.html?preview=1&r=3" title="Find your match animated preview" tabindex="-1"></iframe></span>
+        <span class="meta"><span class="number">06</span><h2>Find your match</h2><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <a class="project" href="mood.html" aria-label="Open Mood switch detail page">
+        <span class="preview"><iframe src="mood.html?preview=1&r=7" title="Mood switch animated preview" tabindex="-1"></iframe></span>
+        <span class="meta"><span class="number">07</span><h2>Mood switch</h2><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <a class="project" href="glitch-check.html" aria-label="Open Pixel checklist detail page">
+        <span class="preview"><iframe src="glitch-check.html?preview=1&r=2" title="Pixel checklist animated preview" tabindex="-1"></iframe></span>
+        <span class="meta"><span class="number">08</span><h2>Pixel checklist</h2><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+            <a class="project" href="glitch-radio.html" aria-label="Open Pixel select detail page">
+        <span class="preview"><iframe src="glitch-radio.html?preview=1&r=1" title="Pixel select animated preview" tabindex="-1"></iframe></span>
+        <span class="meta"><span class="number">09</span><h2>Pixel select</h2><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+            <a class="project" href="engage.html" aria-label="Open Engage detail page">
+        <span class="preview"><iframe src="engage.html?preview=1&r=6" title="Engage animated preview" tabindex="-1"></iframe></span>
+        <span class="meta"><span class="number">10</span><h2>Engage</h2><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <a class="project" href="engage-check.html" aria-label="Open Engage check detail page">
+        <span class="preview"><iframe src="engage-check.html?preview=1&r=1" title="Engage check animated preview" tabindex="-1"></iframe></span>
+        <span class="meta"><span class="number">11</span><h2>Engage check</h2><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <a class="project" href="engage-radio.html" aria-label="Open Engage select detail page">
+        <span class="preview"><iframe src="engage-radio.html?preview=1&r=1" title="Engage select animated preview" tabindex="-1"></iframe></span>
+        <span class="meta"><span class="number">12</span><h2>Engage select</h2><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+    </section>
+    <div class="foot"><span class="d"></span>Built with care</div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pixel checklist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    :root{
+      --font:"Space Mono","SF Mono","Courier New",monospace;
+      --pixel:"VT323","Space Mono",monospace;
+      --pink:#ff5aa0;
+      --green:#2eb86a;
+      --yellow:#ffe340;
+      --blue:#2d5bff;
+      --ink:#000;
+      --cream:#f3eac4;
+      --ease:cubic-bezier(.22,1,.32,1);
+    }
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;}
+    body{
+      display:grid;place-items:center;font-family:var(--font);color:var(--ink);
+      background:conic-gradient(var(--pink) 25%, var(--green) 0 50%, var(--pink) 0 75%, var(--green) 0);
+      background-size:8px 8px;
+      image-rendering:pixelated;
+    }
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
+      background:repeating-linear-gradient(0deg,rgba(0,0,0,.09) 0 1px, transparent 1px 3px);mix-blend-mode:multiply;}
+
+    .stage{display:flex;flex-direction:column;align-items:center;gap:20px;padding:38px 24px;position:relative;z-index:1;width:min(96vw,440px);}
+    .eyebrow{font-family:var(--pixel);font-size:22px;letter-spacing:.22em;color:var(--ink);text-transform:uppercase;background:var(--cream);padding:3px 12px 1px;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);}
+    .title{font-family:var(--pixel);font-size:40px;line-height:1;letter-spacing:.02em;color:var(--ink);text-transform:uppercase;text-align:center;background:var(--cream);padding:6px 16px 2px;border:2.5px solid var(--ink);box-shadow:6px 6px 0 var(--ink);}
+
+    .list{display:flex;flex-direction:column;gap:12px;width:100%;margin-top:4px;}
+    .task{position:relative;display:flex;align-items:center;gap:14px;padding:12px 14px;background:var(--cream);border:2.5px solid var(--ink);box-shadow:5px 5px 0 var(--ink);cursor:pointer;
+      transition:transform .18s var(--ease),box-shadow .18s var(--ease),filter .3s var(--ease);}
+    .task:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink);}
+    .task:active{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--ink);}
+    .task.flash{animation:rgbSplit .36s steps(4) 1;}
+    @keyframes rgbSplit{
+      0%  {text-shadow:0 0 0 var(--ink);transform:translate(0,0);}
+      25% {text-shadow:-3px 0 0 #0ff, 3px 0 0 #f0f;transform:translate(2px,-1px);}
+      50% {text-shadow:3px 0 0 #0ff, -3px 0 0 #f0f;transform:translate(-2px,1px);}
+      75% {text-shadow:-2px 0 0 #0ff, 2px 0 0 #f0f;transform:translate(1px,0);}
+      100%{text-shadow:0 0 0 var(--ink);transform:translate(0,0);}
+    }
+    /* ---- pixel dissolve ---- */
+    .task{overflow:hidden;max-height:120px;}
+    .task.dissolving{pointer-events:none;animation:dissolve 1s cubic-bezier(.5,0,.6,1) forwards;}
+    @keyframes dissolve{
+       0%  {max-height:120px;padding-top:12px;padding-bottom:12px;margin-top:0;opacity:1;
+            filter:none;transform:translate(0,0);}
+       12% {transform:translate(-3px,0);filter:drop-shadow(3px 0 #0ff) drop-shadow(-3px 0 #f0f);}
+       22% {transform:translate(3px,-1px);filter:drop-shadow(-4px 0 #0ff) drop-shadow(4px 0 #f0f);}
+       32% {transform:translate(-2px,1px);filter:blur(1px) hue-rotate(90deg) saturate(2);}
+       45% {opacity:.7;filter:blur(2px) saturate(2);transform:scale(1.02);
+            -webkit-mask-image:radial-gradient(circle,#000 60%,transparent 100%),conic-gradient(#000 25%,transparent 0 50%,#000 0 75%,transparent 0);
+            -webkit-mask-size:100% 100%, 4px 4px;-webkit-mask-composite:source-in;
+            mask-image:radial-gradient(circle,#000 60%,transparent 100%),conic-gradient(#000 25%,transparent 0 50%,#000 0 75%,transparent 0);
+            mask-size:100% 100%, 4px 4px;mask-composite:intersect;}
+       62% {opacity:.4;filter:blur(4px);}
+       80% {opacity:.1;max-height:60px;}
+       100%{opacity:0;max-height:0;padding-top:0;padding-bottom:0;margin-top:0;border-width:0;box-shadow:none;}
+    }
+    .task.dissolving + .task{animation:slideUp .5s cubic-bezier(.22,1,.32,1) .5s both;}
+    @keyframes slideUp{from{transform:translateY(0);}to{transform:translateY(-6px);}}
+
+    /* chunky pixel checkbox */
+    .cb{position:relative;flex:0 0 auto;width:28px;height:28px;border:2.5px solid var(--ink);background:var(--cream);overflow:hidden;}
+    .cb .fill{position:absolute;inset:0;background:
+      conic-gradient(var(--ink) 25%, var(--blue) 0 50%, var(--ink) 0 75%, var(--blue) 0);
+      background-size:4px 4px;transform:scale(0);transform-origin:center;transition:transform .32s steps(4);}
+    .cb .tick{position:absolute;inset:0;display:grid;place-items:center;z-index:2;opacity:0;transition:opacity .18s var(--ease) .3s;}
+    .cb .tick svg{width:18px;height:18px;shape-rendering:crispEdges;}
+    .cb .tick path{fill:none;stroke:var(--yellow);stroke-width:4;stroke-linecap:square;stroke-linejoin:miter;
+      stroke-dasharray:28;stroke-dashoffset:28;transition:stroke-dashoffset .4s steps(5) .3s;}
+    .task[data-on="true"] .cb .fill{transform:scale(1);}
+    .task[data-on="true"] .cb .tick{opacity:1;}
+    .task[data-on="true"] .cb .tick path{stroke-dashoffset:0;}
+
+    .copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
+    .label{font-family:var(--pixel);font-size:26px;line-height:1;letter-spacing:.04em;color:var(--ink);text-transform:uppercase;transition:text-decoration-color .25s var(--ease),color .25s var(--ease);}
+    .meta{font-family:var(--pixel);font-size:14px;letter-spacing:.18em;color:var(--ink);text-transform:uppercase;opacity:.65;}
+    .task[data-on="true"] .label{text-decoration:line-through;text-decoration-thickness:3px;text-decoration-color:var(--ink);color:#4a4a3e;}
+    .task[data-on="true"]{filter:saturate(.6);background:#dfd6ad;}
+
+    .pill{flex:0 0 auto;padding:3px 8px 1px;font-family:var(--pixel);font-size:14px;letter-spacing:.1em;color:var(--ink);text-transform:uppercase;background:var(--yellow);border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);transition:background .25s steps(3);}
+    .task[data-on="true"] .pill{background:var(--green);}
+    .pill.flip{animation:pillFlip .36s steps(4);}
+    @keyframes pillFlip{0%{transform:rotateX(0);}50%{transform:rotateX(90deg) scale(1.1);}100%{transform:rotateX(0);}}
+
+    .foot{display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:8px;}
+    .count{font-family:var(--pixel);font-size:22px;letter-spacing:.14em;color:var(--ink);text-transform:uppercase;background:var(--cream);padding:3px 10px 1px;border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink);transition:transform .25s cubic-bezier(.34,1.56,.64,1);}
+    .count.pop{animation:countPop .36s steps(4);}
+    @keyframes countPop{0%{transform:scale(1);}40%{transform:scale(1.25) rotate(-2deg);}100%{transform:scale(1);}}
+    .add{font-family:var(--pixel);font-size:22px;letter-spacing:.14em;color:var(--ink);text-transform:uppercase;background:var(--pink);padding:5px 14px 3px;border:2.5px solid var(--ink);box-shadow:4px 4px 0 var(--ink);cursor:pointer;transition:transform .15s var(--ease),box-shadow .15s var(--ease);}
+    .add:hover{animation:jitter .3s steps(6) infinite;}
+    .add:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink);animation:none;}
+    @keyframes jitter{
+      0%,100%{transform:translate(0,0);}
+      20%{transform:translate(-1px,1px);}
+      40%{transform:translate(1px,-1px);}
+      60%{transform:translate(-1px,-1px);}
+      80%{transform:translate(1px,1px);}
+    }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <span class="eyebrow">Checklist.sys</span>
+    <span class="title">Today's To-dos</span>
+
+    <section class="list" id="list"></section>
+
+    <div class="foot">
+      <span class="count" id="count">0/5 DONE</span>
+      <button class="add" type="button">+ New Task</button>
+    </div>
+  </main>
+
+  <script>
+    const tasks = [
+      { id:'1', t:'Feed cat.exe',     m:'7:00 AM',  on:true  },
+      { id:'2', t:'Save memory.wav',  m:'0.6 MB',   on:true  },
+      { id:'3', t:'Boot coffee.app',  m:'required', on:false },
+      { id:'4', t:'Scan desktop.sys', m:'full',     on:false },
+      { id:'5', t:'Dump cache.log',   m:'15 MB',    on:false },
+    ];
+    const TOTAL = tasks.length;
+    let doneCount = tasks.filter(t => t.on).length;
+
+    const list = document.getElementById('list');
+    const countEl = document.getElementById('count');
+    // render only pending items; already-done ones contribute to count without appearing
+    list.innerHTML = tasks.filter(t => !t.on).map(t => `
+      <div class="task" data-id="${t.id}" data-on="false" role="checkbox" aria-checked="false" tabindex="0">
+        <span class="cb" aria-hidden="true">
+          <span class="fill"></span>
+          <span class="tick"><svg viewBox="0 0 24 24"><path d="M4 12 L10 18 L20 6"/></svg></span>
+        </span>
+        <span class="copy">
+          <span class="label">${t.t}</span>
+          <span class="meta">&gt;&gt; ${t.m}</span>
+        </span>
+        <span class="pill">.RDY</span>
+      </div>`).join('');
+
+    function updateCount(){
+      const next = `${doneCount}/${TOTAL} DONE`;
+      if (countEl.textContent !== next) {
+        countEl.textContent = next;
+        countEl.classList.remove('pop'); void countEl.offsetWidth; countEl.classList.add('pop');
+      }
+    }
+    updateCount();
+
+    list.addEventListener('click', (e) => {
+      const task = e.target.closest('.task');
+      if (!task || task.classList.contains('dissolving') || task.getAttribute('data-on') === 'true') return;
+      task.setAttribute('data-on', 'true');
+      task.setAttribute('aria-checked', 'true');
+      const pill = task.querySelector('.pill');
+      pill.textContent = '.OK';
+      // glitch flash + pill flip
+      task.classList.remove('flash'); void task.offsetWidth; task.classList.add('flash');
+      pill.classList.remove('flip');  void pill.offsetWidth; pill.classList.add('flip');
+      doneCount += 1;
+      updateCount();
+      // let the user see completion for a beat, then pixel-dissolve the row
+      window.setTimeout(() => {
+        task.classList.add('dissolving');
+        window.setTimeout(() => task.remove(), 1000);
+      }, 650);
+    });
+    list.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.target.closest('.task')?.click(); }
+    });
+    updateCount();
+
+    if (new URLSearchParams(location.search).has('preview')) {
+      const order = ['3','4','5'];
+      let i = 0;
+      window.setTimeout(function tick(){
+        list.querySelector(`.task[data-id="${order[i]}"]`)?.click();
+        i += 1;
+        if (i < order.length) window.setTimeout(tick, 2000);
+        else window.setTimeout(() => location.reload(), 3800);
+      }, 1200);
+    }
+  </script>
+</body>
+</html>
