@@ -139,10 +139,10 @@
       sections: {
         Spacing: [['Page padding', '72 × 24 px'], ['Panel alignment', 'Viewport center'], ['Panel padding', '16 px'], ['Section gap', '14–19 px']],
         Typography: [['UI family', 'Inter'], ['Accent family', 'Space Mono'], ['Value', '25 px / 1'], ['Labels', '8–10 px'], ['Tracking', '.025–.11 em']],
-        Component: [['Panel', '440 px max'], ['Modes', '3 parameters'], ['Slider region', '58 px high'], ['Handle', '22 × 22 px'], ['Minimum target', '38 px']],
+        Component: [['Panel', '440 px max'], ['Sliders', '3 simultaneous controls'], ['Slider region', '42 px high'], ['Handle', '22 × 22 px'], ['Minimum target', '38 px']],
         Surface: [['Panel stroke', '1 px charcoal'], ['Panel radius', '12 px'], ['Track', '8 px high / 3 px radius'], ['Hard shadow', '5 px / 0 blur']],
         States: [['Hover', '1.12× handle'], ['Pressed', 'Acid fill / .92×'], ['Drag', 'Pink stepped pulse'], ['Focus', '3 px blue ring']],
-        Motion: [['Handle tracking', '70 ms linear'], ['Snap feedback', '320 ms'], ['Value refresh', '240 ms ease'], ['Mode refresh', '280 ms ease']]
+        Motion: [['Handle tracking', '70 ms linear'], ['Snap feedback', '320 ms'], ['Value refresh', '240 ms ease'], ['Controls', 'Independent state']]
       }
     }
   };
