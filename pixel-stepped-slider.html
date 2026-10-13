@@ -185,19 +185,18 @@
     .copy:hover{background:var(--line);transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--pink)}
     @media(max-width:520px){.step{font-size:8px}.preview-card,.control-card{border-radius:10px}}
   </style>
+  <style>
+    body{place-items:center;padding:72px 24px}
+    html.is-preview body{padding:32px 24px}
+    .app{width:min(100%,640px)}
+    .app::before{display:none}
+    .workspace{display:block}
+    @media(max-width:520px){body{padding:68px 16px 28px}html.is-preview body{padding:24px 16px}}
+  </style>
 </head>
 <body>
   <main class="app">
-    <header class="mast"><div><span class="eyebrow">PALETTE STUDIO / COLOR SYSTEM</span><h1>Brand Color Tuner</h1></div><span class="badge">6-STEP CONTROL</span></header>
     <div class="workspace">
-      <section class="card preview-card" aria-label="Commerce color preview">
-        <div class="card-head"><span class="section-label">Live Preview</span><span class="live">ACTIVE</span></div>
-        <div class="product" id="product">
-          <div class="product-visual" aria-hidden="true"><span class="bag"></span></div>
-          <div class="product-info"><div class="product-copy"><span class="product-kicker">FORM / EDITION 04</span><strong class="product-title">Everyday Carry Tote</strong><span class="product-price">$48.00</span></div><button class="commerce-button" type="button">Add to bag</button></div>
-        </div>
-        <div class="token"><span class="token-key">Color</span><span class="token-value">Brand primary</span><span class="token-value">CTA · Product accent</span></div>
-      </section>
       <section class="card control-card" aria-label="Brand color controls">
         <div class="card-head"><span class="section-label">Color Parameter</span><span class="live" id="status">HUE MODE</span></div>
         <div class="mode-tabs" role="tablist" aria-label="Color parameter">

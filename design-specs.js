@@ -126,9 +126,9 @@
     'pixel-stepped-slider.html': {
       title: 'Brand Color Tuner', tone: 'Edgy · Commercial editorial', week: 'Week 4', back: 'week4.html',
       sections: {
-        Spacing: [['Page padding', '42 × 24 px'], ['Workspace gap', '18 px'], ['Preview padding', '16 px'], ['Control padding', '18 px']],
+        Spacing: [['Page padding', '72 × 24 px'], ['Panel alignment', 'Viewport center'], ['Control padding', '18 px'], ['Control gap', '16 px']],
         Typography: [['UI family', 'Inter'], ['Accent family', 'Space Mono'], ['Title', '34–46 px / 1.04'], ['Slider value', '24 px / 1'], ['Control label', '10–12 px']],
-        Component: [['Workspace', '820 px max'], ['Preview card', '500 px max · centered'], ['Control card', '640 px max · centered'], ['Steps', '6 labeled values'], ['Slider region', '64 px high'], ['Minimum target', '44 px']],
+        Component: [['Workspace', '640 px max'], ['Control card', '640 px max · centered'], ['Steps', '6 labeled values'], ['Slider region', '64 px high'], ['Minimum target', '44 px']],
         Surface: [['Card stroke', '1 px charcoal'], ['Card radius', '14 px'], ['Track radius', '7 px'], ['Editorial shadow', '5 px hard + soft lift']],
         States: [['Hover', '−1 to −2 px elevation'], ['Pressed', 'Pink handle accent'], ['Drag', 'Handle pulse only'], ['Focus', '3 px blue ring']],
         Motion: [['Spectrum', 'Fixed'], ['Handle tracking', '80 ms linear'], ['Snap feedback', '360 ms'], ['Value refresh', '260 ms ease'], ['Preview refresh', '300 ms ease']]
