@@ -144,6 +144,17 @@
         States: [['Hover', '1.12× handle'], ['Pressed', 'Acid fill / .92×'], ['Drag', 'Pink stepped pulse'], ['Focus', '3 px blue ring']],
         Motion: [['Handle tracking', '70 ms linear'], ['Snap feedback', '320 ms'], ['Value refresh', '240 ms ease'], ['Controls', 'Independent state']]
       }
+    },
+    'glass-temperature-slider.html': {
+      title: 'Glass Temperature', tone: 'Futuristic · Mysterious · Elegant', week: 'Week 4', back: 'week4.html',
+      sections: {
+        Spacing: [['Canvas', '1600 × 1000 reference'], ['Page padding', '72 × 24 px'], ['Panel padding', '28 × 30 px'], ['Header gap', '20 px']],
+        Typography: [['Family', 'Inter / Space Mono'], ['Value', '38 px / 1'], ['Label', '11 px / .14 em'], ['Range copy', '10 px / 1']],
+        Component: [['Panel', '640 px max'], ['Track', '540 px reference / 5 px high'], ['Slider region', '126 px high'], ['Glass thumb', '48 × 48 px'], ['Minimum target', '48 px']],
+        Surface: [['Panel radius', '20 px'], ['Panel stroke', '1 px / 15% white'], ['Backdrop blur', '24 px'], ['Glass layers', 'Refraction + inner highlights']],
+        States: [['Hover', 'Edge highlight + halo'], ['Pressed', '.94× compression'], ['Drag', 'Off-axis glass motion'], ['Focus', '2 px cyan ring']],
+        Motion: [['Range', '16–30°C / 0.1°C'], ['Magnetic threshold', '13 px'], ['Off-axis limit', '25 px'], ['Snap rebound', '430 ms spring']]
+      }
     }
   };
 
