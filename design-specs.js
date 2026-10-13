@@ -124,13 +124,13 @@
       }
     },
     'pixel-stepped-slider.html': {
-      title: 'Hue / Chroma', tone: 'Edgy · Playful', week: 'Week 4', back: 'week4.html',
+      title: 'Brand Color Tuner', tone: 'Edgy · Commercial', week: 'Week 4', back: 'week4.html',
       sections: {
-        Spacing: [['Stage padding', '44 × 24 px'], ['Stage gap', '32 px'], ['Feedback gap', '11 px'], ['Track label inset', '24 px']],
-        Typography: [['Family', 'VT323 / Space Mono'], ['Title', '42–64 px / 1'], ['Value label', '34 px / .9'], ['Readout', '38 px / 1'], ['Tracking', '.08–.24 em']],
-        Component: [['Slider track', '760 × 176 px max'], ['Steps', '6 · 20% increments'], ['Divider', '24 × 128 px'], ['Minimum input target', '44 px']],
-        Surface: [['Track radius', '999 px'], ['Track stroke', '4 px'], ['Panel stroke', '3 px'], ['Hard shadow', '10 px / 0 blur']],
-        States: [['Hover', '−3 px lift / +3 px shadow'], ['Pressed', '+4 px inset'], ['Drag', '.97 vertical squash'], ['Focus', '4 px blue ring']],
+        Spacing: [['Page padding', '38 × 24 px'], ['Workspace gap', '18 px'], ['Card padding', '18 px'], ['Control gap', '17 px']],
+        Typography: [['Family', 'VT323 / Space Mono'], ['Title', '38–58 px / 1'], ['Slider value', '42 px / .8'], ['Control label', '18–23 px'], ['Tracking', '.08–.18 em']],
+        Component: [['Workspace', '980 px max'], ['Steps', '6 · 20% increments'], ['Slider region', '108 px high'], ['Mode control', '2 × 48 px'], ['Minimum target', '48 px']],
+        Surface: [['Card stroke', '3 px'], ['Track radius', '18 px'], ['Track stroke', '3 px'], ['Hard shadow', '8 px / 0 blur']],
+        States: [['Hover', '−2 px lift / +2 px shadow'], ['Pressed', '+3 px inset'], ['Drag', '.94 vertical squash'], ['Focus', '4 px blue ring']],
         Motion: [['Live resize', '80 ms linear'], ['Snap feedback', '360 ms'], ['Easing', 'cubic-bezier(.34,1.56,.64,1)']]
       }
     }

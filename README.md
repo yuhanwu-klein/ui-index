@@ -43,4 +43,4 @@ Then open http://127.0.0.1:8787/
 
 The Week 4 page contains the first slider study plus five empty project slots.
 
-- 01 Hue / Chroma — six-step color balance slider with pixel-art styling and proportional drag motion
+- 01 Brand Color Tuner — commercial color-token tool with Hue/Chroma modes and a six-step slider

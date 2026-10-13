@@ -3,71 +3,90 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hue / Chroma · Stepped Slider</title>
+  <title>Brand Color Tuner · Stepped Slider</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+  <script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
   <style>
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-    :root{--pink:#ff5aa0;--green:#2eb86a;--yellow:#ffe340;--blue:#2d5bff;--ink:#050505;--cream:#f3eac4;--step:40%;--pixel:"VT323","Space Mono",monospace;--mono:"Space Mono","SF Mono",monospace;--ease:cubic-bezier(.22,1,.32,1);--snap:cubic-bezier(.34,1.56,.64,1);}
-    html,body{width:100%;height:100%;margin:0;overflow:hidden;}
-    body{display:grid;place-items:center;color:var(--ink);font-family:var(--mono);background-color:var(--pink);background-image:linear-gradient(45deg,var(--green) 25%,transparent 25%,transparent 75%,var(--green) 75%),linear-gradient(45deg,var(--green) 25%,transparent 25%,transparent 75%,var(--green) 75%);background-position:0 0,6px 6px;background-size:12px 12px;}
-    body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.15;background:repeating-linear-gradient(to bottom,transparent 0 3px,rgba(0,0,0,.3) 4px);}
-    .stage{width:min(92vw,760px);display:flex;flex-direction:column;align-items:center;gap:32px;padding:44px 24px;position:relative;z-index:1;}
-    .tag,.title,.readout,.hint{background:var(--cream);border:3px solid var(--ink);box-shadow:7px 7px 0 var(--ink);}
-    .tag{padding:5px 18px 3px;font-family:var(--pixel);font-size:25px;line-height:1;letter-spacing:.24em;text-transform:uppercase;}
-    .title{margin:0;padding:8px 22px 5px;font-family:var(--pixel);font-size:clamp(42px,7vw,64px);line-height:1;letter-spacing:.04em;text-align:center;text-transform:uppercase;}
-    .mixer{width:100%;display:flex;flex-direction:column;align-items:center;gap:22px;}
-    .slider-wrap{position:relative;width:100%;height:176px;}
-    .shell{position:absolute;inset:0;overflow:hidden;border:4px solid var(--ink);border-radius:999px;background:var(--cream);box-shadow:10px 10px 0 var(--ink);transition:transform 160ms var(--ease),box-shadow 160ms var(--ease);}
-    .zone{position:absolute;top:0;bottom:0;overflow:hidden;transition:width 80ms linear;}
-    .zone.left{left:0;width:var(--step);background-color:var(--pink);background-image:linear-gradient(45deg,var(--green) 25%,transparent 25%,transparent 75%,var(--green) 75%),linear-gradient(45deg,var(--green) 25%,transparent 25%,transparent 75%,var(--green) 75%);background-position:0 0,5px 5px;background-size:10px 10px;}
-    .zone.right{right:0;width:calc(100% - var(--step));background:linear-gradient(90deg,#ff3948,#ffca28,#26d86f,#2ac8ff,#4f48ff,#d53cff,#ff3948);}
-    .zone.right::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent 0 5px,rgba(243,234,196,.32) 5px 10px);}
-    .zone-copy{position:absolute;top:50%;z-index:2;display:flex;flex-direction:column;gap:4px;padding:7px 12px 4px;border:2px solid var(--ink);background:var(--cream);box-shadow:4px 4px 0 var(--ink);transform:translateY(-50%);white-space:nowrap;pointer-events:none;transition:opacity 120ms ease,transform 180ms var(--ease);}
-    .zone.left .zone-copy{left:24px}.zone.right .zone-copy{right:24px;text-align:right}
-    .zone-name{font-family:var(--pixel);font-size:18px;line-height:1;letter-spacing:.18em}.zone-value{font-family:var(--pixel);font-size:34px;line-height:.9}
-    .divider{position:absolute;z-index:5;top:50%;left:var(--step);width:24px;height:128px;transform:translate(-50%,-50%);pointer-events:none;transition:left 80ms linear,filter 160ms ease;}
-    .divider::before{content:"";position:absolute;left:9px;top:0;bottom:0;width:6px;border:2px solid var(--ink);background:var(--cream);box-shadow:3px 3px 0 var(--ink);}
-    .grip{position:absolute;left:0;top:50%;width:24px;height:24px;border:3px solid var(--ink);background:var(--yellow);box-shadow:3px 3px 0 var(--ink);transform:translateY(-50%) rotate(45deg);}
-    input[type="range"]{position:absolute;z-index:10;inset:-14px 0;width:100%;height:calc(100% + 28px);margin:0;opacity:0;cursor:grab;}input[type="range"]:active{cursor:grabbing;}
-    .slider-wrap:hover .shell{transform:translate(-3px,-3px);box-shadow:13px 13px 0 var(--ink)}
-    .slider-wrap.is-pressed .shell{transform:translate(4px,4px);box-shadow:6px 6px 0 var(--ink)}
-    .slider-wrap.is-dragging .shell{transform:translate(2px,2px) scaleY(.97);box-shadow:7px 7px 0 var(--ink)}
-    .slider-wrap.is-dragging .divider{filter:drop-shadow(0 0 8px var(--yellow))}.slider-wrap.is-dragging .grip{animation:grip-pulse 360ms steps(2) infinite}.slider-wrap.is-dragging .zone-copy{transform:translateY(-50%) translateY(-5px)}.slider-wrap.is-settling .divider{animation:snap 360ms var(--snap)}
-    input[type="range"]:focus-visible + .focus-ring{position:absolute;z-index:11;inset:-9px;border:4px solid var(--blue);border-radius:999px;pointer-events:none;}
-    .ticks{width:calc(100% - 52px);display:flex;justify-content:space-between;margin-top:-7px}.tick{width:11px;height:11px;border:2px solid var(--ink);background:var(--cream);box-shadow:2px 2px 0 var(--ink);transition:background 180ms steps(2),transform 180ms var(--snap)}.tick.on{background:var(--yellow);transform:translateY(-2px) scale(1.25)}
-    .feedback{display:flex;flex-direction:column;align-items:center;gap:11px}.readout{min-width:280px;padding:7px 20px 4px;font-family:var(--pixel);font-size:38px;line-height:1;letter-spacing:.08em;text-align:center;text-transform:uppercase}.hint{padding:5px 14px 3px;background:var(--pink);font-family:var(--pixel);font-size:20px;line-height:1;letter-spacing:.18em;text-transform:uppercase;box-shadow:5px 5px 0 var(--ink)}
-    @keyframes grip-pulse{50%{background:var(--blue);transform:translateY(-50%) rotate(45deg) scale(1.16)}}@keyframes snap{45%{transform:translate(-50%,-50%) scaleX(1.35) scaleY(.88)}}
-    @media(max-width:620px){.stage{width:min(94vw,520px);gap:24px;padding:28px 18px}.tag{font-size:19px;letter-spacing:.18em}.title{font-size:40px}.slider-wrap{height:142px}.divider{height:104px}.zone.left .zone-copy{left:12px}.zone.right .zone-copy{right:12px}.zone-name{font-size:14px}.zone-value{font-size:27px}.readout{min-width:240px;font-size:32px}}
-    @media(max-width:420px){.stage{gap:20px}.slider-wrap{height:126px}.zone-name{font-size:11px;letter-spacing:.08em}.zone-value{font-size:22px}.zone-copy{gap:2px;padding:5px 7px 3px}}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    :root{--pink:#ff5aa0;--green:#2eb86a;--yellow:#ffe340;--blue:#2d5bff;--ink:#050505;--cream:#f3eac4;--paper:#fffdf5;--color:#5bd65b;--pct:40%;--pixel:"VT323","Space Mono",monospace;--mono:"Space Mono","SF Mono",monospace;--ease:cubic-bezier(.22,1,.32,1);--snap:cubic-bezier(.34,1.56,.64,1)}
+    html,body{min-height:100%;margin:0}
+    body{display:grid;place-items:center;padding:86px 24px 38px;color:var(--ink);font-family:var(--mono);background-color:var(--pink);background-image:linear-gradient(45deg,var(--green) 25%,transparent 25%,transparent 75%,var(--green) 75%),linear-gradient(45deg,var(--green) 25%,transparent 25%,transparent 75%,var(--green) 75%);background-position:0 0,6px 6px;background-size:12px 12px}
+    html.is-preview body{padding:38px 24px}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;background:repeating-linear-gradient(to bottom,transparent 0 3px,rgba(0,0,0,.34) 4px)}
+    button,input{font:inherit}
+    .app{position:relative;z-index:1;width:min(100%,980px)}
+    .mast{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:22px}
+    .eyebrow,.badge,.section-label,.token-key{font-family:var(--pixel);letter-spacing:.18em;text-transform:uppercase}
+    .eyebrow{display:inline-block;margin-bottom:8px;padding:4px 12px 2px;border:2px solid var(--ink);background:var(--cream);box-shadow:4px 4px 0 var(--ink);font-size:20px}
+    h1{margin:0;padding:7px 18px 4px;border:3px solid var(--ink);background:var(--cream);box-shadow:7px 7px 0 var(--ink);font-family:var(--pixel);font-size:clamp(38px,6vw,58px);font-weight:400;line-height:1;letter-spacing:.03em;text-transform:uppercase}
+    .badge{flex:0 0 auto;padding:5px 10px 3px;border:2px solid var(--ink);background:var(--yellow);box-shadow:3px 3px 0 var(--ink);font-size:16px}
+    .workspace{display:grid;grid-template-columns:minmax(270px,.82fr) minmax(420px,1.18fr);gap:18px;align-items:stretch}
+    .card{border:3px solid var(--ink);background:var(--cream);box-shadow:8px 8px 0 var(--ink)}
+    .preview-card{padding:18px;display:flex;flex-direction:column;gap:14px}
+    .card-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .section-label{font-size:18px}.live{padding:3px 8px 1px;border:2px solid var(--ink);background:var(--green);font-family:var(--pixel);font-size:15px;letter-spacing:.12em}
+    .product{min-height:248px;display:flex;flex-direction:column;justify-content:space-between;padding:20px;border:3px solid var(--ink);background:var(--color);box-shadow:5px 5px 0 var(--ink);transition:background 300ms var(--ease),transform 180ms var(--ease)}
+    .product:hover{transform:translate(-2px,-2px)}
+    .product-copy{max-width:230px}.product-kicker{display:block;margin-bottom:5px;font-family:var(--pixel);font-size:18px;letter-spacing:.12em}.product-title{display:block;font-family:var(--pixel);font-size:42px;line-height:.9;text-transform:uppercase}
+    .commerce-button{align-self:flex-start;min-height:48px;padding:0 18px;border:3px solid var(--ink);background:var(--paper);box-shadow:4px 4px 0 var(--ink);font-family:var(--pixel);font-size:22px;letter-spacing:.08em;text-transform:uppercase}
+    .token{display:grid;grid-template-columns:1fr auto;gap:8px 16px;padding:13px 14px;border:2px solid var(--ink);background:var(--paper)}
+    .token-key{font-size:14px}.token-value{font:700 12px/1.4 var(--mono);text-align:right}
+    .control-card{padding:18px;display:flex;flex-direction:column;gap:17px}
+    .mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+    .mode{min-height:48px;border:2.5px solid var(--ink);background:var(--paper);box-shadow:4px 4px 0 var(--ink);font-family:var(--pixel);font-size:23px;letter-spacing:.12em;cursor:pointer;transition:transform 150ms var(--ease),box-shadow 150ms var(--ease),background 150ms steps(2)}
+    .mode:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}.mode:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}.mode[aria-selected="true"]{background:var(--yellow)}.mode:focus-visible,.slider:focus-visible,.copy:focus-visible{outline:4px solid var(--blue);outline-offset:4px}
+    .range-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}.range-name{font-family:var(--pixel);font-size:20px;letter-spacing:.1em}.range-value{font-family:var(--pixel);font-size:42px;line-height:.8}
+    .range-wrap{position:relative;height:108px}
+    .track{position:absolute;inset:12px 0;border:3px solid var(--ink);border-radius:18px;background:var(--paper);box-shadow:6px 6px 0 var(--ink);overflow:hidden;transition:transform 160ms var(--ease),box-shadow 160ms var(--ease)}
+    .fill,.remain{position:absolute;top:0;bottom:0;transition:width 80ms linear}.fill{left:0;width:var(--pct);background:var(--track-fill)}.remain{right:0;width:calc(100% - var(--pct));background:repeating-linear-gradient(45deg,#fffdf5 0 6px,#e7dfbf 6px 12px)}
+    .divider{position:absolute;z-index:3;top:50%;left:var(--pct);width:16px;height:86px;transform:translate(-50%,-50%);pointer-events:none;transition:left 80ms linear}.divider::before{content:"";position:absolute;left:5px;inset-block:0;width:6px;border:2px solid var(--ink);background:var(--paper);box-shadow:3px 3px 0 var(--ink)}.divider::after{content:"";position:absolute;left:0;top:50%;width:16px;height:16px;border:2px solid var(--ink);background:var(--yellow);box-shadow:2px 2px 0 var(--ink);transform:translateY(-50%) rotate(45deg)}
+    .slider{position:absolute;z-index:5;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:grab}.slider:active{cursor:grabbing}
+    .range-wrap:hover .track{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}.range-wrap.pressed .track{transform:translate(3px,3px);box-shadow:3px 3px 0 var(--ink)}.range-wrap.dragging .track{transform:translate(2px,2px) scaleY(.94);box-shadow:4px 4px 0 var(--ink)}.range-wrap.dragging .divider::after{animation:pulse 360ms steps(2) infinite}.range-wrap.settling .divider{animation:snap 360ms var(--snap)}
+    .steps{display:flex;justify-content:space-between;padding:0 9px}.step{width:10px;height:10px;border:2px solid var(--ink);background:var(--paper);box-shadow:2px 2px 0 var(--ink)}.step.on{background:var(--yellow);transform:translateY(-2px) scale(1.2)}
+    .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.metric{padding:9px;border:2px solid var(--ink);background:var(--paper)}.metric b{display:block;margin-bottom:4px;font-family:var(--pixel);font-size:14px;letter-spacing:.12em}.metric span{display:block;font-size:12px;font-weight:700}
+    .copy{min-height:48px;border:3px solid var(--ink);background:var(--pink);box-shadow:5px 5px 0 var(--ink);font-family:var(--pixel);font-size:22px;letter-spacing:.13em;text-transform:uppercase;cursor:pointer}.copy:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}.copy:active{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--ink)}
+    @keyframes pulse{50%{background:var(--blue);transform:translateY(-50%) rotate(45deg) scale(1.18)}}@keyframes snap{45%{transform:translate(-50%,-50%) scaleX(1.4) scaleY(.86)}}
+    @media(max-width:760px){body{place-items:start center;padding:78px 16px 26px}html.is-preview body{padding:26px 16px}.mast{align-items:flex-start}.workspace{grid-template-columns:1fr}.preview-card{order:2}.control-card{order:1}.product{min-height:210px}}
+    @media(max-width:460px){.mast{display:block}.badge{display:inline-block;margin-top:13px}.workspace{gap:14px}.card{box-shadow:6px 6px 0 var(--ink)}.product{min-height:185px}.metrics{grid-template-columns:1fr}.metric{display:flex;align-items:center;justify-content:space-between}.metric b{margin:0}.range-value{font-size:36px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
   </style>
 </head>
 <body>
-  <main class="stage">
-    <span class="tag">Color_Mixer.exe</span>
-    <h1 class="title">Hue or chroma?</h1>
-    <section class="mixer" aria-label="Hue and chroma stepped mixer">
-      <div class="slider-wrap" id="sliderWrap">
-        <div class="shell" aria-hidden="true">
-          <div class="zone left"><span class="zone-copy"><span class="zone-name">CHROMA</span><span class="zone-value" id="leftValue">40%</span></span></div>
-          <div class="zone right"><span class="zone-copy"><span class="zone-name">HUE</span><span class="zone-value" id="rightValue">60%</span></span></div>
-          <span class="divider"><span class="grip"></span></span>
+  <main class="app">
+    <header class="mast"><div><span class="eyebrow">Palette_Studio.exe</span><h1>Brand Color Tuner</h1></div><span class="badge">6-Step Control</span></header>
+    <div class="workspace">
+      <section class="card preview-card" aria-label="Commerce color preview">
+        <div class="card-head"><span class="section-label">Live Preview</span><span class="live">ACTIVE</span></div>
+        <div class="product" id="product"><div class="product-copy"><span class="product-kicker">SUMMER DROP / 04</span><strong class="product-title">Color that converts.</strong></div><button class="commerce-button" type="button">Add to cart ↗</button></div>
+        <div class="token"><span class="token-key">Token</span><span class="token-value">--brand-primary</span><span class="token-key">Usage</span><span class="token-value">CTA / Promo</span></div>
+      </section>
+      <section class="card control-card" aria-label="Brand color controls">
+        <div class="card-head"><span class="section-label">Color Parameter</span><span class="live" id="status">HUE MODE</span></div>
+        <div class="mode-tabs" role="tablist" aria-label="Color parameter">
+          <button class="mode" id="hueTab" type="button" role="tab" aria-selected="true">HUE</button>
+          <button class="mode" id="chromaTab" type="button" role="tab" aria-selected="false">CHROMA</button>
         </div>
-        <input id="level" type="range" min="0" max="5" step="1" value="2" aria-label="Hue and chroma balance" aria-valuetext="Chroma 40 percent, hue 60 percent">
-        <span class="focus-ring" aria-hidden="true"></span>
-      </div>
-      <div class="ticks" aria-hidden="true"><span class="tick"></span><span class="tick"></span><span class="tick on"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span></div>
-      <div class="feedback" aria-live="polite"><output class="readout" id="readout" for="level">02_HUE_BLEND</output><span class="hint">&gt;&gt; Drag to mix</span></div>
-    </section>
+        <div class="range-head"><span class="range-name" id="rangeName">HUE ANGLE</span><output class="range-value" id="rangeValue" for="level">120°</output></div>
+        <div class="range-wrap" id="rangeWrap">
+          <div class="track" aria-hidden="true"><span class="fill"></span><span class="remain"></span><span class="divider"></span></div>
+          <input class="slider" id="level" type="range" min="0" max="5" step="1" value="2" aria-label="Hue angle" aria-valuetext="Hue 120 degrees, step 3 of 6">
+        </div>
+        <div class="steps" aria-hidden="true"><span class="step"></span><span class="step"></span><span class="step on"></span><span class="step"></span><span class="step"></span><span class="step"></span></div>
+        <div class="metrics" aria-live="polite"><div class="metric"><b>HUE</b><span id="hueMetric">120°</span></div><div class="metric"><b>CHROMA</b><span id="chromaMetric">60%</span></div><div class="metric"><b>HEX</b><span id="hexMetric">#5BD65B</span></div></div>
+        <button class="copy" id="copy" type="button">Copy CSS Token</button>
+      </section>
+    </div>
   </main>
   <script>
-    const input=document.getElementById('level'),wrap=document.getElementById('sliderWrap'),leftValue=document.getElementById('leftValue'),rightValue=document.getElementById('rightValue'),readout=document.getElementById('readout'),ticks=[...document.querySelectorAll('.tick')];
-    const names=['00_HUE_ONLY','01_HUE_LEAN','02_HUE_BLEND','03_CHROMA_BLEND','04_CHROMA_LEAN','05_CHROMA_MAX'];let settleTimer;
-    function render(){const step=Number(input.value),chroma=step*20;document.documentElement.style.setProperty('--step',`${chroma}%`);leftValue.textContent=`${chroma}%`;rightValue.textContent=`${100-chroma}%`;readout.textContent=names[step];input.setAttribute('aria-valuetext',`Chroma ${chroma} percent, hue ${100-chroma} percent, ${names[step].replaceAll('_',' ')}`);ticks.forEach((tick,index)=>tick.classList.toggle('on',index===step));}
-    function settle(){wrap.classList.remove('is-pressed','is-dragging','is-settling');requestAnimationFrame(()=>wrap.classList.add('is-settling'));clearTimeout(settleTimer);settleTimer=setTimeout(()=>wrap.classList.remove('is-settling'),380);}
-    input.addEventListener('pointerdown',event=>{wrap.classList.add('is-pressed','is-dragging');input.setPointerCapture?.(event.pointerId)});input.addEventListener('pointerup',settle);input.addEventListener('pointercancel',settle);input.addEventListener('input',render);input.addEventListener('change',settle);input.addEventListener('keydown',()=>wrap.classList.add('is-pressed'));input.addEventListener('keyup',()=>{render();settle()});render();
+    const root=document.documentElement,input=document.getElementById('level'),wrap=document.getElementById('rangeWrap'),rangeName=document.getElementById('rangeName'),rangeValue=document.getElementById('rangeValue'),hueMetric=document.getElementById('hueMetric'),chromaMetric=document.getElementById('chromaMetric'),hexMetric=document.getElementById('hexMetric'),status=document.getElementById('status'),copy=document.getElementById('copy'),tabs={hue:document.getElementById('hueTab'),chroma:document.getElementById('chromaTab')},steps=[...document.querySelectorAll('.step')];
+    const state={mode:'hue',hueStep:2,chromaStep:3};let settleTimer;
+    function hslToHex(h,s,l){s/=100;l/=100;const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l),f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return`#${[f(0),f(8),f(4)].map(x=>Math.round(255*x).toString(16).padStart(2,'0')).join('').toUpperCase()}`}
+    function render(){const step=Number(input.value);state[state.mode+'Step']=step;const hue=state.hueStep*60,chroma=state.chromaStep*20,pct=step*20,hex=hslToHex(hue,chroma,60);root.style.setProperty('--pct',`${pct}%`);root.style.setProperty('--color',hex);root.style.setProperty('--track-fill',state.mode==='hue'?'linear-gradient(90deg,#ff3948,#ffca28,#26d86f,#2ac8ff,#4f48ff,#d53cff)':'linear-gradient(90deg,#999,#'+hex.slice(1)+')');rangeName.textContent=state.mode==='hue'?'HUE ANGLE':'CHROMA LEVEL';rangeValue.textContent=state.mode==='hue'?`${hue}°`:`${chroma}%`;hueMetric.textContent=`${hue}°`;chromaMetric.textContent=`${chroma}%`;hexMetric.textContent=hex;status.textContent=`${state.mode.toUpperCase()} MODE`;input.setAttribute('aria-label',state.mode==='hue'?'Hue angle':'Chroma level');input.setAttribute('aria-valuetext',state.mode==='hue'?`Hue ${hue} degrees, step ${step+1} of 6`:`Chroma ${chroma} percent, step ${step+1} of 6`);steps.forEach((dot,index)=>dot.classList.toggle('on',index===step));}
+    function selectMode(mode){state.mode=mode;input.value=state[mode+'Step'];Object.entries(tabs).forEach(([name,tab])=>tab.setAttribute('aria-selected',String(name===mode)));render();}
+    function settle(){wrap.classList.remove('pressed','dragging','settling');requestAnimationFrame(()=>wrap.classList.add('settling'));clearTimeout(settleTimer);settleTimer=setTimeout(()=>wrap.classList.remove('settling'),380)}
+    tabs.hue.addEventListener('click',()=>selectMode('hue'));tabs.chroma.addEventListener('click',()=>selectMode('chroma'));input.addEventListener('input',render);input.addEventListener('pointerdown',event=>{wrap.classList.add('pressed','dragging');input.setPointerCapture?.(event.pointerId)});input.addEventListener('pointerup',settle);input.addEventListener('pointercancel',settle);input.addEventListener('change',settle);input.addEventListener('keydown',()=>wrap.classList.add('pressed'));input.addEventListener('keyup',settle);copy.addEventListener('click',async()=>{const text=`--brand-primary: ${hexMetric.textContent};`;try{await navigator.clipboard.writeText(text);copy.textContent='Copied: '+text}catch{copy.textContent=text}setTimeout(()=>copy.textContent='Copy CSS Token',1600)});render();
   </script>
   <script src="design-specs.js"></script>
 </body>
