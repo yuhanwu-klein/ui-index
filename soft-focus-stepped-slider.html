@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Focus Duration · Stepped Slider</title>
+  <script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    :root{--ink:#20201f;--page:#fff;--panel:#f1f1f3;--soft:#e4e4e7;--muted:#85858a;--line:rgba(32,32,31,.09);--pct:50%;--font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--mono:"SF Mono","Courier New",monospace;--ease:cubic-bezier(.22,.9,.28,1);--pop:cubic-bezier(.2,1.35,.35,1)}
+    html,body{width:100%;height:100%;margin:0;background:var(--page)}
+    body{display:grid;place-items:center;padding:72px 24px;color:var(--ink);font-family:var(--font);overflow:hidden}
+    html.is-preview body{padding:32px 24px}
+    .panel{position:relative;width:min(100%,420px);padding:22px;border:1px solid var(--line);border-radius:20px;background:var(--panel);box-shadow:0 8px 24px rgba(32,32,31,.07)}
+    .head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:24px}
+    .kicker{display:block;margin-bottom:7px;color:var(--muted);font:700 9px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase}
+    .title{margin:0;font-size:16px;font-weight:700;line-height:1;letter-spacing:-.02em}
+    .value{font-size:28px;font-weight:700;line-height:1;letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+    .unit{margin-left:4px;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:0}
+    .stage{position:relative;height:104px;padding:0 8px;border-radius:14px;background:rgba(255,255,255,.48)}
+    .track-area{position:absolute;left:24px;right:24px;top:42px;height:5px}
+    .rail{position:absolute;inset:0;border-radius:999px;background:#cfcfd3}
+    .fill{position:absolute;inset:0 auto 0 0;width:var(--pct);border-radius:999px;background:var(--ink);transition:width 360ms var(--ease)}
+    .nodes{position:absolute;z-index:2;inset:0;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+    .node{width:10px;height:10px;border:1.5px solid var(--ink);border-radius:50%;background:var(--panel);transform:scale(.72);transition:transform 300ms var(--pop),background-color 240ms ease}
+    .node.passed{background:var(--ink)}
+    .node.active{background:#fff;box-shadow:0 0 0 3px var(--ink);transform:scale(.88)}
+    .thumb{position:absolute;z-index:4;left:var(--pct);top:2.5px;width:34px;height:34px;border:1.5px solid var(--ink);border-radius:50%;background:#fff;box-shadow:0 5px 12px rgba(32,32,31,.14);transform:translate(-50%,-50%);pointer-events:none;transition:left 360ms var(--ease),transform 260ms var(--pop),box-shadow 220ms ease}
+    .thumb::after{content:"";position:absolute;inset:11px;border-radius:50%;background:var(--ink)}
+    .ripple{position:absolute;z-index:3;left:var(--pct);top:2.5px;width:34px;height:34px;border:1px solid var(--ink);border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.5);pointer-events:none}
+    .stage.rippling .ripple{animation:ripple 520ms ease-out}
+    .stage:hover .thumb{box-shadow:0 7px 16px rgba(32,32,31,.18);transform:translate(-50%,-50%) scale(1.08)}
+    .stage.dragging .fill,.stage.dragging .thumb{transition-duration:90ms}
+    .stage.dragging .thumb{transform:translate(-50%,-50%) scale(.9)}
+    .labels{position:absolute;left:19px;right:19px;top:67px;display:flex;justify-content:space-between;color:var(--muted);font:700 9px/1 var(--mono);pointer-events:none}
+    .label{width:28px;text-align:center;transition:color 220ms ease,transform 260ms var(--pop)}
+    .label.active{color:var(--ink);transform:translateY(-2px)}
+    .range{position:absolute;z-index:6;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:grab}
+    .range:active{cursor:grabbing}
+    .stage:has(.range:focus-visible){outline:1.5px solid var(--ink);outline-offset:7px}
+    .footer{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:14px;color:var(--muted);font-size:12px}
+    .footer strong{color:var(--ink);font-weight:650}
+    .count{font:700 9px/1 var(--mono);letter-spacing:.12em}
+    @keyframes ripple{0%{opacity:.28;transform:translate(-50%,-50%) scale(.55)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.1)}}
+    @media(max-width:480px){body{padding:68px 16px 28px}.panel{padding:18px}.value{font-size:25px}.track-area{left:20px;right:20px}.labels{left:15px;right:15px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    design-specs{position:fixed}
+  </style>
+</head>
+<body>
+  <main class="panel" aria-label="Stepped focus duration control">
+    <header class="head"><div><span class="kicker">Session length</span><h1 class="title">Focus duration</h1></div><output class="value" id="value" for="duration">45<span class="unit">min</span></output></header>
+    <div class="stage" id="stage">
+      <div class="track-area" aria-hidden="true"><span class="rail"></span><span class="fill"></span><div class="nodes"><span class="node"></span><span class="node"></span><span class="node"></span><span class="node"></span><span class="node"></span></div><span class="ripple"></span><span class="thumb"></span></div>
+      <div class="labels" aria-hidden="true"><span class="label">15</span><span class="label">30</span><span class="label">45</span><span class="label">60</span><span class="label">75</span></div>
+      <input class="range" id="duration" type="range" min="15" max="75" step="15" value="45" aria-label="Focus duration" aria-valuetext="45 minutes, deep focus">
+    </div>
+    <footer class="footer"><span>Mode: <strong id="mode">Deep focus</strong></span><span class="count" id="count">03 / 05</span></footer>
+  </main>
+  <script>
+    const modes=['Quick reset','Focus sprint','Deep focus','Long session','Extended focus'],root=document.documentElement,input=document.getElementById('duration'),output=document.getElementById('value'),stage=document.getElementById('stage'),mode=document.getElementById('mode'),count=document.getElementById('count'),nodes=[...document.querySelectorAll('.node')],labels=[...document.querySelectorAll('.label')];
+    function render(animate=false){const value=Number(input.value),index=(value-15)/15,pct=index/4*100;root.style.setProperty('--pct',`${pct}%`);output.innerHTML=`${value}<span class="unit">min</span>`;mode.textContent=modes[index];count.textContent=`${String(index+1).padStart(2,'0')} / 05`;input.setAttribute('aria-valuetext',`${value} minutes, ${modes[index]}`);nodes.forEach((node,i)=>{node.classList.toggle('passed',i<=index);node.classList.toggle('active',i===index)});labels.forEach((label,i)=>label.classList.toggle('active',i===index));if(animate){stage.classList.remove('rippling');void stage.offsetWidth;stage.classList.add('rippling');clearTimeout(stage._rippleTimer);stage._rippleTimer=setTimeout(()=>stage.classList.remove('rippling'),540)}}
+    input.addEventListener('input',()=>render(true));input.addEventListener('pointerdown',()=>stage.classList.add('dragging'));input.addEventListener('pointerup',()=>stage.classList.remove('dragging'));input.addEventListener('pointercancel',()=>stage.classList.remove('dragging'));render();
+  </script>
+  <script src="design-specs.js"></script>
+</body>
+</html>

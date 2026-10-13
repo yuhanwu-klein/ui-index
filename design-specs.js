@@ -166,6 +166,28 @@
         States: [['Hover', 'Glass highlight + halo'], ['Pressed', '.94× thumb compression'], ['Drag', 'Direct stepped tracking'], ['Selected', 'Icon lift + illuminated node'], ['Focus', '2 px cyan ring']],
         Motion: [['Range', '5–30°C / 6 steps'], ['Step transition', '260 ms spring'], ['Drag tracking', '80 ms linear'], ['State transition', '180–220 ms']]
       }
+    },
+    'soft-focus-stepped-slider.html': {
+      title: 'Focus Duration', tone: 'Serene · Intimate · Matter-of-fact', week: 'Week 4', back: 'week4.html',
+      sections: {
+        Spacing: [['Page padding', '72 × 24 px'], ['Panel padding', '22 px'], ['Header gap', '24 px'], ['Footer gap', '14 px']],
+        Typography: [['Family', 'SF Pro / system-ui'], ['Title', '16 px / 1 · 700'], ['Value', '28 px / 1 · 700'], ['Metadata', '9 px / 1 Mono'], ['Supporting copy', '12 px']],
+        Component: [['Panel', '420 px max'], ['Slider region', '104 px high'], ['Duration steps', '5'], ['Thumb', '34 × 34 px'], ['Minimum target', '44 px']],
+        Surface: [['Canvas', 'Pure white #FFFFFF'], ['Panel', '#F1F1F3'], ['Panel radius', '20 px'], ['Panel stroke', '1 px / 9% ink'], ['Track', '5 px / full radius']],
+        States: [['Hover', '1.08× thumb + shadow'], ['Pressed', '.9× thumb'], ['Drag', '90 ms tracking'], ['Selected', 'Filled node + active label'], ['Focus', '1.5 px ink outline']],
+        Motion: [['Range', '15–75 min / 15 min steps'], ['Step transition', '360 ms soft easing'], ['Ripple feedback', '520 ms'], ['Node pop', '300 ms spring']]
+      }
+    },
+    'soft-ambient-continuous-slider.html': {
+      title: 'Ambient Sound', tone: 'Serene · Intimate · Matter-of-fact', week: 'Week 4', back: 'week4.html',
+      sections: {
+        Spacing: [['Page padding', '72 × 24 px'], ['Panel padding', '22 px'], ['Header gap', '24 px'], ['Footer gap', '14 px']],
+        Typography: [['Family', 'SF Pro / system-ui'], ['Title', '16 px / 1 · 700'], ['Value', '28 px / 1 · 700'], ['Metadata', '9 px / 1 Mono'], ['Supporting copy', '12 px']],
+        Component: [['Panel', '420 px max'], ['Slider region', '104 px high'], ['Range', '0–100% continuous'], ['Thumb', '34 × 34 px'], ['Minimum target', '44 px']],
+        Surface: [['Canvas', 'Pure white #FFFFFF'], ['Panel', '#F1F1F3'], ['Panel radius', '20 px'], ['Panel stroke', '1 px / 9% ink'], ['Track', '6 px / full radius']],
+        States: [['Hover', '1.08× thumb + shadow'], ['Pressed', '.9× thumb'], ['Drag', 'Repeating ripple + direct tracking'], ['Focus', '1.5 px ink outline']],
+        Motion: [['Range', '0–100% / 1% increments'], ['Handle tracking', '80 ms linear'], ['Ripple cycle', '760 ms'], ['Morph', '260 ms spring']]
+      }
     }
   };
 
