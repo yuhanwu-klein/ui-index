@@ -130,8 +130,8 @@
         Typography: [['Family', 'VT323 / Space Mono'], ['Title', '38–58 px / 1'], ['Slider value', '42 px / .8'], ['Control label', '18–23 px'], ['Tracking', '.08–.18 em']],
         Component: [['Workspace', '980 px max'], ['Steps', '6 · 20% increments'], ['Slider region', '108 px high'], ['Mode control', '2 × 48 px'], ['Minimum target', '48 px']],
         Surface: [['Card stroke', '3 px'], ['Track radius', '18 px'], ['Track stroke', '3 px'], ['Hard shadow', '8 px / 0 blur']],
-        States: [['Hover', '−2 px lift / +2 px shadow'], ['Pressed', '+3 px inset'], ['Drag', '.94 vertical squash'], ['Focus', '4 px blue ring']],
-        Motion: [['Live resize', '80 ms linear'], ['Snap feedback', '360 ms'], ['Easing', 'cubic-bezier(.34,1.56,.64,1)']]
+        States: [['Hover', '1.12× handle scale'], ['Pressed', 'Blue / .92× handle'], ['Drag', 'Handle pulse only'], ['Focus', '4 px blue ring']],
+        Motion: [['Spectrum', 'Fixed'], ['Handle tracking', '80 ms linear'], ['Snap feedback', '360 ms'], ['Easing', 'cubic-bezier(.34,1.56,.64,1)']]
       }
     }
   };
