@@ -6,11 +6,15 @@
   <title>Week 4 · UI Index</title>
   <style>
     * { box-sizing:border-box; }
-    :root { --page:#e8e6dd; --dot:#c2bfb2; --ink:#1a1a18; --muted:#8a8880; --line:#cfccc0; --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; --mono:"SF Mono","Courier New",monospace; }
+    :root { --page:#fff; --ink:#1a1a18; --muted:#7c7c77; --line:#e6e6e2; --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; --mono:"SF Mono","Courier New",monospace; }
     html,body { min-height:100%; margin:0; color:var(--ink); font-family:var(--font); }
-    body { padding:28px; background-color:var(--page); background-image:radial-gradient(var(--dot) 1.2px,transparent 1.4px); background-size:18px 18px; }
+    body { padding:28px; background:var(--page); }
     main { width:min(100%,1440px); margin:0 auto; min-height:calc(100vh - 56px); display:grid; grid-template-rows:60px 1fr 40px; gap:20px; }
-    header { display:flex; align-items:center; justify-content:space-between; padding:4px 2px; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:4px 2px; }
+    .header-main { display:flex; align-items:center; gap:14px; min-width:0; }
+    .back { min-height:40px; display:inline-flex; align-items:center; padding:0 14px; border:1px solid var(--line); border-radius:999px; color:var(--ink); background:#fff; font:650 12px/1 var(--font); text-decoration:none; white-space:nowrap; }
+    .back:hover { border-color:#a9a9a4; }
+    .back:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
     h1 { margin:0; font-size:22px; font-weight:700; letter-spacing:-.02em; }
     h1 a { color:inherit; text-decoration:none; }
     .count { color:var(--muted); font:600 11px/1 var(--mono); letter-spacing:.14em; }
@@ -26,7 +30,7 @@
 </head>
 <body>
   <main>
-    <header><h1><a href="index.html">UI Index</a> · Week 4</h1><span class="count">00 / 06</span></header>
+    <header><div class="header-main"><a class="back" href="index.html">← Archive</a><h1>Week 4</h1></div><span class="count">00 / 06</span></header>
     <section class="empty" aria-label="Week 4 project area">
       <div class="message"><span>Page ready</span><h2>Week 4</h2><p>This page is ready for the six slider studies.</p></div>
     </section>

@@ -140,17 +140,17 @@
         </section>`).join('');
       root.innerHTML = `
         <style>
-          :host { --ink:#171715; --paper:#f5f2e9; --muted:#77746d; --line:#d9d5c9; font-family:-apple-system,"SF Pro Text",system-ui,sans-serif; }
+          :host { --ink:#171715; --paper:#fff; --muted:#70706b; --line:#e5e5e1; font-family:-apple-system,"SF Pro Text",system-ui,sans-serif; }
           * { box-sizing:border-box; }
           .back,.open,.close { -webkit-tap-highlight-color:transparent; }
-          .back { position:fixed; z-index:2147483645; top:18px; left:18px; min-height:42px; display:inline-flex; align-items:center; padding:0 15px; border:1px solid rgba(23,23,21,.13); border-radius:999px; background:rgba(245,242,233,.9); color:var(--ink); box-shadow:0 8px 24px rgba(0,0,0,.1); backdrop-filter:blur(12px); font:650 13px/1 inherit; text-decoration:none; }
+          .back { position:fixed; z-index:2147483645; top:18px; left:18px; min-height:42px; display:inline-flex; align-items:center; padding:0 15px; border:1px solid rgba(23,23,21,.13); border-radius:999px; background:rgba(255,255,255,.94); color:var(--ink); box-shadow:0 8px 24px rgba(0,0,0,.1); backdrop-filter:blur(12px); font:650 13px/1 inherit; text-decoration:none; }
           .open { position:fixed; z-index:2147483645; right:18px; bottom:18px; min-width:112px; min-height:44px; padding:0 18px; border:1px solid rgba(255,255,255,.16); border-radius:999px; background:var(--ink); color:#fff; box-shadow:0 10px 28px rgba(0,0,0,.24); font:700 13px/1 inherit; letter-spacing:.01em; cursor:pointer; }
           .back:hover,.open:hover { transform:translateY(-2px); }
           .back:focus-visible,.open:focus-visible,.close:focus-visible { outline:3px solid #4f8cff; outline-offset:3px; }
           dialog { width:min(920px,calc(100vw - 28px)); max-height:min(820px,calc(100vh - 28px)); padding:0; border:0; border-radius:24px; background:var(--paper); color:var(--ink); box-shadow:0 28px 80px rgba(0,0,0,.32); overflow:hidden; }
           dialog::backdrop { background:rgba(13,13,12,.62); backdrop-filter:blur(8px); }
           .panel { max-height:min(820px,calc(100vh - 28px)); overflow:auto; overscroll-behavior:contain; }
-          header { position:sticky; top:0; z-index:2; display:flex; align-items:flex-start; gap:24px; padding:28px 30px 22px; border-bottom:1px solid var(--line); background:rgba(245,242,233,.94); backdrop-filter:blur(14px); }
+          header { position:sticky; top:0; z-index:2; display:flex; align-items:flex-start; gap:24px; padding:28px 30px 22px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.96); backdrop-filter:blur(14px); }
           .kicker { margin:0 0 8px; color:var(--muted); font:700 10px/1.2 "SF Mono",monospace; letter-spacing:.15em; text-transform:uppercase; }
           h2 { margin:0; font-size:30px; line-height:1.05; letter-spacing:-.035em; }
           .tone { margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.4; }

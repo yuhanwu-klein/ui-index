@@ -3,6 +3,8 @@
 A growing collection of interactive UI micro-studies, organized by week.
 Live site: **https://yuhanwu-klein.github.io/ui-index/**
 
+The home archive lists the complete Week 1–Week 14 course timeline. Available weeks link to their project galleries; future weeks remain clearly marked until work is added.
+
 ## Week 3 · The 12 pieces
 
 Every Week 3 detail page includes an accessible **View specs** panel with spacing, typography, component sizing, surface, and motion specifications. The panel is hidden in index-page previews so the component thumbnails stay clean.

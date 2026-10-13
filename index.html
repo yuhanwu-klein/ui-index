@@ -6,40 +6,55 @@
   <title>UI Index</title>
   <style>
     * { box-sizing: border-box; }
-    :root { --page:#e8e6dd; --dot:#c2bfb2; --card:#f6f3eb; --ink:#1a1a18; --muted:#8a8880; --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; --mono:"SF Mono","Courier New",monospace; }
+    :root { --page:#fff; --card:#fff; --ink:#1a1a18; --muted:#7c7c77; --line:#e6e6e2; --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; --mono:"SF Mono","Courier New",monospace; }
     html,body { min-height:100%; margin:0; color:var(--ink); font-family:var(--font); }
-    body { padding:28px; background-color:var(--page); background-image:radial-gradient(var(--dot) 1.2px,transparent 1.4px); background-size:18px 18px; }
-    main { width:min(100%,980px); margin:0 auto; min-height:calc(100vh - 56px); display:grid; grid-template-rows:60px 1fr 40px; gap:20px; }
+    body { padding:28px; background:var(--page); }
+    main { width:min(100%,1240px); margin:0 auto; min-height:calc(100vh - 56px); display:grid; grid-template-rows:auto 1fr 40px; gap:28px; }
     header { display:flex; align-items:center; justify-content:space-between; padding:4px 2px; }
-    h1 { margin:0; font-size:22px; font-weight:700; letter-spacing:-.02em; }
-    .count,.eyebrow { color:var(--muted); font:600 11px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; }
-    .weeks { align-self:center; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
-    .week { min-height:360px; padding:28px; border:1px solid rgba(26,26,24,.06); border-radius:22px; background:var(--card); color:inherit; text-decoration:none; box-shadow:0 10px 28px rgba(26,26,24,.07),0 1px 0 rgba(26,26,24,.03); display:flex; flex-direction:column; transition:transform 220ms cubic-bezier(.22,1,.32,1),box-shadow 220ms ease; }
-    .week:hover { transform:translateY(-4px); box-shadow:0 18px 36px rgba(26,26,24,.12); }
+    .title-group { display:flex; flex-direction:column; gap:4px; }
+    h1 { margin:0; font-size:26px; font-weight:750; letter-spacing:-.035em; }
+    .subtitle { margin:0; color:var(--muted); font-size:13px; line-height:1.5; }
+    .count,.eyebrow { color:var(--muted); font:650 10px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; }
+    .weeks { align-self:start; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+    .week { min-height:196px; padding:20px; border:1px solid var(--line); border-radius:18px; background:#fff; color:inherit; text-decoration:none; box-shadow:0 6px 20px rgba(26,26,24,.045); display:flex; flex-direction:column; transition:transform 220ms cubic-bezier(.22,1,.32,1),box-shadow 220ms ease,border-color 220ms ease; }
+    a.week:hover { transform:translateY(-3px); border-color:#b8b8b2; box-shadow:0 14px 30px rgba(26,26,24,.1); }
     .week:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
-    .week h2 { margin:auto 0 8px; font-size:clamp(42px,7vw,72px); line-height:.95; letter-spacing:-.06em; }
-    .week p { margin:0; color:var(--muted); font-size:14px; line-height:1.5; }
-    .week .arrow { align-self:flex-end; font-size:24px; transition:transform 220ms ease; }
-    .week:hover .arrow { transform:translate(3px,-3px); }
-    .week.four { background:var(--ink); color:var(--card); }
-    .week.four p,.week.four .eyebrow { color:#aaa79e; }
+    .week h2 { margin:auto 0 7px; font-size:30px; line-height:1; letter-spacing:-.045em; }
+    .week p { min-height:42px; margin:0; color:var(--muted); font-size:12.5px; line-height:1.5; }
+    .week .arrow { align-self:flex-end; font-size:18px; transition:transform 220ms ease; }
+    a.week:hover .arrow { transform:translate(2px,-2px); }
+    .week.pending { border-style:dashed; box-shadow:none; }
+    .week.pending .arrow { color:#c2c2bd; }
     .foot { display:flex; align-items:center; gap:6px; color:var(--muted); font:600 11px/1 var(--mono); letter-spacing:.1em; text-transform:uppercase; padding:4px 2px; }
     .foot .d { width:6px; height:6px; border-radius:2px; background:var(--ink); opacity:.65; }
-    @media (max-width:680px) { body { padding:16px; } main { min-height:calc(100vh - 32px); grid-template-rows:48px 1fr 32px; gap:12px; } .weeks { grid-template-columns:1fr; width:100%; } .week { min-height:240px; } }
+    @media (max-width:940px) { .weeks { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media (max-width:560px) { body { padding:16px; } main { min-height:calc(100vh - 32px); gap:18px; } header { align-items:flex-start; } .weeks { grid-template-columns:1fr; width:100%; } .week { min-height:170px; } }
   </style>
 </head>
 <body>
   <main>
-    <header><h1>UI Index</h1><span class="count">02 weeks</span></header>
+    <header><div class="title-group"><h1>UI Archive</h1><p class="subtitle">Interaction studies organized by week.</p></div><span class="count">14 weeks</span></header>
     <section class="weeks" aria-label="Course weeks">
+      <article class="week pending" aria-disabled="true"><span class="eyebrow">Coming soon</span><span class="arrow" aria-hidden="true">01</span><h2>Week 1</h2><p>Projects have not been added yet.</p></article>
+      <article class="week pending" aria-disabled="true"><span class="eyebrow">Coming soon</span><span class="arrow" aria-hidden="true">02</span><h2>Week 2</h2><p>Projects have not been added yet.</p></article>
       <a class="week" href="week3.html" aria-label="Open Week 3 projects">
         <span class="eyebrow">12 studies</span><span class="arrow" aria-hidden="true">↗</span>
         <h2>Week 3</h2><p>Toggle, checkbox, and radio interface studies.</p>
       </a>
-      <a class="week four" href="week4.html" aria-label="Open Week 4 projects">
-        <span class="eyebrow">New page</span><span class="arrow" aria-hidden="true">↗</span>
+      <a class="week" href="week4.html" aria-label="Open Week 4 projects">
+        <span class="eyebrow">In progress</span><span class="arrow" aria-hidden="true">↗</span>
         <h2>Week 4</h2><p>Slider studies coming next.</p>
       </a>
+      <article class="week pending" aria-disabled="true"><span class="eyebrow">Coming soon</span><span class="arrow" aria-hidden="true">05</span><h2>Week 5</h2><p>Projects have not been added yet.</p></article>
+      <article class="week pending" aria-disabled="true"><span class="eyebrow">Coming soon</span><span class="arrow" aria-hidden="true">06</span><h2>Week 6</h2><p>Projects have not been added yet.</p></article>
+      <article class="week pending" aria-disabled="true"><span class="eyebrow">Coming soon</span><span class="arrow" aria-hidden="true">07</span><h2>Week 7</h2><p>Projects have not been added yet.</p></article>
+      <article class="week pending" aria-disabled="true"><span class="eyebrow">Coming soon</span><span class="arrow" aria-hidden="true">08</span><h2>Week 8</h2><p>Projects have not been added yet.</p></article>
+      <article class="week pending" aria-disabled="true"><span class="eyebrow">Coming soon</span><span class="arrow" aria-hidden="true">09</span><h2>Week 9</h2><p>Projects have not been added yet.</p></article>
+      <article class="week pending" aria-disabled="true"><span class="eyebrow">Coming soon</span><span class="arrow" aria-hidden="true">10</span><h2>Week 10</h2><p>Projects have not been added yet.</p></article>
+      <article class="week pending" aria-disabled="true"><span class="eyebrow">Coming soon</span><span class="arrow" aria-hidden="true">11</span><h2>Week 11</h2><p>Projects have not been added yet.</p></article>
+      <article class="week pending" aria-disabled="true"><span class="eyebrow">Coming soon</span><span class="arrow" aria-hidden="true">12</span><h2>Week 12</h2><p>Projects have not been added yet.</p></article>
+      <article class="week pending" aria-disabled="true"><span class="eyebrow">Coming soon</span><span class="arrow" aria-hidden="true">13</span><h2>Week 13</h2><p>Projects have not been added yet.</p></article>
+      <article class="week pending" aria-disabled="true"><span class="eyebrow">Coming soon</span><span class="arrow" aria-hidden="true">14</span><h2>Week 14</h2><p>Projects have not been added yet.</p></article>
     </section>
     <div class="foot"><span class="d"></span>Built with care</div>
   </main>
