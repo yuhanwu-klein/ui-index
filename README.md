@@ -5,6 +5,8 @@ Live site: **https://yuhanwu-klein.github.io/ui-index/**
 
 ## Week 3 · The 12 pieces
 
+Every Week 3 detail page includes an accessible **View specs** panel with spacing, typography, component sizing, surface, and motion specifications. The panel is hidden in index-page previews so the component thumbnails stay clean.
+
 **Basic components**
 - 01 Appearance Toggle — day/night + language switch with eclipse animation
 - 02 Checkbox — daily journal list, sticky ink + sinking "done" items
