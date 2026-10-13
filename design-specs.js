@@ -141,8 +141,8 @@
         Typography: [['UI family', 'Inter'], ['Accent family', 'Space Mono'], ['Value', '25 px / 1'], ['Labels', '8–10 px'], ['Tracking', '.025–.11 em']],
         Component: [['Panel', '440 px max'], ['Sliders', '3 simultaneous controls'], ['Slider region', '42 px high'], ['Handle', '22 × 22 px'], ['Minimum target', '38 px']],
         Surface: [['Panel stroke', '1 px charcoal'], ['Panel radius', '12 px'], ['Track', '8 px high / 3 px radius'], ['Hard shadow', '5 px / 0 blur']],
-        States: [['Hover', '1.12× handle'], ['Pressed', 'Acid handle'], ['Drag', 'Off-axis magnetic response'], ['Focus', '3 px blue ring']],
-        Motion: [['Magnetic threshold', '9 px from rail'], ['Off-axis resistance', '72% / 13 px max'], ['Snap feedback', '320 ms'], ['Controls', 'Independent state']]
+        States: [['Hover', '1.12× handle'], ['Pressed', 'Acid fill / .92×'], ['Drag', 'Pink stepped pulse'], ['Focus', '3 px blue ring']],
+        Motion: [['Handle tracking', '70 ms linear'], ['Snap feedback', '320 ms'], ['Value refresh', '240 ms ease'], ['Controls', 'Independent state']]
       }
     }
   };
