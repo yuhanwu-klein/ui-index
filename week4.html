@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Week 4 · UI Index</title>
+  <style>
+    * { box-sizing:border-box; }
+    :root { --page:#e8e6dd; --dot:#c2bfb2; --ink:#1a1a18; --muted:#8a8880; --line:#cfccc0; --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; --mono:"SF Mono","Courier New",monospace; }
+    html,body { min-height:100%; margin:0; color:var(--ink); font-family:var(--font); }
+    body { padding:28px; background-color:var(--page); background-image:radial-gradient(var(--dot) 1.2px,transparent 1.4px); background-size:18px 18px; }
+    main { width:min(100%,1440px); margin:0 auto; min-height:calc(100vh - 56px); display:grid; grid-template-rows:60px 1fr 40px; gap:20px; }
+    header { display:flex; align-items:center; justify-content:space-between; padding:4px 2px; }
+    h1 { margin:0; font-size:22px; font-weight:700; letter-spacing:-.02em; }
+    h1 a { color:inherit; text-decoration:none; }
+    .count { color:var(--muted); font:600 11px/1 var(--mono); letter-spacing:.14em; }
+    .empty { display:grid; place-items:center; min-height:420px; border:1.5px dashed var(--line); border-radius:22px; }
+    .message { max-width:360px; padding:32px; text-align:center; }
+    .message span { color:var(--muted); font:600 11px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; }
+    .message h2 { margin:14px 0 8px; font-size:36px; letter-spacing:-.04em; }
+    .message p { margin:0; color:var(--muted); font-size:14px; line-height:1.55; }
+    .foot { display:flex; align-items:center; gap:6px; color:var(--muted); font:600 11px/1 var(--mono); letter-spacing:.1em; text-transform:uppercase; padding:4px 2px; }
+    .foot .d { width:6px; height:6px; border-radius:2px; background:var(--ink); opacity:.65; }
+    @media (max-width:560px) { body { padding:16px; } main { min-height:calc(100vh - 32px); grid-template-rows:48px 1fr 32px; gap:12px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header><h1><a href="index.html">UI Index</a> · Week 4</h1><span class="count">00 / 06</span></header>
+    <section class="empty" aria-label="Week 4 project area">
+      <div class="message"><span>Page ready</span><h2>Week 4</h2><p>This page is ready for the six slider studies.</p></div>
+    </section>
+    <div class="foot"><span class="d"></span>Built with care</div>
+  </main>
+</body>
+</html>

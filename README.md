@@ -1,9 +1,9 @@
 # UI Index
 
-A collection of 12 interactive UI micro-studies, each a single self-contained HTML page.
+A growing collection of interactive UI micro-studies, organized by week.
 Live site: **https://yuhanwu-klein.github.io/ui-index/**
 
-## The 12 pieces
+## Week 3 · The 12 pieces
 
 **Basic components**
 - 01 Appearance Toggle — day/night + language switch with eclipse animation
@@ -34,3 +34,7 @@ python3 -m http.server 8787
 ```
 
 Then open http://127.0.0.1:8787/
+
+## Week 4
+
+The Week 4 page is ready for six slider studies.
