@@ -126,10 +126,10 @@
     'pixel-stepped-slider.html': {
       title: 'Brand Color Tuner', tone: 'Edgy · Commercial', week: 'Week 4', back: 'week4.html',
       sections: {
-        Spacing: [['Page padding', '38 × 24 px'], ['Workspace gap', '18 px'], ['Card padding', '18 px'], ['Control gap', '17 px']],
-        Typography: [['Family', 'VT323 / Space Mono'], ['Title', '38–58 px / 1'], ['Slider value', '42 px / .8'], ['Control label', '18–23 px'], ['Tracking', '.08–.18 em']],
-        Component: [['Workspace', '980 px max'], ['Preview card', '560 px max · centered'], ['Control card', '760 px max · centered'], ['Steps', '6 · 20% increments'], ['Slider region', '108 px high'], ['Minimum target', '48 px']],
-        Surface: [['Card stroke', '3 px'], ['Track radius', '18 px'], ['Track stroke', '3 px'], ['Hard shadow', '8 px / 0 blur']],
+        Spacing: [['Page padding', '38 × 24 px'], ['Workspace gap', '16 px'], ['Card padding', '14 px'], ['Control gap', '12 px']],
+        Typography: [['Family', 'VT323 / Space Mono'], ['Title', '34–46 px / 1'], ['Slider value', '34 px / .8'], ['Control label', '16–20 px'], ['Tracking', '.08–.18 em']],
+        Component: [['Workspace', '820 px max'], ['Preview card', '440 px max · centered'], ['Control card', '640 px max · centered'], ['Steps', '6 · 20% increments'], ['Slider region', '84 px high'], ['Minimum target', '44 px']],
+        Surface: [['Card stroke', '2 px'], ['Track radius', '14 px'], ['Track stroke', '2 px'], ['Hard shadow', '5 px / 0 blur']],
         States: [['Hover', '1.12× handle scale'], ['Pressed', 'Blue / .92× handle'], ['Drag', 'Handle pulse only'], ['Focus', '4 px blue ring']],
         Motion: [['Spectrum', 'Fixed'], ['Handle tracking', '80 ms linear'], ['Snap feedback', '360 ms'], ['Value glitch', '320 ms stepped'], ['Mode scan', '520 ms / 6 steps']]
       }
