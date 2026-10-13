@@ -149,7 +149,7 @@
       title: 'Glass Temperature', tone: 'Futuristic · Mysterious · Elegant', week: 'Week 4', back: 'week4.html',
       sections: {
         Spacing: [['Canvas', '1600 × 1000 reference'], ['Page padding', '72 × 24 px'], ['Panel padding', '28 × 30 px'], ['Header gap', '20 px']],
-        Typography: [['Family', 'Inter / Space Mono'], ['Value', '38 px / 1'], ['Label', '12 px / .11 em'], ['Range copy', '11 px / 1'], ['Zone labels', '11 px / 1']],
+        Typography: [['Family', 'Inter / Space Mono'], ['Value', '38 px / 1'], ['Label', '12 px / .11 em'], ['Zone labels', '11 px / 1']],
         Component: [['Panel', '640 px max'], ['Track', '540 px reference / 6 px high'], ['Slider region', '126 px high'], ['Glass thumb', '46 × 46 px'], ['Minimum target', '46 px']],
         Surface: [['Panel radius', '20 px'], ['Panel stroke', '1 px / 15% white'], ['Backdrop blur', '24 px'], ['Glass layers', 'Refraction + inner highlights']],
         States: [['Hover', 'Edge highlight + halo'], ['Pressed', '.94× compression'], ['Drag', 'Off-axis glass motion'], ['Focus', '2 px cyan ring']],
