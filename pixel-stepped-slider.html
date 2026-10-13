@@ -186,11 +186,12 @@
     @media(max-width:520px){.step{font-size:8px}.preview-card,.control-card{border-radius:10px}}
   </style>
   <style>
-    body{place-items:center;padding:72px 24px}
-    html.is-preview body{padding:32px 24px}
+    body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;padding:72px 24px}
+    html.is-preview body{min-height:100vh;min-height:100svh;padding:32px 24px}
     .app{width:min(100%,640px)}
     .app::before{display:none}
     .workspace{display:block}
+    design-specs{position:fixed}
     @media(max-width:520px){body{padding:68px 16px 28px}html.is-preview body{padding:24px 16px}}
   </style>
 </head>
