@@ -153,7 +153,7 @@
         Component: [['Panel', '640 px max'], ['Track', '540 px reference / 5 px high'], ['Slider region', '126 px high'], ['Glass thumb', '48 × 48 px'], ['Minimum target', '48 px']],
         Surface: [['Panel radius', '20 px'], ['Panel stroke', '1 px / 15% white'], ['Backdrop blur', '24 px'], ['Glass layers', 'Refraction + inner highlights']],
         States: [['Hover', 'Edge highlight + halo'], ['Pressed', '.94× compression'], ['Drag', 'Off-axis glass motion'], ['Focus', '2 px cyan ring']],
-        Motion: [['Range', '16–30°C / 0.1°C'], ['Magnetic threshold', '13 px'], ['Off-axis limit', '25 px'], ['Snap rebound', '430 ms spring']]
+        Motion: [['Range', '16–30°C / 0.1°C'], ['Magnetic threshold', '11 px'], ['Off-axis limit', '34 px'], ['Elastic rail return', '520 ms / 2.2 oscillation']]
       }
     }
   };
