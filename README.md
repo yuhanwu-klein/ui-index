@@ -41,4 +41,4 @@ Then open http://127.0.0.1:8787/
 
 ## Week 4
 
-The Week 4 page is ready for six slider studies.
+The Week 4 page contains six empty project slots ready for the slider studies.
