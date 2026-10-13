@@ -12,11 +12,10 @@
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     :root{--ink:#f7f8fa;--muted:rgba(238,242,247,.54);--cyan:#63e6ff;--warm:#ff6b45;--pct:53.57%;--lift:0px;--flux-top:60px;--flux-height:0px;--ui:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--mono:"Space Mono","SF Mono",monospace;--spring:cubic-bezier(.2,1.45,.45,1)}
     html,body{min-height:100%;margin:0}
-    body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;padding:72px 24px;background:radial-gradient(circle at 50% 38%,#242932 0,#14171c 42%,#090b0f 100%);color:var(--ink);font-family:var(--ui);overflow:hidden}
-    body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.025),transparent 35%),repeating-linear-gradient(90deg,transparent 0 79px,rgba(255,255,255,.012) 80px)}
+    body{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;padding:72px 24px;background:#fff;color:var(--ink);font-family:var(--ui);overflow:hidden}
     html.is-preview body{min-height:100vh;min-height:100svh;padding:32px 24px}
     button,input{font:inherit}
-    .panel{position:relative;width:min(100%,640px);padding:28px 30px 26px;border:1px solid rgba(255,255,255,.15);border-radius:20px;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.035));box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.035),0 28px 80px rgba(0,0,0,.42);backdrop-filter:blur(24px) saturate(125%);-webkit-backdrop-filter:blur(24px) saturate(125%);overflow:hidden}
+    .panel{position:relative;width:min(100%,640px);padding:28px 30px 26px;border:1px solid rgba(255,255,255,.15);border-radius:20px;background:linear-gradient(145deg,rgba(48,54,64,.97),rgba(18,22,28,.97));box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.035),0 24px 64px rgba(14,20,28,.2);backdrop-filter:blur(24px) saturate(125%);-webkit-backdrop-filter:blur(24px) saturate(125%);overflow:hidden}
     .panel::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at 18% 0,rgba(255,255,255,.13),transparent 30%),linear-gradient(105deg,transparent 58%,rgba(255,255,255,.035) 59%,transparent 66%);pointer-events:none}
     .head{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:16px}
     .title-line{display:flex;align-items:center;gap:10px;margin-bottom:8px}

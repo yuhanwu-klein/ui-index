@@ -151,7 +151,7 @@
         Spacing: [['Canvas', '1600 × 1000 reference'], ['Page padding', '72 × 24 px'], ['Panel padding', '28 × 30 px'], ['Header gap', '20 px']],
         Typography: [['Family', 'Inter / Space Mono'], ['Value', '38 px / 1'], ['Label', '12 px / .11 em'], ['Zone labels', '11 px / 1']],
         Component: [['Panel', '640 px max'], ['Track', '540 px reference / 6 px high'], ['Slider region', '126 px high'], ['Glass thumb', '46 × 46 px'], ['Minimum target', '46 px']],
-        Surface: [['Panel radius', '20 px'], ['Panel stroke', '1 px / 15% white'], ['Backdrop blur', '24 px'], ['Glass layers', 'Refraction + inner highlights']],
+        Surface: [['Canvas', 'Pure white #FFFFFF'], ['Panel radius', '20 px'], ['Panel stroke', '1 px / 15% white'], ['Backdrop blur', '24 px'], ['Glass layers', 'Smoked glass + inner highlights']],
         States: [['Hover', 'Edge highlight + halo'], ['Pressed', '.94× compression'], ['Drag', 'Off-axis glass motion'], ['Focus', '2 px cyan ring']],
         Motion: [['Range', '16–30°C / 0.5°C'], ['Magnetic threshold', '6 px'], ['Off-axis limit', '8 px'], ['Local refraction', '72 px radius'], ['Magnetic return', '220 ms / no oscillation']]
       }
