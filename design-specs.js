@@ -161,7 +161,7 @@
       sections: {
         Spacing: [['Canvas', '1600 × 1000 reference'], ['Page padding', '72 × 24 px'], ['Panel padding', '28 × 30 px'], ['Header gap', '20 px'], ['Icon gap', '5 px']],
         Typography: [['Family', 'Inter / Space Mono'], ['Value', '36 px / 1'], ['Label', '12 px / .11 em'], ['Status', '10 px / .07 em'], ['Recommendation', '11 px']],
-        Component: [['Panel', '640 px max'], ['Slider region', '156 px high'], ['Temperature steps', '6'], ['Clothing icons', '23 × 23 px'], ['Glass thumb', '44 × 44 px'], ['Minimum target', '44 px']],
+        Component: [['Panel', '640 px max'], ['Slider region', '174 px high'], ['Temperature steps', '6'], ['Clothing icons', '28 × 28 px'], ['Icon wells', '44 × 44 px'], ['Glass thumb', '44 × 44 px'], ['Minimum target', '44 px']],
         Surface: [['Canvas', 'Pure white #FFFFFF'], ['Panel radius', '20 px'], ['Panel stroke', '1 px / 15% white'], ['Icon well radius', '11 px'], ['Track', '6 px / full radius'], ['Glass layers', 'Smoked glass + inner highlights']],
         States: [['Hover', 'Glass highlight + halo'], ['Pressed', '.94× thumb compression'], ['Drag', 'Direct stepped tracking'], ['Selected', 'Icon lift + illuminated node'], ['Focus', '2 px cyan ring']],
         Motion: [['Range', '5–30°C / 6 steps'], ['Step transition', '260 ms spring'], ['Drag tracking', '80 ms linear'], ['State transition', '180–220 ms']]

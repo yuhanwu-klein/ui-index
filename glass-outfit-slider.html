@@ -25,18 +25,19 @@
     .status[data-zone="hot"]{color:#ffc1ad;background:rgba(255,107,69,.1);border-color:rgba(255,107,69,.2)}
     .value{font:400 36px/1 var(--mono);letter-spacing:-.065em;text-shadow:0 0 24px rgba(255,255,255,.12)}
     .unit{margin-left:3px;color:rgba(247,248,250,.58);font-size:.48em;letter-spacing:0}
-    .slider-stage{position:relative;z-index:1;height:156px;border-radius:14px;touch-action:none;cursor:grab}
+    .slider-stage{position:relative;z-index:1;height:174px;border-radius:14px;touch-action:none;cursor:grab}
     .slider-stage:active{cursor:grabbing}
     .slider-stage::after{content:"";position:absolute;z-index:8;inset:-4px 2px -2px;border:2px solid transparent;border-radius:14px;pointer-events:none;transition:border-color 140ms ease,box-shadow 140ms ease}
     .slider-stage:has(.range:focus-visible)::after{border-color:rgba(133,224,255,.78);box-shadow:0 0 0 4px rgba(99,230,255,.1)}
     .outfits{position:absolute;z-index:3;left:18px;right:18px;top:0;display:grid;grid-template-columns:repeat(6,1fr);pointer-events:none}
-    .outfit{display:grid;justify-items:center;gap:5px;color:rgba(238,242,247,.44);transition:color 180ms ease,transform 220ms var(--spring)}
-    .icon-shell{width:38px;height:38px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.08);border-radius:11px;background:rgba(255,255,255,.025);transition:border-color 180ms ease,background 180ms ease,box-shadow 180ms ease,transform 220ms var(--spring)}
-    .outfit svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round}
-    .outfit small{font:500 10px/1 var(--mono);letter-spacing:.02em}
+    .outfit{display:grid;justify-items:center;gap:3px;color:rgba(238,242,247,.44);transition:color 180ms ease,transform 220ms var(--spring)}
+    .icon-shell{width:44px;height:44px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.09);border-radius:12px;background:rgba(255,255,255,.025);transition:border-color 180ms ease,background 180ms ease,box-shadow 180ms ease,transform 220ms var(--spring)}
+    .outfit svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round}
+    .garment{font-size:9px;font-weight:600;line-height:1;letter-spacing:.065em;text-transform:uppercase;white-space:nowrap}
+    .outfit small{font:500 9px/1 var(--mono);letter-spacing:.02em;opacity:.75}
     .outfit.active{color:#f7fbff;transform:translateY(-2px)}
     .outfit.active .icon-shell{border-color:rgba(211,249,255,.38);background:rgba(198,244,250,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 0 18px rgba(117,226,247,.16);transform:scale(1.08)}
-    .track-area{position:absolute;left:18px;right:18px;top:90px;height:8px}
+    .track-area{position:absolute;left:18px;right:18px;top:108px;height:8px}
     .rail-shadow,.rail{position:absolute;inset:1px 0;height:6px;border-radius:999px}
     .rail-shadow{background:#06080b;box-shadow:0 1px 0 rgba(255,255,255,.08),0 8px 20px rgba(0,0,0,.35)}
     .rail{background:linear-gradient(90deg,var(--cyan),#bfefff 32%,#f6f7f8 52%,#ffd1bd 72%,var(--warm));box-shadow:0 0 14px rgba(99,230,255,.16),0 0 14px rgba(255,107,69,.12);opacity:.9}
@@ -53,7 +54,7 @@
     .recommendation strong{color:rgba(247,250,252,.88);font-weight:600}
     .recommendation span:last-child{font:500 10px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase}
     .range{position:absolute;z-index:7;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:inherit}
-    @media(max-width:680px){body{padding:66px 16px 28px}.panel{padding:22px 18px 20px}.value{font-size:32px}.outfits,.track-area,.recommendation{left:8px;right:8px}.outfit:nth-child(even) small{opacity:.7}.icon-shell{width:34px;height:34px}.outfit svg{width:21px;height:21px}}
+    @media(max-width:680px){body{padding:66px 16px 28px}.panel{padding:22px 18px 20px}.value{font-size:32px}.outfits,.track-area,.recommendation{left:8px;right:8px}.garment{font-size:8px;letter-spacing:.03em}.icon-shell{width:38px;height:38px}.outfit svg{width:24px;height:24px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
     design-specs{position:fixed}
   </style>
@@ -66,12 +67,12 @@
     </div>
     <div class="slider-stage" id="stage">
       <div class="outfits" aria-hidden="true">
-        <div class="outfit"><span class="icon-shell"><svg viewBox="0 0 24 24"><path d="M8 5 5 7 2.5 13l3 1.5L7 12v8h10v-8l1.5 2.5 3-1.5L19 7l-3-2c-.8 1.6-2.1 2.4-4 2.4S8.8 6.6 8 5Z"/><path d="M9 4c.4-1.3 1.4-2 3-2s2.6.7 3 2M12 7.5V20"/></svg></span><small>5°</small></div>
-        <div class="outfit"><span class="icon-shell"><svg viewBox="0 0 24 24"><path d="m8 4-4 3-2 7 3 1 2-4v9h10v-9l2 4 3-1-2-7-4-3c-.8 1.4-2.1 2.1-4 2.1S8.8 5.4 8 4Z"/><path d="m9 5 3 4 3-4M12 9v11"/></svg></span><small>10°</small></div>
-        <div class="outfit"><span class="icon-shell"><svg viewBox="0 0 24 24"><path d="m8 5-4 2-2 6 3 1.5L7 11v9h10v-9l2 3.5 3-1.5-2-6-4-2c-.6 1.2-2 1.8-4 1.8S8.6 6.2 8 5Z"/><path d="M9 5c.5 1 1.5 1.5 3 1.5S14.5 6 15 5"/></svg></span><small>15°</small></div>
-        <div class="outfit"><span class="icon-shell"><svg viewBox="0 0 24 24"><path d="m8 4-5 3 2 5 3-1v9h8v-9l3 1 2-5-5-3c-.7 1.2-2 1.8-4 1.8S8.7 5.2 8 4Z"/><path d="m8 4 4 5 4-5M12 9v11"/></svg></span><small>20°</small></div>
-        <div class="outfit"><span class="icon-shell"><svg viewBox="0 0 24 24"><path d="m8 4-6 3 2.5 5L8 10v10h8V10l3.5 2L22 7l-6-3c-.7 1.2-2 1.8-4 1.8S8.7 5.2 8 4Z"/><path d="M9 4c.5 1 1.5 1.5 3 1.5S14.5 5 15 4"/></svg></span><small>25°</small></div>
-        <div class="outfit"><span class="icon-shell"><svg viewBox="0 0 24 24"><path d="M9 3v3L6.5 8v12h11V8L15 6V3"/><path d="M9 6c.5 1.3 1.5 2 3 2s2.5-.7 3-2M9 3h2v3M13 6V3h2"/></svg></span><small>30°</small></div>
+        <div class="outfit"><span class="icon-shell"><svg viewBox="0 0 28 28"><path d="M10 7 6.5 9 3 17l3.8 1.5L9 14v11h10V14l2.2 4.5L25 17l-3.5-8L18 7c-.7 2-2 3-4 3s-3.3-1-4-3Z"/><path d="M10.5 6c.3-2.1 1.5-3.2 3.5-3.2S17.2 3.9 17.5 6M14 10v15M9 15h10M9 19h10"/></svg></span><span class="garment">Parka</span><small>5°</small></div>
+        <div class="outfit"><span class="icon-shell"><svg viewBox="0 0 28 28"><path d="m10 4-5 4-2 9 4 1.5 2-5V26h10V13.5l2 5 4-1.5-2-9-5-4c-.8 1.7-2.1 2.5-4 2.5S10.8 5.7 10 4Z"/><path d="m10 5 4 6 4-6M14 11v15M10 16h8"/></svg></span><span class="garment">Coat</span><small>10°</small></div>
+        <div class="outfit"><span class="icon-shell"><svg viewBox="0 0 28 28"><path d="m9 7-5 3-2 8 4 1 2-5v11h12V14l2 5 4-1-2-8-5-3c-.7 1.4-2.4 2.1-5 2.1S9.7 8.4 9 7Z"/><path d="M10 7c.6 1.2 1.9 1.8 4 1.8S17.4 8.2 18 7M8 20h12M11 13h6M11 16h6"/></svg></span><span class="garment">Knit</span><small>15°</small></div>
+        <div class="outfit"><span class="icon-shell"><svg viewBox="0 0 28 28"><path d="m9 5-6 4 2.5 7L9 14v11h10V14l3.5 2L25 9l-6-4c-.8 1.5-2.5 2.2-5 2.2S9.8 6.5 9 5Z"/><path d="m9 5 5 6 5-6M14 11v14M10 17l2 1M18 17l-2 1"/></svg></span><span class="garment">Jacket</span><small>20°</small></div>
+        <div class="outfit"><span class="icon-shell"><svg viewBox="0 0 28 28"><path d="m9 6-7 4 3 6 4-2v11h10V14l4 2 3-6-7-4c-.8 1.5-2.5 2.2-5 2.2S9.8 7.5 9 6Z"/><path d="M10 6c.6 1.2 1.9 1.8 4 1.8S17.4 7.2 18 6"/></svg></span><span class="garment">Tee</span><small>25°</small></div>
+        <div class="outfit"><span class="icon-shell"><svg viewBox="0 0 28 28"><path d="M10 4v4L7 11v14h14V11l-3-3V4"/><path d="M10 8c.6 1.8 1.9 2.7 4 2.7S17.4 9.8 18 8M10 4h3v5M15 9V4h3"/></svg></span><span class="garment">Tank</span><small>30°</small></div>
       </div>
       <div class="track-area" id="track" aria-hidden="true">
         <span class="rail-shadow"></span><span class="rail"></span>
