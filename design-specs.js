@@ -131,7 +131,7 @@
         Component: [['Workspace', '980 px max'], ['Steps', '6 · 20% increments'], ['Slider region', '108 px high'], ['Mode control', '2 × 48 px'], ['Minimum target', '48 px']],
         Surface: [['Card stroke', '3 px'], ['Track radius', '18 px'], ['Track stroke', '3 px'], ['Hard shadow', '8 px / 0 blur']],
         States: [['Hover', '1.12× handle scale'], ['Pressed', 'Blue / .92× handle'], ['Drag', 'Handle pulse only'], ['Focus', '4 px blue ring']],
-        Motion: [['Spectrum', 'Fixed'], ['Handle tracking', '80 ms linear'], ['Snap feedback', '360 ms'], ['Easing', 'cubic-bezier(.34,1.56,.64,1)']]
+        Motion: [['Spectrum', 'Fixed'], ['Handle tracking', '80 ms linear'], ['Snap feedback', '360 ms'], ['Value glitch', '320 ms stepped'], ['Mode scan', '520 ms / 6 steps']]
       }
     }
   };
