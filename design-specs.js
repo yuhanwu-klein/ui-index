@@ -122,6 +122,17 @@
         Surface: [['Control radius', '50%'], ['Border', 'None'], ['Inactive fill', '#E4E4E8'], ['Active fill', 'Space gradient']],
         Motion: [['Fill transition', '650 ms'], ['Dot scale', '350 ms'], ['Easing', 'cubic-bezier(.4,0,.2,1)']]
       }
+    },
+    'pixel-stepped-slider.html': {
+      title: 'Hue / Chroma', tone: 'Edgy · Playful', week: 'Week 4', back: 'week4.html',
+      sections: {
+        Spacing: [['Stage padding', '44 × 24 px'], ['Stage gap', '32 px'], ['Feedback gap', '11 px'], ['Track label inset', '24 px']],
+        Typography: [['Family', 'VT323 / Space Mono'], ['Title', '42–64 px / 1'], ['Value label', '34 px / .9'], ['Readout', '38 px / 1'], ['Tracking', '.08–.24 em']],
+        Component: [['Slider track', '760 × 176 px max'], ['Steps', '6 · 20% increments'], ['Divider', '24 × 128 px'], ['Minimum input target', '44 px']],
+        Surface: [['Track radius', '999 px'], ['Track stroke', '4 px'], ['Panel stroke', '3 px'], ['Hard shadow', '10 px / 0 blur']],
+        States: [['Hover', '−3 px lift / +3 px shadow'], ['Pressed', '+4 px inset'], ['Drag', '.97 vertical squash'], ['Focus', '4 px blue ring']],
+        Motion: [['Live resize', '80 ms linear'], ['Snap feedback', '360 ms'], ['Easing', 'cubic-bezier(.34,1.56,.64,1)']]
+      }
     }
   };
 
@@ -167,12 +178,12 @@
           @media (max-width:640px) { .grid { grid-template-columns:1fr; padding:16px; } header { padding:22px 18px 18px; } h2 { font-size:25px; } .note { padding:0 18px 22px; } .back { top:12px; left:12px; } .open { right:12px; bottom:12px; } }
           @media (prefers-reduced-motion:reduce) { .back,.open { transition:none; } dialog::backdrop { backdrop-filter:none; } }
         </style>
-        <a class="back" href="week3.html" aria-label="Back to Week 3">← Week 3</a>
+        <a class="back" href="${spec.back || 'week3.html'}" aria-label="Back to ${spec.week || 'Week 3'}">← ${spec.week || 'Week 3'}</a>
         <button class="open" type="button">View specs</button>
         <dialog aria-labelledby="spec-title">
           <div class="panel">
             <header>
-              <div><p class="kicker">Week 3 · Design specification</p><h2 id="spec-title">${spec.title}</h2><p class="tone">${spec.tone}</p></div>
+              <div><p class="kicker">${spec.week || 'Week 3'} · Design specification</p><h2 id="spec-title">${spec.title}</h2><p class="tone">${spec.tone}</p></div>
               <button class="close" type="button" aria-label="Close specifications">×</button>
             </header>
             <div class="grid">${sectionMarkup}</div>
