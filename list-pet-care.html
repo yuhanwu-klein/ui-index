@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pet Care List · Week 5</title>
+  <script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    :root{--ink:#1c1c1e;--muted:#8e8e93;--soft:#f1f1f3;--line:#ececef;--purple:#5d20a6;--cta:linear-gradient(135deg,#9d4fe0 0%,#5d20a6 100%);
+      --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      --ease:cubic-bezier(.22,1,.32,1);--pop:cubic-bezier(.34,1.4,.5,1);--pad-y:12px;--pad-x:14px;--gap:12px}
+    html,body{margin:0;height:100%}
+    body{background:#fff;display:grid;place-items:center;font-family:var(--font);color:var(--ink);padding:28px;min-height:100vh;box-sizing:border-box}
+    button{font:inherit;color:inherit}
+    .screen{position:relative;width:402px;height:874px;background:#fff;border-radius:54px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.28);zoom:.86;isolation:isolate}
+    html.is-preview{overflow:hidden}html.is-preview body{padding:0}html.is-preview .screen{zoom:1;transform:scale(1.34)}
+    .statusbar{position:absolute;top:0;left:0;right:0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:5px 22px 0 33px;z-index:40;color:#000;transition:color .4s var(--ease)}
+    .time{font-size:17px;font-weight:600;letter-spacing:-.2px;font-variant-numeric:tabular-nums}
+    .sbicons{display:flex;align-items:center;gap:7px}
+    .island{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:125px;height:37px;background:#000;border-radius:20px}
+    .homebar{position:absolute;left:50%;bottom:9px;transform:translateX(-50%);width:138px;height:5px;border-radius:3px;background:#1c1c1e;opacity:.9;z-index:45}
+    .h-eyebrow{display:block;font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+    .h1{margin:0;font-size:26px;line-height:32px;font-weight:800;letter-spacing:-.6px}
+    .sec-h{margin:18px 4px 8px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+
+    /* ===== list item system ===== */
+    .rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+    .row{position:relative;display:flex;align-items:center;gap:var(--gap);width:100%;min-height:52px;padding:var(--pad-y) var(--pad-x);border:0;border-radius:16px;background:var(--soft);text-align:left;overflow:hidden;transition:background .25s var(--ease),transform .45s var(--pop)}
+    .row.two{min-height:64px}
+    button.row{cursor:pointer}
+    button.row:hover,.row.is-hover{background:#e9e9ee}
+    button.row:active,.row.is-pressed{background:#e2e2e8;transform:scale(.975)}
+    button.row:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+    .rip{position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(28,28,30,.1);transform:translate(-50%,-50%) scale(0);pointer-events:none;animation:rip .6s var(--ease) forwards}
+    @keyframes rip{to{transform:translate(-50%,-50%) scale(1);opacity:0}}
+    .ic{flex:0 0 auto;width:36px;height:36px;border-radius:11px;background:#fff;display:grid;place-items:center;color:var(--ink);transition:transform .45s var(--pop)}
+    .ic svg{width:20px;height:20px}
+    button.row:hover .ic,.row.is-hover .ic{transform:rotate(-8deg) scale(1.08)}
+    .av,.th{flex:0 0 auto;width:40px;height:40px;object-fit:cover;background:#e4e4e9;display:block}
+    .av{border-radius:50%}.th{border-radius:10px}
+    .tx{flex:1;min-width:0;display:flex;flex-direction:column}
+    .lb{font-size:15px;line-height:20px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sp{font-size:12.5px;line-height:16px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .tr{flex:0 0 auto;display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;line-height:18px;font-weight:600}
+    .tr .ico{width:20px;height:20px;color:var(--ink)}
+    .chev{width:20px;height:20px;color:#a5a5ad;transition:transform .45s var(--pop)}
+    button.row:hover .chev.go,.row.is-hover .chev.go{transform:translateX(3px)}
+    .chip{padding:4px 9px;border-radius:10px;background:#fff;color:var(--ink);font-size:11px;line-height:14px;font-weight:700}
+    .chip.due{background:var(--ink);color:#fff}
+
+    /* expand group */
+    .grp{border-radius:16px;background:var(--soft);transition:background .25s var(--ease)}
+    .grp>.row{background:transparent}
+    .grp:has(>.row:hover){background:#e9e9ee}
+    .grp>.row:hover,.grp>.row.is-hover{background:transparent}
+    .grp.open .caret{transform:rotate(180deg)}
+    .sub{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--ease)}
+    .grp.open .sub{grid-template-rows:1fr}
+    .sub>div{overflow:hidden}
+    .sub ul{list-style:none;margin:0;padding:0 8px 8px;display:flex;flex-direction:column;gap:4px}
+    .si{display:flex;align-items:center;gap:12px;min-height:44px;padding:10px 12px 10px 54px;border-radius:12px;background:#fff;opacity:0;transform:translateY(-10px) scale(.96);transition:opacity .3s var(--ease),transform .5s var(--pop)}
+    .si .lb{font-size:14px;font-weight:500}
+    .grp.open .si{opacity:1;transform:none}
+    .grp.open .si:nth-child(1){transition-delay:.08s}.grp.open .si:nth-child(2){transition-delay:.14s}.grp.open .si:nth-child(3){transition-delay:.2s}.grp.open .si:nth-child(4){transition-delay:.26s}
+
+    /* liquid CTA (Week 3 · Pets) */
+    .lq{position:relative;width:100%;height:52px;border-radius:16px;border:2px solid #7c3aed;background:#fff;color:#7c3aed;font-size:15.5px;font-weight:700;cursor:pointer;overflow:hidden;display:grid;place-items:center;transition:transform .4s var(--pop)}
+    .lq:active{transform:scale(.98)}
+    .lq:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+    .lq .lbl{position:relative;z-index:2}
+    .lq .fillclip{position:absolute;left:0;right:0;bottom:0;height:0;overflow:hidden;background:var(--cta);z-index:3;transition:height .6s cubic-bezier(.34,1.28,.5,1)}
+    .lq .lbl2{position:absolute;left:0;right:0;bottom:0;height:48px;display:grid;place-items:center;color:#fff}
+    .lq .surface{position:absolute;left:0;width:100%;height:8px;bottom:0;z-index:1;overflow:hidden;opacity:0;pointer-events:none;transition:bottom .6s cubic-bezier(.34,1.28,.5,1),opacity .3s}
+    .lq .surface svg{position:absolute;bottom:-1px;left:0;width:200%;height:100%;fill:#8e43db}
+    .lq .surface .w1{animation:wave 2.3s linear infinite}.lq .surface .w2{animation:wave 3.6s linear infinite reverse;opacity:.5}
+    @keyframes wave{to{transform:translateX(-50%)}}
+    .lq[data-fill="100"] .fillclip{height:100%}.lq[data-fill="100"] .surface{bottom:100%;opacity:1}
+
+    /* staged entrance (Week 3 · Pets sheet) */
+    .stg{opacity:0;transform:translateY(26px) scale(.96);transition:opacity .36s var(--ease),transform .46s var(--pop)}
+    .in .stg{opacity:1;transform:none}
+    .in .stg:nth-child(1){transition-delay:.18s}.in .stg:nth-child(2){transition-delay:.28s}.in .stg:nth-child(3){transition-delay:.38s}.in .stg:nth-child(4){transition-delay:.48s}.in .stg:nth-child(5){transition-delay:.58s}.in .stg:nth-child(6){transition-delay:.68s}
+
+    /* chrome + spec */
+    .chrome-back,.chrome-open{position:fixed;z-index:50;min-height:42px;display:inline-flex;align-items:center;border-radius:999px;font:650 13px/1 -apple-system,"SF Pro Text",system-ui,sans-serif;text-decoration:none;transition:transform 160ms var(--ease)}
+    .chrome-back{top:18px;left:18px;padding:0 15px;border:1px solid rgba(23,23,21,.13);background:rgba(255,255,255,.94);color:var(--ink);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+    .chrome-open{right:18px;bottom:18px;padding:0 18px;border:1px solid rgba(255,255,255,.16);background:#171715;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.24);cursor:pointer;font-weight:700}
+    .chrome-back:hover,.chrome-open:hover{transform:translateY(-2px)}
+    html.is-preview .chrome-back,html.is-preview .chrome-open,html.is-preview dialog{display:none}
+    dialog{width:min(980px,calc(100vw - 28px));max-height:calc(100vh - 28px);padding:0;border:0;border-radius:24px;background:#fff;color:#171715;box-shadow:0 28px 80px rgba(0,0,0,.32);overflow:hidden}
+    dialog::backdrop{background:rgba(13,13,12,.62);backdrop-filter:blur(8px)}
+    .spec{max-height:calc(100vh - 28px);overflow:auto;overscroll-behavior:contain}
+    .spec header{position:sticky;top:0;z-index:5;display:flex;align-items:flex-start;gap:24px;padding:26px 30px 20px;border-bottom:1px solid #e5e5e1;background:rgba(255,255,255,.96);backdrop-filter:blur(14px)}
+    .kicker{margin:0 0 8px;color:#70706b;font:700 10px/1.2 "SF Mono",monospace;letter-spacing:.15em;text-transform:uppercase}
+    .spec h2{margin:0;font-size:30px;line-height:1.05;letter-spacing:-.035em}
+    .tone{margin:8px 0 0;color:#70706b;font-size:13px}
+    .close{margin-left:auto;width:40px;height:40px;border:1px solid #e5e5e1;border-radius:50%;background:transparent;font:400 22px/1 inherit;cursor:pointer}
+    .spec h3{margin:0 0 4px;font:750 11px/1.2 "SF Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+    .lede{margin:0 0 18px;color:#70706b;font-size:12.5px;line-height:1.5}
+    .block{padding:24px 30px;border-bottom:1px solid #e5e5e1}
+    .redline{--band:rgba(240,98,160,.26);--band-2:rgba(240,98,160,.42);--red:#e0457b;padding:34px 24px 30px;border-radius:16px;background-color:#fdf6fb;background-image:radial-gradient(rgba(224,69,123,.22) 1px,transparent 1.2px);background-size:12px 12px;display:flex;flex-direction:column;align-items:center;gap:34px;overflow-x:auto}
+    .rl{display:grid;grid-template-columns:44px auto 110px;grid-template-rows:30px auto}
+    .rl-top{grid-column:2;grid-row:1;display:grid;grid-template-columns:var(--cols)}
+    .rl-left{grid-column:1;grid-row:2;display:grid;grid-template-rows:var(--vp) 1fr var(--vp)}
+    .rl-right{grid-column:3;grid-row:2;position:relative}
+    .rl-body{grid-column:2;grid-row:2;display:grid;grid-template-columns:var(--cols);grid-template-rows:var(--vp) minmax(var(--h),auto) var(--vp);width:340px;border-radius:16px;overflow:hidden;background:var(--soft)}
+    .rl-body.white{background:#fff;border-radius:12px}
+    .rl-body>i{background:var(--band)}.rl-body>i.k{background:var(--band-2)}
+    .rl-body>.c{display:flex;align-items:center;min-width:0}.rl-body>.c.gap{background:var(--band)}.rl-body>.c.ctr{justify-content:center}
+    .m{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;font:600 12px/1 var(--font);color:#3a2a33}
+    .m::after{content:"";width:100%;height:6px;border:1px solid var(--red);border-top:0;border-bottom:0;background:linear-gradient(var(--red),var(--red)) center/100% 1px no-repeat}
+    .m.blank{visibility:hidden}
+    .v{display:flex;align-items:center;justify-content:flex-end;gap:4px;padding-right:6px;font:600 12px/1 var(--font);color:#3a2a33}
+    .v::after{content:"";width:6px;height:100%;max-height:14px;border:1px solid var(--red);border-left:0;border-right:0;background:linear-gradient(var(--red),var(--red)) center/1px 100% no-repeat}
+    .call{position:absolute;top:50%;left:0;display:flex;align-items:center;gap:6px;font:600 12px/1 var(--font);color:#3a2a33;transform:translateY(-50%);white-space:nowrap}
+    .call::before{content:"";width:22px;border-top:1px dotted #3a2a33}
+    .outline{outline:1px dashed #3a2a33;outline-offset:2px}
+    .rl-cap{grid-column:2;margin-top:8px;font:700 9px/1 "SF Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:#a0687f}
+    .states{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .state{display:flex;flex-direction:column;gap:8px}
+    .state small{font:700 10px/1.2 "SF Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:#70706b}
+    .state p{margin:0;font-size:12px;line-height:1.45;color:#70706b}
+    .tables{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+    .tables section{padding:18px;border:1px solid #e5e5e1;border-radius:16px}
+    .tables dl{margin:10px 0 0}
+    .tables dl div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:14px;padding:9px 0;border-top:1px solid #e5e5e1}
+    .tables dt,.tables dd{margin:0;font-size:12.5px;line-height:1.45}
+    .tables dt{color:#70706b}.tables dd{text-align:right;font-weight:650;font-variant-numeric:tabular-nums}
+    @media(max-width:720px){.states,.tables{grid-template-columns:1fr}.block{padding:20px 16px}.spec header{padding:20px 16px 16px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+    .page{position:absolute;inset:0;padding-top:54px;display:flex;flex-direction:column;background:#fff}
+    .head{display:flex;align-items:flex-end;justify-content:space-between;padding:10px 20px 18px}
+    .pet{width:44px;height:44px;border-radius:50%;object-fit:cover;background:#e4e4e9;transition:transform .6s var(--pop)}
+    .scroll{flex:1;overflow-y:auto;padding:0 20px 120px}
+    .p1{transition:transform .55s var(--ease),filter .55s var(--ease)}
+    .p2{transform:translateX(100%);visibility:hidden;box-shadow:-18px 0 40px rgba(0,0,0,.12);transition:transform .55s var(--ease),visibility 0s .55s}
+    .screen.deep .p1{transform:translateX(-28%);filter:brightness(.9)}
+    .screen.deep .p2{transform:none;visibility:visible;transition:transform .55s var(--ease)}
+    .screen.deep .pet{transform:scale(.6) rotate(-20deg)}
+    .head2{padding:4px 20px 18px}
+    .back{display:inline-flex;align-items:center;gap:2px;margin:0 0 6px -8px;padding:7px 10px 7px 4px;border:0;border-radius:12px;background:transparent;font-size:16px;font-weight:600;cursor:pointer;transition:background .2s,transform .4s var(--pop)}
+    .back svg{width:20px;height:20px}
+    .back:hover{background:var(--soft)}.back:active{transform:scale(.95)}
+    .back:focus-visible{outline:2px solid var(--ink)}
+    .foot{position:absolute;left:0;right:0;bottom:0;padding:24px 20px 34px;background:linear-gradient(to top,#fff 70%,rgba(255,255,255,0))}
+    .stg-cta{opacity:0;transform:translateY(26px);transition:opacity .36s var(--ease),transform .46s var(--pop)}
+    .p2.in .stg-cta{opacity:1;transform:none;transition-delay:.62s}
+    .head .h1{transition:transform .5s var(--pop)}
+    .sec-h:first-child{margin-top:0}
+    .tabbar{position:absolute;left:50%;bottom:24px;z-index:30;display:inline-flex;align-items:center;gap:4px;padding:7px;border-radius:32px;background:rgba(244,244,246,.78);backdrop-filter:blur(22px);box-shadow:0 12px 28px rgba(0,0,0,.13),0 1px 0 rgba(255,255,255,.7) inset;transform:translateX(-50%);transition:transform .5s var(--ease),opacity .35s var(--ease)}
+    .tab{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 22px 6px;border-radius:24px;color:#9a9a9f}
+    .tab .ic-t{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:#e6e6ea;color:#5a5a60}
+    .tab .lbt{font-size:11px;font-weight:600;letter-spacing:-.1px}
+    .tab.on{background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.1);color:var(--ink)}.tab.on .ic-t{background:transparent;color:var(--ink)}
+    .screen.deep .tabbar{transform:translate(-50%,120px);opacity:0}
+
+  </style>
+</head>
+<body>
+  <a class="chrome-back" href="week5.html">← Week 5</a>
+  <button class="chrome-open" id="openSpec" type="button">View specs</button>
+
+  <main class="screen" id="screen" aria-label="Pet care app">
+    <div class="statusbar">
+      <span class="time">9:41</span><div class="island"></div>
+      <div class="sbicons" aria-hidden="true">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.7c2.55 0 5 .98 6.84 2.74a.6.6 0 0 0 .84-.01l.64-.66a.6.6 0 0 0-.01-.86A12 12 0 0 0 8.5.7 12 12 0 0 0 .19 3.9a.6.6 0 0 0-.01.86l.64.66c.23.24.6.25.84.01A9.86 9.86 0 0 1 8.5 2.7Z"/><path d="M8.5 6.3c1.6 0 3.13.62 4.28 1.72a.6.6 0 0 0 .83-.02l.64-.67a.6.6 0 0 0-.02-.86 8.4 8.4 0 0 0-11.46 0 .6.6 0 0 0-.02.86l.64.67c.22.23.6.24.83.02A5.9 5.9 0 0 1 8.5 6.3Z"/><circle cx="8.5" cy="10.3" r="1.6"/></svg>
+        <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="23.2" height="12" rx="3.6" fill="none" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="18.5" height="9" rx="2.3" fill="currentColor"/><path d="M25.1 4.4c1 .35 1.7 1.3 1.7 2.35s-.7 2-1.7 2.35V4.4Z" fill="currentColor" fill-opacity=".4"/></svg>
+      </div>
+    </div>
+    <section class="page p1" id="p1">
+      <div class="head">
+        <div><span class="h-eyebrow">My pet</span><h1 class="h1">Mochi</h1></div>
+        <img class="pet" src="https://placedog.net/96/96?id=1" alt="">
+      </div>
+      <div class="scroll">
+          <p class="sec-h">Care</p>
+          <ul class="rows">
+            <li><button class="row two" type="button" id="drill" aria-label="Health record, 2 due. Open">
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2l4 4M20 4l-8.5 8.5M15 4.5l4.5 4.5M11 6l7 7-7.5 7.5a2 2 0 0 1-2.8 0L5.5 18.4a2 2 0 0 1 0-2.8Z"/><path d="M3 21l3-3"/></svg></span>
+              <span class="tx"><span class="lb">Health record</span><span class="sp">Next vaccine in 12 days</span></span>
+              <span class="tr">2 due<svg class="chev go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></button></li>
+            <li><div class="grp" id="grp">
+              <button class="row two" type="button" id="expand" aria-expanded="false" aria-controls="sub">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/></svg></span>
+                <span class="tx"><span class="lb">Daily routine</span><span class="sp">4 tasks · 2 done</span></span>
+                <span class="tr"><svg class="chev caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></button>
+              <div class="sub" id="sub" role="region" aria-label="Daily routine"><div><ul>
+                <li class="si"><span class="tx"><span class="lb">Breakfast</span></span><span class="tr">8:00 AM</span></li>
+                <li class="si"><span class="tx"><span class="lb">Morning walk</span></span><span class="tr">9:30 AM</span></li>
+                <li class="si"><span class="tx"><span class="lb">Play time</span></span><span class="tr">4:00 PM</span></li>
+                <li class="si"><span class="tx"><span class="lb">Dinner</span></span><span class="tr">6:00 PM</span></li>
+              </ul></div></div>
+            </div></li>
+            <li><div class="row two">
+              <img class="th" src="https://placedog.net/96/96?id=5" alt="">
+              <span class="tx"><span class="lb">Last walk</span><span class="sp">2.4 km · today 9:30</span></span>
+              <span class="tr">32 min</span></div></li>
+          </ul>
+          <p class="sec-h">About</p>
+          <ul class="rows">
+            <li><div class="row two">
+              <img class="av" src="https://randomuser.me/api/portraits/women/68.jpg" alt="">
+              <span class="tx"><span class="lb">Weekend sitter</span></span>
+              <span class="tr"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 18.5V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H8.5L5 18.5Z"/></svg></span></span></div></li>
+            <li><div class="row">
+              <span class="tx"><span class="lb">Weight</span></span>
+              <span class="tr">12.4 kg</span></div></li>
+          </ul>
+      </div>
+    </section>
+    <section class="page p2" id="p2" aria-hidden="true">
+      <div class="head2">
+        <button class="back" type="button" id="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Mochi</button>
+        <h1 class="h1">Health record</h1>
+      </div>
+      <div class="scroll"><ul class="rows">
+        <li class="stg"><div class="row two"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2l4 4M20 4l-8.5 8.5M15 4.5l4.5 4.5M11 6l7 7-7.5 7.5a2 2 0 0 1-2.8 0L5.5 18.4a2 2 0 0 1 0-2.8Z"/><path d="M3 21l3-3"/></svg></span><span class="tx"><span class="lb">Rabies</span><span class="sp">Booster · Oct 30</span></span><span class="tr"><span class="chip due">Due</span></span></div></li>
+        <li class="stg"><div class="row two"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2l4 4M20 4l-8.5 8.5M15 4.5l4.5 4.5M11 6l7 7-7.5 7.5a2 2 0 0 1-2.8 0L5.5 18.4a2 2 0 0 1 0-2.8Z"/><path d="M3 21l3-3"/></svg></span><span class="tx"><span class="lb">Bordetella</span><span class="sp">Annual · Nov 4</span></span><span class="tr"><span class="chip due">Due</span></span></div></li>
+        <li class="stg"><div class="row two"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2l4 4M20 4l-8.5 8.5M15 4.5l4.5 4.5M11 6l7 7-7.5 7.5a2 2 0 0 1-2.8 0L5.5 18.4a2 2 0 0 1 0-2.8Z"/><path d="M3 21l3-3"/></svg></span><span class="tx"><span class="lb">DHPP</span><span class="sp">Given · Sep 12</span></span><span class="tr"><span class="chip">Done</span></span></div></li>
+        <li class="stg"><div class="row two"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/><path d="M8.5 12h2l1-2 1.5 4 1-2h1.5"/></svg></span><span class="tx"><span class="lb">Heartworm test</span><span class="sp">Negative · Aug 2</span></span><span class="tr"><span class="chip">Done</span></span></div></li>
+      </ul></div>
+      <div class="foot stg-cta"><button class="lq" id="book" type="button" data-fill="0" data-done="Booked · Oct 30"><span class="lbl">Book next vaccine</span><span class="fillclip"><span class="lbl2">Booked · Oct 30</span></span><span class="surface" aria-hidden="true"><svg class="w1" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M0 5 Q 12.5 0 25 5 T 50 5 T 75 5 T 100 5 T 125 5 T 150 5 T 175 5 T 200 5 V10 H0Z"/></svg><svg class="w2" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M0 5 Q 12.5 10 25 5 T 50 5 T 75 5 T 100 5 T 125 5 T 150 5 T 175 5 T 200 5 V10 H0Z"/></svg></span></button></div>
+    </section>
+    <nav class="tabbar" aria-label="Tabs">
+      <span class="tab"><span class="ic-t"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.1 3.3 10v10.2c0 .5.4.9.9.9h4.7v-6.2h6.2v6.2h4.7c.5 0 .9-.4.9-.9V10L12 3.1Z"/></svg></span><span class="lbt">Home</span></span>
+      <span class="tab on"><span class="ic-t"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg></span><span class="lbt">Care</span></span>
+      <span class="tab"><span class="ic-t"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.7"/><path d="M5 20c0-3.7 3.1-6.2 7-6.2s7 2.5 7 6.2" stroke-linecap="round"/></svg></span><span class="lbt">Profile</span></span>
+    </nav>
+    <div class="homebar" aria-hidden="true"></div>
+  </main>
+  <dialog id="spec" aria-labelledby="specTitle">
+    <div class="spec">
+      <header>
+        <div><p class="kicker">Week 5 · Style B · Version A · Design specification</p><h2 id="specTitle">Pet Care List</h2><p class="tone">Tone: Playful · Warm — Week 3 app system: soft blocks, black &amp; white content, purple only for the action.</p></div>
+        <button class="close" id="closeSpec" type="button" aria-label="Close specifications">×</button>
+      </header>
+      <div class="block">
+        <h3>Layout · Version A</h3>
+        <p class="lede">Single scrolling screen. Drill-in is an iOS push: the next screen slides in from the right while this one parallaxes 28% left and dims to 90%. Content on the new screen enters one row at a time, then the liquid CTA.</p>
+      </div>
+      <div class="block">
+        <h3>Anatomy &amp; spacing</h3>
+        <p class="lede">Each row is its own soft block (8 px apart). Pink bands mark padding and gaps; numbers are px at 1×.</p>
+        <div class="redline">
+          <div class="rl" style="--cols:14px 36px 12px 1fr 12px auto 14px;--h:40px;--vp:12px">
+            <div class="rl-top"><span class="m">14</span><span class="m">36</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">14</span></div>
+            <div class="rl-left"><span class="v">12</span><span></span><span class="v">12</span></div>
+            <div class="rl-body"><i class="k"></i><i></i><i></i><i></i><i></i><i></i><i class="k"></i><i></i><span class="c ctr"><span class="ic outline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2l4 4M20 4l-8.5 8.5M15 4.5l4.5 4.5M11 6l7 7-7.5 7.5a2 2 0 0 1-2.8 0L5.5 18.4a2 2 0 0 1 0-2.8Z"/><path d="M3 21l3-3"/></svg></span></span><span class="c gap"></span><span class="c"><span class="tx"><span class="lb" style="font-weight:600;font-size:15px">Health record</span><span class="sp">Next vaccine in 12 days</span></span></span><span class="c gap"></span><span class="c"><span class="tr">2 due<svg class="chev go outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></span><i></i><i class="k"></i><i></i><i></i><i></i><i></i><i></i><i class="k"></i></div>
+            <div class="rl-right"><span class="call">36 tile · 20 glyph · 64 h</span></div>
+            <span class="rl-cap">01 · Icon · 2 lines · text + icon · push</span>
+          </div>
+          <div class="rl" style="--cols:14px 36px 12px 1fr 12px 20px 14px;--h:40px;--vp:12px">
+            <div class="rl-top"><span class="m">14</span><span class="m">36</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span><span class="m">20</span><span class="m">14</span></div>
+            <div class="rl-left"><span class="v">12</span><span></span><span class="v">12</span></div>
+            <div class="rl-body"><i class="k"></i><i></i><i></i><i></i><i></i><i></i><i class="k"></i><i></i><span class="c ctr"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/></svg></span></span><span class="c gap"></span><span class="c"><span class="tx"><span class="lb" style="font-weight:600;font-size:15px">Daily routine</span><span class="sp">4 tasks · 2 done</span></span></span><span class="c gap"></span><span class="c ctr"><svg class="chev caret outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span><i></i><i class="k"></i><i></i><i></i><i></i><i></i><i></i><i class="k"></i></div>
+            <div class="rl-right"><span class="call">20 caret · 64 h</span></div>
+            <span class="rl-cap">02 · Icon · 2 lines · icon · expand</span>
+          </div>
+          <div class="rl" style="--cols:14px 40px 12px 1fr 12px auto 14px;--h:40px;--vp:12px">
+            <div class="rl-top"><span class="m">14</span><span class="m">40</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">14</span></div>
+            <div class="rl-left"><span class="v">12</span><span></span><span class="v">12</span></div>
+            <div class="rl-body"><i class="k"></i><i></i><i></i><i></i><i></i><i></i><i class="k"></i><i></i><span class="c ctr"><img class="th outline" src="https://placedog.net/96/96?id=5" alt=""></span><span class="c gap"></span><span class="c"><span class="tx"><span class="lb" style="font-weight:600;font-size:15px">Last walk</span><span class="sp">2.4 km · today 9:30</span></span></span><span class="c gap"></span><span class="c"><span class="tr">32 min</span></span><i></i><i class="k"></i><i></i><i></i><i></i><i></i><i></i><i class="k"></i></div>
+            <div class="rl-right"><span class="call">40 thumbnail · 64 h</span></div>
+            <span class="rl-cap">03 · Thumbnail · 2 lines · text</span>
+          </div>
+          <div class="rl" style="--cols:14px 40px 12px 1fr 12px 20px 14px;--h:40px;--vp:12px">
+            <div class="rl-top"><span class="m">14</span><span class="m">40</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span><span class="m">20</span><span class="m">14</span></div>
+            <div class="rl-left"><span class="v">12</span><span></span><span class="v">12</span></div>
+            <div class="rl-body"><i class="k"></i><i></i><i></i><i></i><i></i><i></i><i class="k"></i><i></i><span class="c ctr"><img class="av outline" src="https://randomuser.me/api/portraits/women/68.jpg" alt=""></span><span class="c gap"></span><span class="c"><span class="tx"><span class="lb" style="font-weight:600;font-size:15px">Weekend sitter</span></span></span><span class="c gap"></span><span class="c ctr"><span class="tr"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 18.5V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H8.5L5 18.5Z"/></svg></span></span></span><i></i><i class="k"></i><i></i><i></i><i></i><i></i><i></i><i class="k"></i></div>
+            <div class="rl-right"><span class="call">40 avatar · 64 h</span></div>
+            <span class="rl-cap">04 · Avatar · 1 line · icon</span>
+          </div>
+          <div class="rl" style="--cols:14px 1fr 12px auto 14px;--h:28px;--vp:12px">
+            <div class="rl-top"><span class="m">14</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">14</span></div>
+            <div class="rl-left"><span class="v">12</span><span></span><span class="v">12</span></div>
+            <div class="rl-body"><i class="k"></i><i></i><i></i><i></i><i class="k"></i><i></i><span class="c"><span class="tx"><span class="lb" style="font-weight:600;font-size:15px">Weight</span></span></span><span class="c gap"></span><span class="c"><span class="tr">12.4 kg</span></span><i></i><i class="k"></i><i></i><i></i><i></i><i class="k"></i></div>
+            <div class="rl-right"><span class="call">52 h</span></div>
+            <span class="rl-cap">05 · No leading · 1 line · text</span>
+          </div>
+          <div class="rl" style="--cols:54px 1fr 12px auto 12px;--h:24px;--vp:10px">
+            <div class="rl-top"><span class="m">54</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span></div>
+            <div class="rl-left"><span class="v">10</span><span></span><span class="v">10</span></div>
+            <div class="rl-body white"><i class="k"></i><i></i><i></i><i></i><i class="k"></i><i></i><span class="c"><span class="tx"><span class="lb" style="font-weight:500;font-size:14px">Morning walk</span></span></span><span class="c gap"></span><span class="c"><span class="tr">9:30 AM</span></span><i></i><i class="k"></i><i></i><i></i><i></i><i class="k"></i></div>
+            <div class="rl-right"><span class="call">44 h</span></div>
+            <span class="rl-cap">06 · Sub-item · white · inset 8 px</span>
+          </div>
+        </div>
+      </div>
+      <div class="block">
+        <h3>States</h3>
+        <p class="lede">Only actionable rows take states. Static rows stay at default.</p>
+        <div class="states">
+          <div class="state"><small>01 · Enabled / default</small><ul class="rows" style="pointer-events:none"><li><div class="row two"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2l4 4M20 4l-8.5 8.5M15 4.5l4.5 4.5M11 6l7 7-7.5 7.5a2 2 0 0 1-2.8 0L5.5 18.4a2 2 0 0 1 0-2.8Z"/><path d="M3 21l3-3"/></svg></span><span class="tx"><span class="lb">Health record</span><span class="sp">Next vaccine in 12 days</span></span><span class="tr">2 due<svg class="chev go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></div></li></ul><p>#F1F1F3 · tile at rest</p></div>
+          <div class="state"><small>02 · Hover</small><ul class="rows" style="pointer-events:none"><li><div class="row two is-hover"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2l4 4M20 4l-8.5 8.5M15 4.5l4.5 4.5M11 6l7 7-7.5 7.5a2 2 0 0 1-2.8 0L5.5 18.4a2 2 0 0 1 0-2.8Z"/><path d="M3 21l3-3"/></svg></span><span class="tx"><span class="lb">Health record</span><span class="sp">Next vaccine in 12 days</span></span><span class="tr">2 due<svg class="chev go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></div></li></ul><p>#E9E9EE · tile −8° · chevron +3 px</p></div>
+          <div class="state"><small>03 · Pressed</small><ul class="rows" style="pointer-events:none"><li><div class="row two is-pressed"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2l4 4M20 4l-8.5 8.5M15 4.5l4.5 4.5M11 6l7 7-7.5 7.5a2 2 0 0 1-2.8 0L5.5 18.4a2 2 0 0 1 0-2.8Z"/><path d="M3 21l3-3"/></svg></span><span class="tx"><span class="lb">Health record</span><span class="sp">Next vaccine in 12 days</span></span><span class="tr">2 due<svg class="chev go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></div></li></ul><p>#E2E2E8 · scale .975 · ripple</p></div>
+        </div>
+      </div>
+      <div class="block" style="border-bottom:0">
+        <h3>Tokens</h3>
+        <div class="tables">
+          <section><h3>Typography</h3><dl>
+            <div><dt>Family</dt><dd>SF Pro Display / Text</dd></div>
+            <div><dt>Screen title</dt><dd>26 / 32 · 800 · −0.6 px</dd></div>
+            <div><dt>Label</dt><dd>15 / 20 · 600 · −0.01 em</dd></div>
+            <div><dt>Supporting text</dt><dd>12.5 / 16 · 400 · #8E8E93</dd></div>
+            <div><dt>Trailing text</dt><dd>13 / 18 · 600 · #8E8E93</dd></div>
+            <div><dt>Sub-item label</dt><dd>14 / 20 · 500</dd></div>
+            <div><dt>Section header</dt><dd>12 / 16 · 700 · uppercase</dd></div>
+          </dl></section>
+          <section><h3>Component size</h3><dl>
+            <div><dt>Artboard</dt><dd>iPhone 17 · 402 × 874 pt</dd></div>
+            <div><dt>1-line row</dt><dd>52 px min</dd></div>
+            <div><dt>2-line row</dt><dd>64 px min</dd></div>
+            <div><dt>Sub-item</dt><dd>44 px min</dd></div>
+            <div><dt>Icon tile / glyph</dt><dd>36 × 36 / 20 × 20 px</dd></div>
+            <div><dt>Avatar · thumbnail</dt><dd>40 × 40 px</dd></div>
+            <div><dt>Chevron · caret</dt><dd>20 × 20 px</dd></div>
+            <div><dt>Liquid CTA</dt><dd>full width × 52 px</dd></div>
+          </dl></section>
+          <section><h3>Spacing</h3><dl>
+            <div><dt>Screen inset</dt><dd>20 px</dd></div>
+            <div><dt>Row padding</dt><dd>12 × 14 px</dd></div>
+            <div><dt>Row gap</dt><dd>8 px (rows are separate)</dd></div>
+            <div><dt>Leading → text</dt><dd>12 px</dd></div>
+            <div><dt>Text → trailing</dt><dd>12 px · trailing items 6 px</dd></div>
+            <div><dt>Sub-items</dt><dd>8 px inset · 4 px gap · 54 px text indent</dd></div>
+            <div><dt>Header</dt><dd>10 / 20 / 18 px · avatar 44 px</dd></div>
+          </dl></section>
+          <section><h3>Surface &amp; stroke</h3><dl>
+            <div><dt>Row</dt><dd>#F1F1F3 · radius 16 px · no stroke</dd></div>
+            <div><dt>Icon tile</dt><dd>#FFFFFF · radius 11 px</dd></div>
+            <div><dt>Avatar · thumbnail</dt><dd>Photo · radius 50% · 10 px</dd></div>
+            <div><dt>Sub-item</dt><dd>#FFFFFF · radius 12 px</dd></div>
+            <div><dt>Chip</dt><dd>radius 10 px · ink or white fill</dd></div>
+            <div><dt>CTA</dt><dd>2 px #7C3AED → gradient #9D4FE0 → #5D20A6</dd></div>
+          </dl></section>
+          <section><h3>States</h3><dl>
+            <div><dt>Default</dt><dd>#F1F1F3</dd></div>
+            <div><dt>Hover</dt><dd>#E9E9EE · tile tilts −8° · chevron +3 px</dd></div>
+            <div><dt>Pressed</dt><dd>#E2E2E8 · scale .975 · ink ripple 10%</dd></div>
+            <div><dt>Focus</dt><dd>2 px ink ring · 2 px offset</dd></div>
+          </dl></section>
+          <section><h3>Motion</h3><dl>
+            <div><dt>Press spring</dt><dd>450 ms · cubic-bezier(.34,1.4,.5,1)</dd></div>
+            <div><dt>Ripple</dt><dd>600 ms · from touch point</dd></div>
+            <div><dt>Expand</dt><dd>500 ms · sub-items stagger 60 ms</dd></div>
+            <div><dt>Content entrance</dt><dd>26 px rise · .96 → 1 · 100 ms stagger</dd></div>
+            <div><dt>Liquid fill</dt><dd>600 ms · 2-layer wave 2.3 s / 3.6 s</dd></div>
+          </dl></section>
+        </div>
+      </div>
+    </div>
+  </dialog>
+  <script>
+    /* shared: ripple, expand, liquid CTA, spec */
+    document.querySelectorAll('button.row').forEach(b=>b.addEventListener('pointerdown',e=>{
+      const r=b.getBoundingClientRect(),z=r.width/b.offsetWidth||1,s=document.createElement('span');
+      s.className='rip';s.style.left=(e.clientX-r.left)/z+'px';s.style.top=(e.clientY-r.top)/z+'px';b.appendChild(s);setTimeout(()=>s.remove(),650);
+    }));
+    const group=document.getElementById('grp'),expand=document.getElementById('expand');
+    function toggle(open=!group.classList.contains('open')){group.classList.toggle('open',open);expand.setAttribute('aria-expanded',String(open))}
+    expand.addEventListener('click',()=>toggle());
+    document.querySelectorAll('.lq').forEach(b=>b.addEventListener('click',()=>{b.dataset.fill=b.dataset.fill==='100'?'0':'100'}));
+    const spec=document.getElementById('spec');
+    document.getElementById('openSpec').addEventListener('click',()=>spec.showModal());
+    document.getElementById('closeSpec').addEventListener('click',()=>spec.close());
+    spec.addEventListener('click',e=>{if(e.target===spec)spec.close()});
+
+    const screen=document.getElementById('screen'),p1=document.getElementById('p1'),p2=document.getElementById('p2'),drill=document.getElementById('drill'),back=document.getElementById('back');
+    function push(on){
+      screen.classList.toggle('deep',on);p1.setAttribute('aria-hidden',String(on));p2.setAttribute('aria-hidden',String(!on));
+      if(on){requestAnimationFrame(()=>requestAnimationFrame(()=>p2.classList.add('in')))}else{p2.classList.remove('in');document.getElementById('book').dataset.fill='0'}
+      (on?back:drill).focus({preventScroll:true});
+    }
+    drill.addEventListener('click',()=>push(true));back.addEventListener('click',()=>push(false));
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&screen.classList.contains('deep')&&!spec.open)push(false)});
+    if(document.documentElement.classList.contains('is-preview')){
+      const seq=[()=>drill.classList.add('is-hover'),()=>{drill.classList.replace('is-hover','is-pressed')},()=>{drill.classList.remove('is-pressed');push(true)},
+        ()=>{},()=>document.getElementById('book').click(),()=>{},()=>push(false),
+        ()=>expand.classList.add('is-hover'),()=>{expand.classList.remove('is-hover');toggle(true)},()=>{},()=>toggle(false)];
+      let i=0;setInterval(()=>{seq[i%seq.length]();i++},1000);
+    }
+
+  </script>
+</body>
+</html>
