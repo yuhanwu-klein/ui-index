@@ -16,7 +16,7 @@
       --ui:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; --mono:"Space Mono","SF Mono",monospace;
       --ease:cubic-bezier(.22,1,.32,1);
       /* list tokens — every value below is documented in the spec */
-      --pad-x:16px; --pad-y:12px; --gap:12px; --icon:20px; --avatar:40px; --thumb:40px;
+      --pad-x:12px; --pad-y:12px; --gap:12px; --icon:20px; --avatar:40px; --thumb:40px;
     }
     html,body{min-height:100%;margin:0}
     body{min-height:100vh;min-height:100svh;display:flex;align-items:flex-start;justify-content:center;padding:max(96px,16vh) 24px 72px;background:var(--canvas);color:var(--ink);font-family:var(--ui)}
@@ -27,8 +27,7 @@
 
     /* ---- card shell (Week 4 · Brand Color Tuner language) ---- */
     .card{position:relative;overflow:hidden;border:1px solid var(--ink);border-radius:14px;background:#fff;box-shadow:5px 5px 0 var(--ink)}
-    .card::before{content:"";position:absolute;inset:0 0 auto;height:5px;background:repeating-linear-gradient(90deg,var(--pink) 0 10px,var(--green) 10px 20px);z-index:3}
-    .card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:21px 16px 12px}
+    .card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 18px 10px}
     .section-label{font:700 10px/12px var(--mono);letter-spacing:.14em;text-transform:uppercase}
     .badge{padding:4px 7px 3px;border:1px solid var(--ink);border-radius:3px;background:var(--acid);font:700 10px/12px var(--mono);letter-spacing:.07em;text-transform:uppercase}
 
@@ -43,13 +42,14 @@
     .app.deep .level-2{position:relative}
 
     /* ---- the list item system ---- */
-    .list{margin:0;padding:0 0 6px;list-style:none}
-    .item{position:relative;display:flex;align-items:center;gap:var(--gap);width:100%;min-height:48px;padding:var(--pad-y) var(--pad-x);border:0;background:#fff;text-align:left}
+    .list{margin:0 6px;padding:0 0 6px;list-style:none}
+    .item{position:relative;display:flex;align-items:center;gap:var(--gap);width:100%;min-height:48px;padding:var(--pad-y) var(--pad-x);border:0;border-radius:6px;background:#fff;text-align:left}
     .item.two{min-height:64px}
     .list>li+li>.item::before,.list>li+li>.group>.item::before{content:"";position:absolute;top:0;left:var(--pad-x);right:var(--pad-x);height:1px;background:var(--rule)}
     button.item{cursor:pointer;transition:background 160ms var(--ease)}
     button.item:hover,.item.is-hover{background:var(--paper)}
-    button.item:active,.item.is-pressed{background:var(--acid);box-shadow:inset 3px 0 0 var(--ink)}
+    button.item:hover::before,button.item:active::before,.item.is-hover::before,.item.is-pressed::before,li:has(>button.item:hover)+li>.item::before,li:has(>.group>button.item:hover)+li>.item::before{opacity:0}
+    button.item:active,.item.is-pressed{background:var(--acid);box-shadow:inset 0 0 0 1px var(--ink)}
     button.item:focus-visible{outline:3px solid rgba(85,104,255,.65);outline-offset:-3px}
 
     .lead{flex:0 0 auto;display:grid;place-items:center}
@@ -69,19 +69,18 @@
     .chev{width:20px;height:20px;fill:none;stroke:var(--ink);stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;transition:transform 200ms var(--ease)}
     button.item:hover .chev.go,.item.is-hover .chev.go{transform:translateX(2px)}
     .item[aria-expanded="true"] .chev.caret{transform:rotate(180deg)}
-    .tag{padding:3px 6px 2px;border:1px solid var(--ink);border-radius:3px;font:700 9px/12px var(--mono);letter-spacing:.08em;text-transform:uppercase;background:#fff}
+    .tag{padding:3px 6px 2px;border:1px solid var(--ink);border-radius:3px;font:700 9px/12px var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--acid)}
 
     /* expand region */
     .sub{display:grid;grid-template-rows:0fr;transition:grid-template-rows 280ms var(--ease)}
     .sub>div{overflow:hidden}
     .group.open .sub{grid-template-rows:1fr}
-    .sub ul{margin:0;padding:0 0 4px;list-style:none;background:#fbfaf6;border-top:1px dashed var(--rule)}
+    .sub ul{margin:0 0 4px;padding:0;list-style:none;background:#fbfaf6;border-radius:6px}
     .sub .item{background:transparent;min-height:44px;padding-left:calc(var(--pad-x) + var(--icon) + var(--gap))}
     .sub .label{font-weight:500}
 
     /* level-2 header */
-    .crumb{display:flex;align-items:center;gap:var(--gap);padding:17px var(--pad-x) 12px}
-    .list.first{padding-top:5px}
+    .crumb{display:flex;align-items:center;gap:var(--gap);padding:18px 18px 10px}
     .back-btn{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 10px 0 6px;border:1px solid var(--ink);border-radius:4px;background:#fff;box-shadow:2px 2px 0 var(--ink);font:700 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:transform 140ms var(--ease),box-shadow 140ms var(--ease)}
     .back-btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
     .back-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink);background:var(--acid)}
@@ -161,7 +160,8 @@
 
         <!-- LEVEL 1 -->
         <div class="pane level-1" id="level1">
-          <ul class="list first">
+          <div class="card-head"><span class="section-label">Brand system</span><span class="badge">Synced</span></div>
+          <ul class="list">
             <!-- icon · two lines · text + icon · DRILL-IN -->
             <li>
               <button class="item two" type="button" id="drill" data-drill aria-label="Color tokens, 24 swatches. Open">
@@ -239,12 +239,12 @@
 
       <div class="block">
         <h3>Anatomy &amp; spacing</h3>
-        <p class="lede">Pink bands mark padding and gaps; numbers are px at 1×. Every configuration is the same row: leading slot · text · trailing slot.</p>
+        <p class="lede">Rows sit 6 px inside an 18 px card padding, so text aligns with the header at 18 px. Pink bands mark padding and gaps; numbers are px at 1×. Every configuration is the same row: leading slot · text · trailing slot.</p>
         <div class="redline">
 
           <!-- 1. no leading · single line · trailing text -->
-          <div class="rl" style="--cols:16px 1fr 12px auto 16px;--w:340px;--h:24px">
-            <div class="rl-top"><span class="m">16</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">16</span></div>
+          <div class="rl" style="--cols:12px 1fr 12px auto 12px;--w:340px;--h:24px">
+            <div class="rl-top"><span class="m">12</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span></div>
             <div class="rl-left"><span class="v">12</span><span></span><span class="v">12</span></div>
             <div class="rl-body">
               <i class="k"></i><i></i><i></i><i></i><i class="k"></i>
@@ -256,8 +256,8 @@
           </div>
 
           <!-- 2. icon · two lines · trailing text + icon -->
-          <div class="rl" style="--cols:16px 20px 12px 1fr 12px auto 16px;--w:340px;--h:40px">
-            <div class="rl-top"><span class="m">16</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">16</span></div>
+          <div class="rl" style="--cols:12px 20px 12px 1fr 12px auto 12px;--w:340px;--h:40px">
+            <div class="rl-top"><span class="m">12</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span></div>
             <div class="rl-left"><span class="v">12</span><span></span><span class="v">12</span></div>
             <div class="rl-body">
               <i class="k"></i><i></i><i></i><i></i><i></i><i></i><i class="k"></i>
@@ -271,8 +271,8 @@
           </div>
 
           <!-- 3. avatar · two lines · trailing text -->
-          <div class="rl" style="--cols:16px 40px 12px 1fr 12px auto 16px;--w:340px;--h:40px">
-            <div class="rl-top"><span class="m">16</span><span class="m">40</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">16</span></div>
+          <div class="rl" style="--cols:12px 40px 12px 1fr 12px auto 12px;--w:340px;--h:40px">
+            <div class="rl-top"><span class="m">12</span><span class="m">40</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span></div>
             <div class="rl-left"><span class="v">12</span><span></span><span class="v">12</span></div>
             <div class="rl-body">
               <i class="k"></i><i></i><i></i><i></i><i></i><i></i><i class="k"></i>
@@ -286,8 +286,8 @@
           </div>
 
           <!-- 4. expand: sub item indent -->
-          <div class="rl" style="--cols:48px 1fr 12px auto 16px;--w:340px;--h:20px">
-            <div class="rl-top"><span class="m">48</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">16</span></div>
+          <div class="rl" style="--cols:44px 1fr 12px auto 12px;--w:340px;--h:20px">
+            <div class="rl-top"><span class="m">44</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span></div>
             <div class="rl-left"><span class="v">12</span><span></span><span class="v">12</span></div>
             <div class="rl-body" style="background:#fbfaf6">
               <i class="k"></i><i></i><i></i><i></i><i class="k"></i>
@@ -295,7 +295,7 @@
               <i class="k"></i><i></i><i></i><i></i><i class="k"></i>
             </div>
             <div class="rl-right"><span class="call">44 h</span></div>
-            <span class="rl-cap">04 · Expanded sub-item · indent = 16 + 20 + 12</span>
+            <span class="rl-cap">04 · Expanded sub-item · indent = 12 + 20 + 12</span>
           </div>
         </div>
       </div>
@@ -312,7 +312,7 @@
             <p>Fill #F5F2EB · chevron +2 px · 160 ms</p></div>
           <div class="state"><small>03 · Pressed</small>
             <div class="card"><div class="item two is-pressed"><span class="lead icon"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:#1c1d21;stroke-width:1.75"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17M3.5 12h17"/></svg></span><span class="text"><span class="label">Color tokens</span><span class="support">24 swatches</span></span><span class="trail"><svg class="chev go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></div></div>
-            <p>Fill #B9FF42 · 3 px ink edge bar</p></div>
+            <p>Fill #B9FF42 · 1 px ink outline</p></div>
         </div>
       </div>
 
@@ -335,17 +335,19 @@
             <div><dt>Minimum target</dt><dd>44 px</dd></div>
           </dl></section>
           <section><h3>Spacing</h3><dl>
-            <div><dt>Row padding</dt><dd>12 × 16 px</dd></div>
+            <div><dt>Card padding</dt><dd>18 px · rows inset 6 px</dd></div>
+            <div><dt>Row padding</dt><dd>12 × 12 px · radius 6 px</dd></div>
             <div><dt>Leading → text</dt><dd>12 px</dd></div>
             <div><dt>Text → trailing</dt><dd>12 px</dd></div>
             <div><dt>Trailing text → icon</dt><dd>8 px</dd></div>
-            <div><dt>Sub-item indent</dt><dd>48 px</dd></div>
-            <div><dt>Divider inset</dt><dd>16 px both sides</dd></div>
+            <div><dt>Sub-item indent</dt><dd>44 px</dd></div>
+            <div><dt>Content edge</dt><dd>18 px from card stroke</dd></div>
           </dl></section>
           <section><h3>Surface &amp; stroke</h3><dl>
             <div><dt>Card</dt><dd>1 px #1C1D21 · radius 14 px</dd></div>
             <div><dt>Card shadow</dt><dd>5 × 5 px · 0 blur</dd></div>
-            <div><dt>Divider</dt><dd>1 px #DFDDD7</dd></div>
+            <div><dt>Divider</dt><dd>1 px #DFDDD7 · hidden beside hover</dd></div>
+            <div><dt>Status badge / tag</dt><dd>#B9FF42 · 1 px ink · radius 3 px</dd></div>
             <div><dt>Avatar</dt><dd>Image · radius 50% · no stroke</dd></div>
             <div><dt>Thumbnail</dt><dd>Image · radius 6 px · no stroke</dd></div>
             <div><dt>Icon stroke</dt><dd>1.75 px · round caps</dd></div>
