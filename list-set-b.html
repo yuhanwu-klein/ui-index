@@ -131,6 +131,14 @@
     .outline{outline:1px dashed #3a2a33;outline-offset:2px}
     .rl-cap{grid-column:2;margin-top:8px;font:700 9px/1 "SF Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:#a0687f}
 
+    .lay{display:flex;align-items:stretch}
+    .lay-col{display:flex;flex-direction:column;gap:4px;padding:8px;border:1px solid #1c1d21;border-radius:8px;background:#fff;box-shadow:3px 3px 0 #1c1d21}
+    .lay-col b{height:14px;border-radius:2px;background:#eeece6}
+    .lay-h{font:700 8px/1 "Space Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:#85827b;padding:4px 0 2px}
+    .lay-gap{width:24px;display:grid;place-items:center;font:600 12px/1 var(--ui);color:#3a2a33;background:rgba(240,98,160,.26);margin:0 4px}
+    .lay-dims{display:flex;gap:4px;font:600 12px/1 var(--ui);color:#3a2a33}
+    .lay-dims span{text-align:center;border-top:1px solid #e0457b;padding-top:6px}
+    .lay-dims span:nth-child(2){border:0}
     /* states strip */
     .states{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
     .state{display:flex;flex-direction:column;gap:8px}
@@ -150,29 +158,55 @@
     @media(max-width:720px){.states,.tables{grid-template-columns:1fr}.block{padding:20px 16px}.spec header{padding:20px 16px 16px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
   </style>
+  <style>
+    /* ===== Version B layout: split column browser ===== */
+    .app{width:min(100%,720px);display:grid;grid-template-columns:320px minmax(0,1fr);gap:18px;align-items:start}
+    .group-h{margin:0;padding:18px 16px 6px;font:700 10px/12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+    .col-list .group-h:first-child{padding-top:23px}
+    .col-list .list{padding-bottom:4px}
+    .col-list .list+.group-h{border-top:1px solid var(--ink)}
+    .item.is-current{background:var(--paper);box-shadow:inset 3px 0 0 var(--ink)}
+    .item.is-current .chev.go{transform:translateX(2px)}
+    .detail{display:grid;align-self:stretch}
+    .detail>*{grid-area:1/1}
+    .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:240px;border:1.5px dashed #cfccc0;border-radius:14px;color:var(--faint);font:700 10px/12px var(--mono);letter-spacing:.14em;text-transform:uppercase;transition:opacity 200ms var(--ease)}
+    .empty svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+    .files{align-self:start;opacity:0;visibility:hidden;transform:translateX(-14px);transition:opacity 260ms var(--ease),transform 320ms var(--ease),visibility 0s 320ms}
+    .detail.open .files{opacity:1;visibility:visible;transform:none;transition:opacity 260ms var(--ease),transform 320ms var(--ease)}
+    .detail.open .empty{opacity:0}
+    .files-head{display:flex;align-items:center;gap:var(--gap);padding:21px var(--pad-x) 12px;border-bottom:1px solid var(--rule)}
+    .files .list{padding-bottom:4px}
+    html.is-preview .app{transform:scale(1.5)}
+    @media(max-width:760px){.app{grid-template-columns:1fr}.detail{align-self:start}.empty{min-height:120px}}
+  </style>
 </head>
 <body>
   <a class="chrome-back" href="week5.html">← Week 5</a>
   <button class="chrome-open" id="openSpec" type="button">View specs</button>
 
   <main class="app" id="app">
-    <section class="card" aria-label="Project list">
-      <div class="viewport" id="viewport">
-
-        <!-- LEVEL 1 -->
-        <div class="pane level-1" id="level1">
-          <ul class="list first">
-            <!-- thumbnail · two lines · text + icon · DRILL-IN -->
-            <li>
-              <button class="item two" type="button" id="drill" aria-label="Spring campaign, 12 files. Open">
+    <section class="card col-list" aria-label="Project">
+      <p class="group-h">Files</p>
+      <ul class="list">
+        <li>
+          <button class="item two" type="button" id="drill" aria-controls="files" aria-label="Spring campaign, 12 files. Open files">
                 <span class="lead thumb"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#f2efe8"/><circle cx="27" cy="13" r="5" fill="#1c1d21"/><path d="M0 40V29l11-9 9 8 7-5 13 10v7z" fill="#d9d6cc"/></svg></span>
                 <span class="text"><span class="label">Spring campaign</span><span class="support">12 files · edited today</span></span>
                 <span class="trail"><span class="meta">12</span><svg class="chev go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
               </button>
-            </li>
-            <!-- icon · two lines · icon · EXPAND -->
+        </li>
+        <!-- no leading · two lines · text -->
             <li>
-              <div class="group" id="typeGroup">
+              <div class="item two">
+                <span class="text"><span class="label">Last export</span><span class="support">PNG @2x · 14 files</span></span>
+                <span class="trail"><span class="meta">2h ago</span></span>
+              </div>
+            </li>
+      </ul>
+      <p class="group-h">Access</p>
+      <ul class="list">
+        <li>
+          <div class="group" id="typeGroup">
                 <button class="item two" type="button" id="expand" aria-expanded="false" aria-controls="typeSub">
                   <span class="lead icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.5"/><path d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16 5.5a3.5 3.5 0 0 1 0 7M18 13.8c1.8.7 3 2.5 3 5.2"/></svg></span>
                   <span class="text"><span class="label">Reviewers</span><span class="support">3 people · 1 pending</span></span>
@@ -186,8 +220,8 @@
                   </ul></div>
                 </div>
               </div>
-            </li>
-            <!-- avatar · one line · text -->
+        </li>
+        <!-- avatar · one line · text -->
             <li>
               <div class="item">
                 <span class="lead avatar"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#e7e2d6"/><path d="M8 42c0-8 5.4-12.5 12-12.5S32 34 32 42z" fill="#2f3138"/><path d="M16.6 26.5h6.8v5.2a3.4 3.4 0 0 1-6.8 0z" fill="#c99a7c"/><ellipse cx="20" cy="18.5" rx="6.4" ry="7.4" fill="#d9ab8b"/><path d="M13.4 18.2c-.6-6.4 3.2-9.6 7.6-9.4 4.6.2 7 3.6 6.2 9.2-1.4-2.6-3.6-4-6.6-4.2-3 .1-5.4 1.6-7.2 4.4z" fill="#22232a"/></svg></span>
@@ -195,7 +229,7 @@
                 <span class="trail"><span class="meta">Admin</span></span>
               </div>
             </li>
-            <!-- icon · one line · text + icon -->
+        <!-- icon · one line · text + icon -->
             <li>
               <div class="item">
                 <span class="lead icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
@@ -203,29 +237,22 @@
                 <span class="trail"><span class="meta">Team</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
               </div>
             </li>
-            <!-- no leading · two lines · text -->
-            <li>
-              <div class="item two">
-                <span class="text"><span class="label">Last export</span><span class="support">PNG @2x · 14 files</span></span>
-                <span class="trail"><span class="meta">2h ago</span></span>
-              </div>
-            </li>
-          </ul>
-        </div>
+      </ul>
+    </section>
 
-        <!-- LEVEL 2 (one level deeper) -->
-        <div class="pane level-2" id="level2" aria-hidden="true">
-          <div class="crumb">
-            <button class="back-btn" type="button" id="back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Projects</button>
-            <h2>Spring campaign</h2>
-          </div>
-          <ul class="list">
+    <section class="detail" id="detail">
+      <div class="empty" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg><span>Select a project</span></div>
+      <div class="card files" id="files" role="region" aria-label="Spring campaign files" aria-hidden="true">
+        <div class="files-head">
+          <button class="back-btn" type="button" id="back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Close</button>
+          <div class="text"><span class="label">Spring campaign</span><span class="support">4 of 12 files</span></div>
+        </div>
+        <ul class="list">
             <li><div class="item two"><span class="lead thumb"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#f2efe8"/><circle cx="27" cy="13" r="5" fill="#ff4f9a"/><path d="M0 40V29l11-9 9 8 7-5 13 10v7z" fill="#d9d6cc"/></svg></span><span class="text"><span class="label">Hero banner</span><span class="support">1920 × 1080 · PNG</span></span><span class="trail"><span class="meta">2.4 MB</span></span></div></li>
             <li><div class="item two"><span class="lead thumb"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#f2efe8"/><circle cx="27" cy="13" r="5" fill="#5568ff"/><path d="M0 40V29l11-9 9 8 7-5 13 10v7z" fill="#d9d6cc"/></svg></span><span class="text"><span class="label">Poster A2</span><span class="support">420 × 594 mm · PDF</span></span><span class="trail"><span class="meta">8.1 MB</span></span></div></li>
             <li><div class="item two"><span class="lead thumb"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#2a2c32"/><circle cx="27" cy="13" r="5" fill="#b9ff42"/><path d="M0 40V29l11-9 9 8 7-5 13 10v7z" fill="#4a4c54"/></svg></span><span class="text"><span class="label">Story frame</span><span class="support">1080 × 1920 · MP4</span></span><span class="trail"><span class="meta">14 MB</span></span></div></li>
             <li><div class="item two"><span class="lead thumb"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#f2efe8"/><circle cx="27" cy="13" r="5" fill="#1c1d21"/><path d="M0 40V29l11-9 9 8 7-5 13 10v7z" fill="#d9d6cc"/></svg></span><span class="text"><span class="label">Email header</span><span class="support">1200 × 400 · JPG</span></span><span class="trail"><span class="meta">380 KB</span></span></div></li>
           </ul>
-        </div>
       </div>
     </section>
   </main>
@@ -233,9 +260,23 @@
   <dialog id="spec" aria-labelledby="specTitle">
     <div class="spec">
       <header>
-        <div><p class="kicker">Week 5 · Set B · Design specification</p><h2 id="specTitle">Project List</h2><p class="tone">Tone: Edgy · Commercial editorial — same list system as Set A, re-configured for project files.</p></div>
+        <div><p class="kicker">Week 5 · Style A · Version B · Design specification</p><h2 id="specTitle">Project List</h2><p class="tone">Tone: Edgy · Commercial editorial — same row system as Version A, new grouped two-column layout.</p></div>
         <button class="close" id="closeSpec" type="button" aria-label="Close specifications">×</button>
       </header>
+
+      <div class="block">
+        <h3>Layout</h3>
+        <p class="lede">Version B keeps every row token from Version A and changes only the page layout: grouped sections and a two-column browser. Drill-in opens the next level in the right column instead of replacing the list.</p>
+        <div class="redline" style="gap:18px">
+          <div class="lay">
+            <div class="lay-col" style="width:180px"><span class="lay-h">Files</span><b></b><b></b><span class="lay-h">Access</span><b></b><b></b><b></b></div>
+            <div class="lay-gap">18</div>
+            <div class="lay-col" style="width:200px"><span class="lay-h">Level 2</span><b></b><b></b><b></b><b></b></div>
+          </div>
+          <div class="lay-dims"><span style="width:180px">320</span><span style="width:24px"></span><span style="width:200px">fluid · 382 at 720</span></div>
+          <span class="rl-cap" style="margin:0">Container 720 max · columns 320 + 18 + fluid · stacks to 1 column under 760</span>
+        </div>
+      </div>
 
       <div class="block">
         <h3>Anatomy &amp; spacing</h3>
@@ -322,11 +363,12 @@
           <section><h3>Typography</h3><dl>
             <div><dt>Label</dt><dd>Inter 14 / 20 · 600 · −0.01 em</dd></div>
             <div><dt>Supporting text</dt><dd>Inter 12 / 16 · 400 · #5F626B</dd></div>
+            <div><dt>Section header</dt><dd>Space Mono 10 / 12 · 700 · +0.14 em</dd></div>
             <div><dt>Trailing text</dt><dd>Space Mono 11 / 16 · 700 · +0.04 em</dd></div>
             <div><dt>Sub-item label</dt><dd>14 / 20 · 500</dd></div>
           </dl></section>
           <section><h3>Component size</h3><dl>
-            <div><dt>List width</dt><dd>420 px max</dd></div>
+            <div><dt>Container</dt><dd>720 px max · 320 + 18 + fluid</dd></div>
             <div><dt>1-line row</dt><dd>48 px · 64 px with avatar</dd></div>
             <div><dt>2-line row</dt><dd>64 px high · content centered</dd></div>
             <div><dt>Sub-item row</dt><dd>44 px high</dd></div>
@@ -341,6 +383,8 @@
             <div><dt>Trailing text → icon</dt><dd>8 px</dd></div>
             <div><dt>Sub-item indent</dt><dd>48 px</dd></div>
             <div><dt>Divider inset</dt><dd>16 px both sides</dd></div>
+            <div><dt>Section header</dt><dd>18 / 16 / 6 px padding</dd></div>
+            <div><dt>Column gap</dt><dd>18 px</dd></div>
           </dl></section>
           <section><h3>Surface &amp; stroke</h3><dl>
             <div><dt>Card</dt><dd>1 px #1C1D21 · radius 14 px</dd></div>
@@ -351,14 +395,15 @@
             <div><dt>Icon stroke</dt><dd>1.75 px · round caps</dd></div>
           </dl></section>
           <section><h3>Actions</h3><dl>
-            <div><dt>Drill-in</dt><dd>Project → file list · back button returns</dd></div>
+            <div><dt>Drill-in</dt><dd>Project → files open in right column</dd></div>
+            <div><dt>Current row</dt><dd>#F5F2EB + 3 px ink bar while open</dd></div>
             <div><dt>Expand</dt><dd>Reviewers → 3 sub-items · caret 180°</dd></div>
             <div><dt>Focus</dt><dd>3 px #5568FF ring · inset</dd></div>
           </dl></section>
           <section><h3>Motion</h3><dl>
             <div><dt>Hover fill</dt><dd>160 ms</dd></div>
             <div><dt>Expand</dt><dd>280 ms</dd></div>
-            <div><dt>Drill-in slide</dt><dd>320 ms</dd></div>
+            <div><dt>Column reveal</dt><dd>320 ms · −14 px → 0</dd></div>
             <div><dt>Easing</dt><dd>cubic-bezier(.22,1,.32,1)</dd></div>
           </dl></section>
         </div>
@@ -367,26 +412,19 @@
   </dialog>
 
   <script>
-    const app=document.getElementById('app'),viewport=document.getElementById('viewport'),level1=document.getElementById('level1'),level2=document.getElementById('level2');
+    const app=document.getElementById('app'),detail=document.getElementById('detail'),filesEl=document.getElementById('files');
     const drill=document.getElementById('drill'),back=document.getElementById('back'),expand=document.getElementById('expand'),group=document.getElementById('typeGroup');
-    const fit=()=>{viewport.style.height=(app.classList.contains('deep')?level2:level1).offsetHeight+'px'};
-    new ResizeObserver(fit).observe(level1);new ResizeObserver(fit).observe(level2);
-    let slideTimer;
-    function goDeep(on){
-      viewport.classList.add('sliding');clearTimeout(slideTimer);slideTimer=setTimeout(()=>viewport.classList.remove('sliding'),360);
-      app.classList.toggle('deep',on);
-      level1.setAttribute('aria-hidden',String(on));level2.setAttribute('aria-hidden',String(!on));
-      fit();
+    function openFiles(on){
+      detail.classList.toggle('open',on);drill.classList.toggle('is-current',on);
+      drill.setAttribute('aria-expanded',String(on));filesEl.setAttribute('aria-hidden',String(!on));
+      if(on&&matchMedia('(max-width:760px)').matches)filesEl.scrollIntoView({behavior:'smooth',block:'nearest'});
       (on?back:drill).focus({preventScroll:true});
     }
-    function toggle(open=!group.classList.contains('open')){
-      group.classList.toggle('open',open);expand.setAttribute('aria-expanded',String(open));
-    }
-    drill.addEventListener('click',()=>goDeep(true));
-    back.addEventListener('click',()=>goDeep(false));
+    function toggle(open=!group.classList.contains('open')){group.classList.toggle('open',open);expand.setAttribute('aria-expanded',String(open))}
+    drill.addEventListener('click',()=>openFiles(!detail.classList.contains('open')));
+    back.addEventListener('click',()=>openFiles(false));
     expand.addEventListener('click',()=>toggle());
-    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&app.classList.contains('deep')&&!document.getElementById('spec').open)goDeep(false)});
-    addEventListener('resize',fit);document.fonts?.ready.then(fit);fit();
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&detail.classList.contains('open')&&!document.getElementById('spec').open)openFiles(false)});
 
     const spec=document.getElementById('spec');
     document.getElementById('openSpec').addEventListener('click',()=>spec.showModal());
@@ -394,13 +432,14 @@
     spec.addEventListener('click',e=>{if(e.target===spec)spec.close()});
 
     if(document.documentElement.classList.contains('is-preview')){
-      const center=()=>document.documentElement.style.setProperty('--pv-top',Math.max(0,(innerHeight-level1.offsetHeight*1.7)/2)+'px');
+      const center=()=>document.documentElement.style.setProperty('--pv-top',Math.max(0,(innerHeight-app.offsetHeight*1.5)/2)+'px');
       center();document.fonts?.ready.then(center);addEventListener('resize',center);
       const seq=[
         ()=>drill.classList.add('is-hover'),
         ()=>{drill.classList.remove('is-hover');drill.classList.add('is-pressed')},
-        ()=>{drill.classList.remove('is-pressed');goDeep(true)},
-        ()=>goDeep(false),
+        ()=>{drill.classList.remove('is-pressed');openFiles(true)},
+        ()=>{},
+        ()=>openFiles(false),
         ()=>expand.classList.add('is-hover'),
         ()=>{expand.classList.remove('is-hover');toggle(true)},
         ()=>toggle(false)
