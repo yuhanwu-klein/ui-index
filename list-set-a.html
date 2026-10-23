@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Asset Library · List Set A</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    :root{
+      --ink:#1c1d21; --canvas:#fff; --paper:#f5f2eb; --rule:#dfddd7; --muted:#5f626b; --faint:#85827b;
+      --pink:#ff4f9a; --green:#45d483; --yellow:#ffe15a; --blue:#5568ff; --acid:#b9ff42;
+      --ui:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; --mono:"Space Mono","SF Mono",monospace;
+      --ease:cubic-bezier(.22,1,.32,1);
+      /* list tokens — every value below is documented in the spec */
+      --pad-x:16px; --pad-y:12px; --gap:12px; --icon:20px; --avatar:40px; --thumb:40px;
+    }
+    html,body{min-height:100%;margin:0}
+    body{min-height:100vh;min-height:100svh;display:flex;align-items:flex-start;justify-content:center;padding:max(96px,16vh) 24px 72px;background:var(--canvas);color:var(--ink);font-family:var(--ui)}
+    html.is-preview body{padding:10vh 24px 24px}
+    html.is-preview .app{transform:scale(1.7);transform-origin:50% 0}
+    button{font:inherit;color:inherit}
+    .app{width:min(100%,420px)}
+
+    /* ---- card shell (Week 4 · Brand Color Tuner language) ---- */
+    .card{position:relative;overflow:hidden;border:1px solid var(--ink);border-radius:14px;background:#fff;box-shadow:5px 5px 0 var(--ink)}
+    .card::before{content:"";position:absolute;inset:0 0 auto;height:5px;background:repeating-linear-gradient(90deg,var(--pink) 0 10px,var(--green) 10px 20px);z-index:3}
+    .card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:21px 16px 12px}
+    .section-label{font:700 10px/12px var(--mono);letter-spacing:.14em;text-transform:uppercase}
+    .badge{padding:4px 7px 3px;border:1px solid var(--ink);border-radius:3px;background:var(--acid);font:700 10px/12px var(--mono);letter-spacing:.07em;text-transform:uppercase}
+
+    .viewport{position:relative;overflow:hidden}
+    .viewport.sliding{transition:height 320ms var(--ease)}
+    .pane{width:100%;transition:transform 320ms var(--ease),opacity 220ms var(--ease)}
+    .pane.level-2{position:absolute;top:0;left:0;transform:translateX(100%);opacity:0;visibility:hidden}
+    .app.deep .level-1{transform:translateX(-24%);opacity:0;visibility:hidden;transition:transform 320ms var(--ease),opacity 220ms var(--ease),visibility 0s 320ms}
+    .app.deep .level-2{transform:none;opacity:1;visibility:visible}
+    .level-1{position:relative}
+    .app.deep .level-1{position:absolute;top:0;left:0}
+    .app.deep .level-2{position:relative}
+
+    /* ---- the list item system ---- */
+    .list{margin:0;padding:0 0 6px;list-style:none}
+    .item{position:relative;display:flex;align-items:center;gap:var(--gap);width:100%;min-height:48px;padding:var(--pad-y) var(--pad-x);border:0;background:#fff;text-align:left}
+    .item.two{min-height:64px}
+    .list>li+li>.item::before,.list>li+li>.group>.item::before{content:"";position:absolute;top:0;left:var(--pad-x);right:var(--pad-x);height:1px;background:var(--rule)}
+    button.item{cursor:pointer;transition:background 160ms var(--ease)}
+    button.item:hover,.item.is-hover{background:var(--paper)}
+    button.item:active,.item.is-pressed{background:var(--acid);box-shadow:inset 3px 0 0 var(--ink)}
+    button.item:focus-visible{outline:3px solid rgba(85,104,255,.65);outline-offset:-3px}
+
+    .lead{flex:0 0 auto;display:grid;place-items:center}
+    .lead.icon{width:var(--icon);height:var(--icon)}
+    .lead.icon svg{width:20px;height:20px;fill:none;stroke:var(--ink);stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+    .lead.avatar{width:var(--avatar);height:var(--avatar);border:1px solid var(--ink);border-radius:50%;background:var(--pink);color:#fff;box-shadow:2px 2px 0 var(--ink);font:700 13px/1 var(--mono)}
+    .lead.thumb{width:var(--thumb);height:var(--thumb);border:1px solid var(--ink);border-radius:6px;background:var(--yellow);overflow:hidden;position:relative}
+    .lead.thumb::after{content:"";position:absolute;inset:0;opacity:.18;background:linear-gradient(45deg,var(--ink) 25%,transparent 25%,transparent 75%,var(--ink) 75%),linear-gradient(45deg,var(--ink) 25%,transparent 25%,transparent 75%,var(--ink) 75%);background-position:0 0,5px 5px;background-size:10px 10px}
+    .lead.swatch{width:var(--icon);height:var(--icon);border:1px solid var(--ink);border-radius:4px;background:var(--sw)}
+
+    .text{flex:1;min-width:0;display:flex;flex-direction:column}
+    .label{font:600 14px/20px var(--ui);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .support{font:400 12px/16px var(--ui);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    .trail{flex:0 0 auto;display:flex;align-items:center;gap:8px}
+    .meta{font:700 11px/16px var(--mono);letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+    .chev{width:20px;height:20px;fill:none;stroke:var(--ink);stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;transition:transform 200ms var(--ease)}
+    button.item:hover .chev.go,.item.is-hover .chev.go{transform:translateX(2px)}
+    .item[aria-expanded="true"] .chev.caret{transform:rotate(180deg)}
+    .tag{padding:3px 6px 2px;border:1px solid var(--ink);border-radius:3px;font:700 9px/12px var(--mono);letter-spacing:.08em;text-transform:uppercase;background:#fff}
+
+    /* expand region */
+    .sub{display:grid;grid-template-rows:0fr;transition:grid-template-rows 280ms var(--ease)}
+    .sub>div{overflow:hidden}
+    .group.open .sub{grid-template-rows:1fr}
+    .sub ul{margin:0;padding:0 0 4px;list-style:none;background:#fbfaf6;border-top:1px dashed var(--rule)}
+    .sub .item{background:transparent;min-height:44px;padding-left:calc(var(--pad-x) + var(--icon) + var(--gap))}
+    .sub .label{font-weight:500}
+
+    /* level-2 header */
+    .crumb{display:flex;align-items:center;gap:var(--gap);padding:0 var(--pad-x) 12px}
+    .back-btn{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 10px 0 6px;border:1px solid var(--ink);border-radius:4px;background:#fff;box-shadow:2px 2px 0 var(--ink);font:700 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:transform 140ms var(--ease),box-shadow 140ms var(--ease)}
+    .back-btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+    .back-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink);background:var(--acid)}
+    .back-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .crumb h2{margin:0;font:700 16px/20px var(--ui);letter-spacing:-.02em}
+
+    /* ---- chrome: back + view specs (matches design-specs.js) ---- */
+    .chrome-back,.chrome-open{position:fixed;z-index:50;min-height:42px;display:inline-flex;align-items:center;border-radius:999px;font:650 13px/1 -apple-system,"SF Pro Text",system-ui,sans-serif;text-decoration:none;transition:transform 160ms var(--ease)}
+    .chrome-back{top:18px;left:18px;padding:0 15px;border:1px solid rgba(23,23,21,.13);background:rgba(255,255,255,.94);color:var(--ink);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+    .chrome-open{right:18px;bottom:18px;padding:0 18px;border:1px solid rgba(255,255,255,.16);background:#171715;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.24);cursor:pointer;font-weight:700}
+    .chrome-back:hover,.chrome-open:hover{transform:translateY(-2px)}
+    html.is-preview .chrome-back,html.is-preview .chrome-open,html.is-preview dialog{display:none}
+
+    /* ---- spec dialog, P2 redline format ---- */
+    dialog{width:min(980px,calc(100vw - 28px));max-height:calc(100vh - 28px);padding:0;border:0;border-radius:24px;background:#fff;color:#171715;box-shadow:0 28px 80px rgba(0,0,0,.32);overflow:hidden}
+    dialog::backdrop{background:rgba(13,13,12,.62);backdrop-filter:blur(8px)}
+    .spec{max-height:calc(100vh - 28px);overflow:auto;overscroll-behavior:contain;font-family:-apple-system,"SF Pro Text",system-ui,sans-serif}
+    .spec header{position:sticky;top:0;z-index:5;display:flex;align-items:flex-start;gap:24px;padding:26px 30px 20px;border-bottom:1px solid #e5e5e1;background:rgba(255,255,255,.96);backdrop-filter:blur(14px)}
+    .kicker{margin:0 0 8px;color:#70706b;font:700 10px/1.2 "SF Mono",monospace;letter-spacing:.15em;text-transform:uppercase}
+    .spec h2{margin:0;font-size:30px;line-height:1.05;letter-spacing:-.035em}
+    .tone{margin:8px 0 0;color:#70706b;font-size:13px}
+    .close{margin-left:auto;width:40px;height:40px;border:1px solid #e5e5e1;border-radius:50%;background:transparent;font:400 22px/1 inherit;cursor:pointer}
+    .spec h3{margin:0 0 4px;font:750 11px/1.2 "SF Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+    .spec .lede{margin:0 0 18px;color:#70706b;font-size:12.5px;line-height:1.5}
+    .block{padding:24px 30px;border-bottom:1px solid #e5e5e1}
+
+    /* redline canvas: pink dot grid like the Material spec sheets */
+    .redline{--band:rgba(240,98,160,.26);--band-2:rgba(240,98,160,.42);--red:#e0457b;
+      padding:34px 24px 30px;border-radius:16px;background-color:#fdf6fb;background-image:radial-gradient(rgba(224,69,123,.22) 1px,transparent 1.2px);background-size:12px 12px;display:flex;flex-direction:column;align-items:center;gap:34px;overflow-x:auto}
+    .rl{display:grid;grid-template-columns:44px auto 64px;grid-template-rows:30px auto;column-gap:0}
+    .rl-top{grid-column:2;grid-row:1;display:grid;grid-template-columns:var(--cols)}
+    .rl-left{grid-column:1;grid-row:2;display:grid;grid-template-rows:12px 1fr 12px}
+    .rl-right{grid-column:3;grid-row:2;position:relative}
+    .rl-body{grid-column:2;grid-row:2;display:grid;grid-template-columns:var(--cols);grid-template-rows:12px minmax(var(--h,24px),auto) 12px;width:var(--w);background:#fff;font-family:var(--ui);color:var(--ink)}
+    .rl-body>i{background:var(--band)}
+    .rl-body>i.k{background:var(--band-2)}
+    .rl-body>.c{display:flex;align-items:center;justify-content:flex-start;background:#fff}
+    .rl-body>.c.gap{background:var(--band)}
+    .rl-body>.c.ctr{justify-content:center}
+    .m{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;font:600 12px/1 var(--ui);color:#3a2a33}
+    .m::after{content:"";width:100%;height:6px;border:1px solid var(--red);border-top:0;border-bottom:0;background:linear-gradient(var(--red),var(--red)) center/100% 1px no-repeat}
+    .m.blank::after,.m.blank{visibility:hidden}
+    .v{display:flex;align-items:center;justify-content:flex-end;gap:4px;padding-right:6px;font:600 12px/1 var(--ui);color:#3a2a33}
+    .v::after{content:"";width:6px;height:100%;max-height:12px;border:1px solid var(--red);border-left:0;border-right:0;background:linear-gradient(var(--red),var(--red)) center/1px 100% no-repeat}
+    .call{position:absolute;top:50%;left:0;display:flex;align-items:center;gap:6px;font:600 12px/1 var(--ui);color:#3a2a33;transform:translateY(-50%);white-space:nowrap}
+    .call::before{content:"";width:22px;border-top:1px dotted #3a2a33}
+    .outline{outline:1px dashed #3a2a33;outline-offset:2px}
+    .rl-cap{grid-column:2;margin-top:8px;font:700 9px/1 "SF Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:#a0687f}
+
+    /* states strip */
+    .states{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .state{display:flex;flex-direction:column;gap:8px}
+    .state .card{box-shadow:3px 3px 0 var(--ink)}
+    .state .card::before{display:none}
+    .state small{font:700 10px/1.2 "SF Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:#70706b}
+    .state p{margin:0;font-size:12px;line-height:1.45;color:#70706b}
+
+    /* token tables */
+    .tables{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .tables section{padding:18px;border:1px solid #e5e5e1;border-radius:16px}
+    .tables dl{margin:10px 0 0}
+    .tables dl div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:14px;padding:9px 0;border-top:1px solid #e5e5e1}
+    .tables dt,.tables dd{margin:0;font-size:12.5px;line-height:1.45}
+    .tables dt{color:#70706b}
+    .tables dd{text-align:right;font-weight:650;font-variant-numeric:tabular-nums}
+    @media(max-width:720px){.states,.tables{grid-template-columns:1fr}.block{padding:20px 16px}.spec header{padding:20px 16px 16px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <a class="chrome-back" href="week5.html">← Week 5</a>
+  <button class="chrome-open" id="openSpec" type="button">View specs</button>
+
+  <main class="app" id="app">
+    <section class="card" aria-label="Asset library">
+      <div class="viewport" id="viewport">
+
+        <!-- LEVEL 1 -->
+        <div class="pane level-1" id="level1">
+          <div class="card-head"><span class="section-label">Asset library</span><span class="badge">Set A</span></div>
+          <ul class="list">
+            <!-- icon · two lines · text + icon · DRILL-IN -->
+            <li>
+              <button class="item two" type="button" id="drill" data-drill aria-label="Color tokens, 24 swatches. Open">
+                <span class="lead icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17M3.5 12h17"/></svg></span>
+                <span class="text"><span class="label">Color tokens</span><span class="support">24 swatches · synced 2m ago</span></span>
+                <span class="trail"><span class="meta">24</span><svg class="chev go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+              </button>
+            </li>
+            <!-- icon · two lines · icon · EXPAND -->
+            <li>
+              <div class="group" id="typeGroup">
+                <button class="item two" type="button" id="expand" aria-expanded="false" aria-controls="typeSub">
+                  <span class="lead icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19l5.5-14L15 19M6.2 14h6.6M15.5 19h5"/></svg></span>
+                  <span class="text"><span class="label">Typography</span><span class="support">3 families · 9 styles</span></span>
+                  <span class="trail"><svg class="chev caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+                </button>
+                <div class="sub" id="typeSub" role="region" aria-label="Typography families">
+                  <div><ul>
+                    <li><div class="item"><span class="text"><span class="label" style="font-family:Inter">Inter</span></span><span class="trail"><span class="meta">400–700</span></span></div></li>
+                    <li><div class="item"><span class="text"><span class="label" style="font-family:'Space Mono'">Space Mono</span></span><span class="trail"><span class="meta">400 · 700</span></span></div></li>
+                    <li><div class="item"><span class="text"><span class="label" style="font-family:Georgia,serif">Editorial Serif</span></span><span class="trail"><span class="meta">400</span></span></div></li>
+                  </ul></div>
+                </div>
+              </div>
+            </li>
+            <!-- avatar · two lines · text -->
+            <li>
+              <div class="item two">
+                <span class="lead avatar" aria-hidden="true">MP</span>
+                <span class="text"><span class="label">Mina Park</span><span class="support">Art director · Editor</span></span>
+                <span class="trail"><span class="meta">Owner</span></span>
+              </div>
+            </li>
+            <!-- thumbnail · two lines · text -->
+            <li>
+              <div class="item two">
+                <span class="lead thumb" aria-hidden="true"></span>
+                <span class="text"><span class="label">Spring campaign</span><span class="support">12 assets · Updated today</span></span>
+                <span class="trail"><span class="tag">Draft</span></span>
+              </div>
+            </li>
+            <!-- no leading · single line · text -->
+            <li>
+              <div class="item">
+                <span class="text"><span class="label">Brand guidelines</span></span>
+                <span class="trail"><span class="meta">v2.4</span></span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- LEVEL 2 (one level deeper) -->
+        <div class="pane level-2" id="level2" aria-hidden="true">
+          <div class="card-head"><span class="section-label">Asset library / Color tokens</span><span class="badge">24</span></div>
+          <div class="crumb">
+            <button class="back-btn" type="button" id="back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Library</button>
+            <h2>Color tokens</h2>
+          </div>
+          <ul class="list">
+            <li><div class="item two"><span class="lead swatch" style="--sw:#ff4f9a" aria-hidden="true"></span><span class="text"><span class="label">Pink 500</span><span class="support">#FF4F9A</span></span><span class="trail"><span class="meta">Accent</span></span></div></li>
+            <li><div class="item two"><span class="lead swatch" style="--sw:#b9ff42" aria-hidden="true"></span><span class="text"><span class="label">Acid 300</span><span class="support">#B9FF42</span></span><span class="trail"><span class="meta">Highlight</span></span></div></li>
+            <li><div class="item two"><span class="lead swatch" style="--sw:#5568ff" aria-hidden="true"></span><span class="text"><span class="label">Blue 500</span><span class="support">#5568FF</span></span><span class="trail"><span class="meta">Focus</span></span></div></li>
+            <li><div class="item two"><span class="lead swatch" style="--sw:#1c1d21" aria-hidden="true"></span><span class="text"><span class="label">Ink 900</span><span class="support">#1C1D21</span></span><span class="trail"><span class="meta">Stroke</span></span></div></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="spec" aria-labelledby="specTitle">
+    <div class="spec">
+      <header>
+        <div><p class="kicker">Week 5 · Set A · Design specification</p><h2 id="specTitle">Asset Library List</h2><p class="tone">Tone: Edgy · Commercial editorial — one list item system, five configurations, two actions.</p></div>
+        <button class="close" id="closeSpec" type="button" aria-label="Close specifications">×</button>
+      </header>
+
+      <div class="block">
+        <h3>Anatomy &amp; spacing</h3>
+        <p class="lede">Pink bands mark padding and gaps; numbers are px at 1×. Every configuration is the same row: leading slot · text · trailing slot.</p>
+        <div class="redline">
+
+          <!-- 1. no leading · single line · trailing text -->
+          <div class="rl" style="--cols:16px 1fr 12px auto 16px;--w:340px;--h:24px">
+            <div class="rl-top"><span class="m">16</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">16</span></div>
+            <div class="rl-left"><span class="v">12</span><span></span><span class="v">12</span></div>
+            <div class="rl-body">
+              <i class="k"></i><i></i><i></i><i></i><i class="k"></i>
+              <i></i><span class="c"><span class="label">Brand guidelines</span></span><span class="c gap"></span><span class="c"><span class="meta">v2.4</span></span><i></i>
+              <i class="k"></i><i></i><i></i><i></i><i class="k"></i>
+            </div>
+            <div class="rl-right"><span class="call">48 h</span></div>
+            <span class="rl-cap">01 · No leading · 1 line · trailing text</span>
+          </div>
+
+          <!-- 2. icon · two lines · trailing text + icon -->
+          <div class="rl" style="--cols:16px 20px 12px 1fr 12px auto 16px;--w:340px;--h:40px">
+            <div class="rl-top"><span class="m">16</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">16</span></div>
+            <div class="rl-left"><span class="v">12</span><span></span><span class="v">12</span></div>
+            <div class="rl-body">
+              <i class="k"></i><i></i><i></i><i></i><i></i><i></i><i class="k"></i>
+              <i></i><span class="c ctr"><span class="lead icon outline"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17M3.5 12h17"/></svg></span></span><span class="c gap"></span>
+              <span class="c"><span class="text"><span class="label">Color tokens</span><span class="support">24 swatches · synced 2m ago</span></span></span>
+              <span class="c gap"></span><span class="c"><span class="trail"><span class="meta">24</span><svg class="chev outline" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></span><i></i>
+              <i class="k"></i><i></i><i></i><i></i><i></i><i></i><i class="k"></i>
+            </div>
+            <div class="rl-right"><span class="call">20 icon · 64 h</span></div>
+            <span class="rl-cap">02 · Icon · 2 lines · text + icon · drill-in</span>
+          </div>
+
+          <!-- 3. avatar · two lines · trailing text -->
+          <div class="rl" style="--cols:16px 40px 12px 1fr 12px auto 16px;--w:340px;--h:40px">
+            <div class="rl-top"><span class="m">16</span><span class="m">40</span><span class="m">12</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">16</span></div>
+            <div class="rl-left"><span class="v">12</span><span></span><span class="v">12</span></div>
+            <div class="rl-body">
+              <i class="k"></i><i></i><i></i><i></i><i></i><i></i><i class="k"></i>
+              <i></i><span class="c ctr"><span class="lead avatar">MP</span></span><span class="c gap"></span>
+              <span class="c"><span class="text"><span class="label">Mina Park</span><span class="support">Art director · Editor</span></span></span>
+              <span class="c gap"></span><span class="c"><span class="meta">Owner</span></span><i></i>
+              <i class="k"></i><i></i><i></i><i></i><i></i><i></i><i class="k"></i>
+            </div>
+            <div class="rl-right"><span class="call">40 avatar · 64 h</span></div>
+            <span class="rl-cap">03 · Avatar / 40 thumbnail · 2 lines · trailing text</span>
+          </div>
+
+          <!-- 4. expand: sub item indent -->
+          <div class="rl" style="--cols:48px 1fr 12px auto 16px;--w:340px;--h:20px">
+            <div class="rl-top"><span class="m">48</span><span class="m blank">.</span><span class="m">12</span><span class="m blank">.</span><span class="m">16</span></div>
+            <div class="rl-left"><span class="v">12</span><span></span><span class="v">12</span></div>
+            <div class="rl-body" style="background:#fbfaf6">
+              <i class="k"></i><i></i><i></i><i></i><i class="k"></i>
+              <i></i><span class="c" style="background:#fbfaf6"><span class="label" style="font-weight:500">Space Mono</span></span><span class="c gap"></span><span class="c" style="background:#fbfaf6"><span class="meta">400 · 700</span></span><i></i>
+              <i class="k"></i><i></i><i></i><i></i><i class="k"></i>
+            </div>
+            <div class="rl-right"><span class="call">44 h</span></div>
+            <span class="rl-cap">04 · Expanded sub-item · indent = 16 + 20 + 12</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>States</h3>
+        <p class="lede">Only actionable rows (drill-in, expand) take states. Static rows stay at default.</p>
+        <div class="states">
+          <div class="state"><small>01 · Enabled / default</small>
+            <div class="card"><div class="item two"><span class="lead icon"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:#1c1d21;stroke-width:1.75"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17M3.5 12h17"/></svg></span><span class="text"><span class="label">Color tokens</span><span class="support">24 swatches</span></span><span class="trail"><svg class="chev go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></div></div>
+            <p>Fill #FFFFFF · chevron at rest</p></div>
+          <div class="state"><small>02 · Hover</small>
+            <div class="card"><div class="item two is-hover"><span class="lead icon"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:#1c1d21;stroke-width:1.75"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17M3.5 12h17"/></svg></span><span class="text"><span class="label">Color tokens</span><span class="support">24 swatches</span></span><span class="trail"><svg class="chev go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></div></div>
+            <p>Fill #F5F2EB · chevron +2 px · 160 ms</p></div>
+          <div class="state"><small>03 · Pressed</small>
+            <div class="card"><div class="item two is-pressed"><span class="lead icon"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:#1c1d21;stroke-width:1.75"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17M3.5 12h17"/></svg></span><span class="text"><span class="label">Color tokens</span><span class="support">24 swatches</span></span><span class="trail"><svg class="chev go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></div></div>
+            <p>Fill #B9FF42 · 3 px ink edge bar</p></div>
+        </div>
+      </div>
+
+      <div class="block" style="border-bottom:0">
+        <h3>Tokens</h3>
+        <div class="tables" style="margin-top:14px">
+          <section><h3>Typography</h3><dl>
+            <div><dt>Label</dt><dd>Inter 14 / 20 · 600 · −0.01 em</dd></div>
+            <div><dt>Supporting text</dt><dd>Inter 12 / 16 · 400 · #5F626B</dd></div>
+            <div><dt>Trailing text</dt><dd>Space Mono 11 / 16 · 700 · +0.04 em</dd></div>
+            <div><dt>Section label</dt><dd>Space Mono 10 / 12 · 700 · +0.14 em</dd></div>
+            <div><dt>Sub-item label</dt><dd>14 / 20 · 500</dd></div>
+          </dl></section>
+          <section><h3>Component size</h3><dl>
+            <div><dt>List width</dt><dd>420 px max</dd></div>
+            <div><dt>1-line row</dt><dd>48 px high</dd></div>
+            <div><dt>2-line row</dt><dd>64 px high · content centered</dd></div>
+            <div><dt>Sub-item row</dt><dd>44 px high</dd></div>
+            <div><dt>Icon / trailing icon</dt><dd>20 × 20 px</dd></div>
+            <div><dt>Avatar / thumbnail</dt><dd>40 × 40 px</dd></div>
+            <div><dt>Minimum target</dt><dd>44 px</dd></div>
+          </dl></section>
+          <section><h3>Spacing</h3><dl>
+            <div><dt>Row padding</dt><dd>12 × 16 px</dd></div>
+            <div><dt>Leading → text</dt><dd>12 px</dd></div>
+            <div><dt>Text → trailing</dt><dd>12 px</dd></div>
+            <div><dt>Trailing text → icon</dt><dd>8 px</dd></div>
+            <div><dt>Sub-item indent</dt><dd>48 px</dd></div>
+            <div><dt>Divider inset</dt><dd>16 px both sides</dd></div>
+          </dl></section>
+          <section><h3>Surface &amp; stroke</h3><dl>
+            <div><dt>Card</dt><dd>1 px #1C1D21 · radius 14 px</dd></div>
+            <div><dt>Card shadow</dt><dd>5 × 5 px · 0 blur</dd></div>
+            <div><dt>Divider</dt><dd>1 px #DFDDD7</dd></div>
+            <div><dt>Avatar</dt><dd>1 px stroke · 50% · 2 px hard shadow</dd></div>
+            <div><dt>Thumbnail</dt><dd>1 px stroke · radius 6 px</dd></div>
+            <div><dt>Icon stroke</dt><dd>1.75 px · round caps</dd></div>
+          </dl></section>
+          <section><h3>Actions</h3><dl>
+            <div><dt>Drill-in</dt><dd>Row → level 2 · back button returns</dd></div>
+            <div><dt>Expand</dt><dd>Reveals 3 sub-items · caret 180°</dd></div>
+            <div><dt>Focus</dt><dd>3 px #5568FF ring · inset</dd></div>
+          </dl></section>
+          <section><h3>Motion</h3><dl>
+            <div><dt>Hover fill</dt><dd>160 ms</dd></div>
+            <div><dt>Expand</dt><dd>280 ms</dd></div>
+            <div><dt>Drill-in slide</dt><dd>320 ms</dd></div>
+            <div><dt>Easing</dt><dd>cubic-bezier(.22,1,.32,1)</dd></div>
+          </dl></section>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    const app=document.getElementById('app'),viewport=document.getElementById('viewport'),level1=document.getElementById('level1'),level2=document.getElementById('level2');
+    const drill=document.getElementById('drill'),back=document.getElementById('back'),expand=document.getElementById('expand'),group=document.getElementById('typeGroup');
+    const fit=()=>{viewport.style.height=(app.classList.contains('deep')?level2:level1).offsetHeight+'px'};
+    new ResizeObserver(fit).observe(level1);new ResizeObserver(fit).observe(level2);
+    let slideTimer;
+    function goDeep(on){
+      viewport.classList.add('sliding');clearTimeout(slideTimer);slideTimer=setTimeout(()=>viewport.classList.remove('sliding'),360);
+      app.classList.toggle('deep',on);
+      level1.setAttribute('aria-hidden',String(on));level2.setAttribute('aria-hidden',String(!on));
+      fit();
+      (on?back:drill).focus({preventScroll:true});
+    }
+    function toggle(open=!group.classList.contains('open')){
+      group.classList.toggle('open',open);expand.setAttribute('aria-expanded',String(open));
+    }
+    drill.addEventListener('click',()=>goDeep(true));
+    back.addEventListener('click',()=>goDeep(false));
+    expand.addEventListener('click',()=>toggle());
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&app.classList.contains('deep')&&!document.getElementById('spec').open)goDeep(false)});
+    addEventListener('resize',fit);document.fonts?.ready.then(fit);fit();
+
+    const spec=document.getElementById('spec');
+    document.getElementById('openSpec').addEventListener('click',()=>spec.showModal());
+    document.getElementById('closeSpec').addEventListener('click',()=>spec.close());
+    spec.addEventListener('click',e=>{if(e.target===spec)spec.close()});
+
+    if(document.documentElement.classList.contains('is-preview')){
+      const seq=[
+        ()=>drill.classList.add('is-hover'),
+        ()=>{drill.classList.remove('is-hover');drill.classList.add('is-pressed')},
+        ()=>{drill.classList.remove('is-pressed');goDeep(true)},
+        ()=>goDeep(false),
+        ()=>expand.classList.add('is-hover'),
+        ()=>{expand.classList.remove('is-hover');toggle(true)},
+        ()=>toggle(false)
+      ];
+      let i=0;setInterval(()=>{seq[i%seq.length]();i++},1100);
+    }
+  </script>
+</body>
+</html>
