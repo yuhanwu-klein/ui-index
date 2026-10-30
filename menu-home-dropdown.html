@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home Grid Dropdown · Week 6</title>
+  <script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    :root{
+      --ink:#1c1c1e;--muted:#8e8e93;--soft:#f1f1f3;--line:#e5e5ea;
+      --green:#34c759;--purple:#5d20a6;--amber:#ffd60a;
+      --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      --ease:cubic-bezier(.22,1,.32,1);--pop:cubic-bezier(.34,1.4,.5,1);
+    }
+    html,body{min-height:100%;margin:0}
+    body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:max(80px,14vh) 24px 72px;background:#f2f2f7;color:var(--ink);font-family:var(--font)}
+    html.is-preview body{padding:var(--pv-top,20vh) 24px 24px}
+    html.is-preview .app{transform:scale(1.4);transform-origin:50% 0}
+    button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+    .app{width:min(100%,340px)}
+
+    /* ── trigger ── */
+    .trigger{
+      display:flex;align-items:center;justify-content:space-between;
+      width:100%;padding:14px 18px;
+      background:#fff;border-radius:16px;
+      box-shadow:0 2px 8px rgba(0,0,0,.06);
+      font-size:17px;font-weight:600;letter-spacing:-.02em;
+      transition:transform .35s var(--pop),box-shadow .25s;
+    }
+    .trigger:hover{box-shadow:0 4px 16px rgba(0,0,0,.1)}
+    .trigger:active{transform:scale(.98)}
+    .trigger .t-left{display:flex;align-items:center;gap:10px}
+    .trigger .t-ico{width:32px;height:32px;border-radius:8px;background:var(--soft);display:grid;place-items:center}
+    .trigger .t-ico svg{width:18px;height:18px;color:var(--ink)}
+    .trigger .chev{width:20px;height:20px;color:var(--muted);transition:transform .3s var(--ease)}
+    .is-open .trigger .chev{transform:rotate(180deg)}
+
+    /* ── dropdown panel ── */
+    .panel{
+      margin-top:8px;padding:14px;
+      background:#fff;border-radius:20px;
+      box-shadow:0 12px 40px rgba(0,0,0,.12),0 1px 3px rgba(0,0,0,.06);
+      display:grid;grid-template-rows:0fr;
+      transition:grid-template-rows .4s var(--ease),opacity .25s;
+      opacity:0;pointer-events:none;
+    }
+    .is-open .panel{grid-template-rows:1fr;opacity:1;pointer-events:auto}
+    .panel-inner{overflow:hidden}
+
+    /* ── grid ── */
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+    /* ── tile ── */
+    .tile{
+      position:relative;aspect-ratio:1/1;
+      padding:14px;border-radius:14px;
+      background:var(--soft);
+      display:flex;flex-direction:column;justify-content:flex-end;
+      cursor:pointer;overflow:hidden;
+      transition:background .2s var(--ease),transform .4s var(--pop),box-shadow .25s;
+      opacity:0;transform:scale(.92);
+    }
+    .is-open .tile{opacity:1;transform:none}
+    .is-open .tile:nth-child(1){transition-delay:0s}
+    .is-open .tile:nth-child(2){transition-delay:.04s}
+    .is-open .tile:nth-child(3){transition-delay:.08s}
+    .is-open .tile:nth-child(4){transition-delay:.12s}
+    .is-open .tile:nth-child(5){transition-delay:.16s}
+    .is-open .tile:nth-child(6){transition-delay:.2s}
+    .tile:hover{background:#eaeaef;transform:scale(1.03);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+    .tile:active{transform:scale(.97);background:#e2e2e7}
+    .tile.is-on{background:rgba(93,32,166,.08)}
+    .tile.is-on:hover{background:rgba(93,32,166,.13)}
+
+    /* status dot */
+    .dot{position:absolute;top:12px;right:12px;width:8px;height:8px;border-radius:50%;background:var(--muted);transition:background .3s,transform .5s var(--pop)}
+    .tile.is-on .dot{background:var(--green);transform:scale(1.2)}
+
+    /* tile label */
+    .tile-label{font-size:15px;font-weight:600;letter-spacing:-.01em;line-height:1.25}
+
+    /* ripple */
+    .rip{position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(28,28,30,.08);transform:translate(-50%,-50%) scale(0);pointer-events:none;animation:rip .55s var(--ease) forwards}
+    @keyframes rip{to{transform:translate(-50%,-50%) scale(1);opacity:0}}
+
+    /* ── divider ── */
+    .divider{height:1px;background:var(--line);margin:12px 0}
+
+    /* ── stats row ── */
+    .stats{display:flex;gap:0;padding:2px 0}
+    .stat{flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:4px 8px}
+    .stat-val{display:flex;align-items:baseline;gap:1px;font-size:22px;font-weight:300;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+    .stat-val small{font-size:13px;font-weight:500;color:var(--muted)}
+    .stat-lbl{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.01em}
+
+    /* ── brightness slider ── */
+    .slider-wrap{margin-top:10px;position:relative;height:44px;border-radius:14px;background:var(--soft);overflow:hidden;cursor:pointer;transition:transform .35s var(--pop)}
+    .slider-wrap:active{transform:scaleY(.96)}
+    .slider-fill{position:absolute;left:0;top:0;bottom:0;width:var(--fill,66%);background:var(--amber);border-radius:14px;transition:width .3s var(--ease)}
+    .slider-label{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:17px;font-weight:500;z-index:2;font-variant-numeric:tabular-nums}
+    .slider-label small{font-size:13px;color:rgba(28,28,30,.5)}
+    .slider-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);z-index:2;width:22px;height:22px;color:rgba(28,28,30,.4)}
+
+    /* ── chrome ── */
+    .chrome-back,.chrome-open{position:fixed;z-index:50;min-height:42px;display:inline-flex;align-items:center;border-radius:999px;font:650 13px/1 -apple-system,"SF Pro Text",system-ui,sans-serif;text-decoration:none;transition:transform 160ms var(--ease)}
+    .chrome-back{top:18px;left:18px;padding:0 15px;border:1px solid rgba(23,23,21,.13);background:rgba(255,255,255,.94);color:var(--ink);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+    .chrome-open{right:18px;bottom:18px;padding:0 18px;border:1px solid rgba(255,255,255,.16);background:#171715;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.24);cursor:pointer;font-weight:700}
+    .chrome-back:hover,.chrome-open:hover{transform:translateY(-2px)}
+    html.is-preview .chrome-back,html.is-preview .chrome-open,html.is-preview dialog{display:none}
+
+    /* ── spec dialog ── */
+    dialog{width:min(980px,calc(100vw - 28px));max-height:calc(100vh - 28px);padding:0;border:0;border-radius:24px;background:#fff;color:#171715;box-shadow:0 28px 80px rgba(0,0,0,.32);overflow:hidden}
+    dialog::backdrop{background:rgba(13,13,12,.62);backdrop-filter:blur(8px)}
+    .spec{max-height:calc(100vh - 28px);overflow:auto;overscroll-behavior:contain}
+    .spec header{position:sticky;top:0;z-index:5;display:flex;align-items:flex-start;gap:24px;padding:26px 30px 20px;border-bottom:1px solid #e5e5e1;background:rgba(255,255,255,.96);backdrop-filter:blur(14px)}
+    .kicker{margin:0 0 8px;color:#70706b;font:700 10px/1.2 "SF Mono",monospace;letter-spacing:.15em;text-transform:uppercase}
+    .spec h2{margin:0;font-size:30px;line-height:1.05;letter-spacing:-.035em}
+    .tone{margin:8px 0 0;color:#70706b;font-size:13px}
+    .close{margin-left:auto;width:40px;height:40px;border:1px solid #e5e5e1;border-radius:50%;background:transparent;font:400 22px/1 inherit;cursor:pointer}
+    .close:hover{background:var(--soft)}
+    .spec h3{margin:0 0 4px;font:750 11px/1.2 "SF Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+    .lede{margin:0 0 18px;color:#70706b;font-size:12.5px;line-height:1.5}
+    .block{padding:24px 30px;border-bottom:1px solid #e5e5e1}
+    .states{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .state{display:flex;flex-direction:column;gap:8px}
+    .state .tile{pointer-events:none;opacity:1;transform:none;aspect-ratio:auto;min-height:80px}
+    .state small{font:700 10px/1.2 "SF Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:#70706b}
+    .state p{margin:0;font-size:12px;line-height:1.45;color:#70706b}
+    .tables{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+    .tables section{padding:18px;border:1px solid #e5e5e1;border-radius:16px}
+    .tables section h3{margin-bottom:8px}
+    .tables dl{margin:10px 0 0}
+    .tables dl div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:14px;padding:9px 0;border-top:1px solid #e5e5e1}
+    .tables dt,.tables dd{margin:0;font-size:12.5px;line-height:1.45}
+    .tables dt{color:#70706b}.tables dd{text-align:right;font-weight:650;font-variant-numeric:tabular-nums}
+    .anatomy{font-size:11px;line-height:1.55;color:#70706b;overflow-x:auto;padding:24px;border:1px solid #e5e5e1;border-radius:12px;background:#fafaf9}
+    @media(max-width:720px){.states,.tables{grid-template-columns:1fr}.block{padding:20px 16px}.spec header{padding:20px 16px 16px}}
+    @media(max-width:560px){body{padding:max(80px,14vh) 16px 48px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <a class="chrome-back" href="week6.html">← Week 6</a>
+  <button class="chrome-open" id="openSpec" type="button">View specs</button>
+
+  <main class="app" id="app">
+    <button class="trigger" id="trigger" type="button" aria-expanded="false" aria-controls="panel">
+      <span class="t-left">
+        <span class="t-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><path d="M9 22V12h6v10"/></svg></span>
+        My Home
+      </span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+
+    <div class="panel" id="panel">
+      <div class="panel-inner">
+        <div class="grid">
+          <div class="tile is-on" data-tile><span class="dot"></span><span class="tile-label">Kitchen</span></div>
+          <div class="tile" data-tile><span class="dot"></span><span class="tile-label">Living Room</span></div>
+          <div class="tile is-on" data-tile><span class="dot"></span><span class="tile-label">Dining Room</span></div>
+          <div class="tile" data-tile><span class="dot"></span><span class="tile-label">Bedroom</span></div>
+          <div class="tile" data-tile><span class="dot"></span><span class="tile-label">Bathroom</span></div>
+          <div class="tile" data-tile><span class="dot"></span><span class="tile-label">Garage</span></div>
+        </div>
+        <div class="divider"></div>
+        <div class="stats">
+          <div class="stat"><span class="stat-val">2°<small></small></span><span class="stat-lbl">temperature</span></div>
+          <div class="stat"><span class="stat-val">80<small>%</small></span><span class="stat-lbl">humidity</span></div>
+          <div class="stat"><span class="stat-val">19<small> dBa</small></span><span class="stat-lbl">noise</span></div>
+        </div>
+        <div class="slider-wrap" id="slider" style="--fill:66%">
+          <div class="slider-fill"></div>
+          <span class="slider-label">66<small>%</small></span>
+          <svg class="slider-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── SPEC DIALOG ── -->
+  <dialog id="spec" aria-labelledby="specTitle">
+    <div class="spec">
+      <header>
+        <div>
+          <p class="kicker">Week 6 · Style 2 · Design specification</p>
+          <h2 id="specTitle">Home Grid Dropdown</h2>
+          <p class="tone">Tone: iOS Home app grid — SF Pro, soft gray tiles, green status dots, amber brightness slider, spring press animations with ripple from the pet app system.</p>
+        </div>
+        <button class="close" id="closeSpec" type="button" aria-label="Close specifications">×</button>
+      </header>
+
+      <div class="block">
+        <h3>Anatomy</h3>
+        <p class="lede">Trigger button with home icon opens a dropdown panel. Panel contains a 2×3 grid of room tiles, a stats row (temperature, humidity, noise), and a brightness slider. Each tile has a status dot and label.</p>
+        <pre class="anatomy">
+┌─────────────────────────────────────┐
+│  🏠 My Home                    ▾   │ ← trigger (17px 600)
+└─────────────────────────────────────┘
+  ↕ 8px gap
+┌─────────────────────────────────────┐
+│ ┌──────────┐  ┌──────────┐         │
+│ │        ●  │  │        ●  │        │ ● = status dot
+│ │           │  │           │        │
+│ │ Kitchen   │  │ Living    │        │ tile label 15px 600
+│ └──────────┘  │ Room      │        │
+│                └──────────┘        │
+│ ┌──────────┐  ┌──────────┐         │
+│ │        ●  │  │        ●  │        │
+│ │           │  │           │        │
+│ │ Dining    │  │ Bedroom   │        │
+│ │ Room      │  │           │        │
+│ └──────────┘  └──────────┘        │
+│ ┌──────────┐  ┌──────────┐         │
+│ │        ●  │  │        ●  │        │
+│ │           │  │           │        │
+│ │ Bathroom  │  │ Garage    │        │
+│ └──────────┘  └──────────┘        │
+│ ──────────────────────────         │ ← divider
+│  2°        80%       19 dBa        │ ← stats
+│  temp      humidity  noise         │
+│ ┌▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░☀┐   │ ← slider 66%
+│ └──────────────────────────────┘   │
+└─────────────────────────────────────┘</pre>
+      </div>
+
+      <div class="block">
+        <h3>States</h3>
+        <p class="lede">Tiles toggle between on (purple tint, green dot) and off (soft gray, muted dot). Hover springs scale, press contracts with ripple.</p>
+        <div class="states">
+          <div class="state">
+            <small>01 · Off / Default</small>
+            <div class="tile" style="background:var(--soft)"><span class="dot" style="background:var(--muted)"></span><span class="tile-label">Kitchen</span></div>
+            <p>#F1F1F3 · muted dot · at rest</p>
+          </div>
+          <div class="state">
+            <small>02 · On / Active</small>
+            <div class="tile is-on" style="background:rgba(93,32,166,.08)"><span class="dot" style="background:var(--green);transform:scale(1.2)"></span><span class="tile-label">Kitchen</span></div>
+            <p>Purple 8% tint · green dot · scale 1.2</p>
+          </div>
+          <div class="state">
+            <small>03 · Hover</small>
+            <div class="tile" style="background:#eaeaef;transform:scale(1.03);box-shadow:0 4px 12px rgba(0,0,0,.08)"><span class="dot"></span><span class="tile-label">Kitchen</span></div>
+            <p>#EAEAEF · scale 1.03 · shadow lift</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block" style="border-bottom:0">
+        <h3>Tokens</h3>
+        <div class="tables">
+          <section>
+            <h3>Typography</h3>
+            <dl>
+              <div><dt>Family</dt><dd>SF Pro Display / Text</dd></div>
+              <div><dt>Trigger label</dt><dd>17px · 600 · −0.02em</dd></div>
+              <div><dt>Tile label</dt><dd>15px · 600 · −0.01em</dd></div>
+              <div><dt>Stat value</dt><dd>22px · 300 · tabular</dd></div>
+              <div><dt>Stat label</dt><dd>11px · 500 · muted</dd></div>
+              <div><dt>Slider value</dt><dd>17px · 500 · tabular</dd></div>
+            </dl>
+          </section>
+          <section>
+            <h3>Spacing</h3>
+            <dl>
+              <div><dt>Trigger padding</dt><dd>14px 18px</dd></div>
+              <div><dt>Panel padding</dt><dd>14px</dd></div>
+              <div><dt>Grid gap</dt><dd>10px · 2 columns</dd></div>
+              <div><dt>Tile padding</dt><dd>14px</dd></div>
+              <div><dt>Tile aspect</dt><dd>1 : 1 square</dd></div>
+              <div><dt>Trigger → panel</dt><dd>8px</dd></div>
+              <div><dt>Slider height</dt><dd>44px</dd></div>
+            </dl>
+          </section>
+          <section>
+            <h3>Colors</h3>
+            <dl>
+              <div><dt>Page bg</dt><dd>#F2F2F7</dd></div>
+              <div><dt>Surface</dt><dd>#FFFFFF</dd></div>
+              <div><dt>Tile default</dt><dd>#F1F1F3</dd></div>
+              <div><dt>Tile on</dt><dd>rgba(93,32,166,.08)</dd></div>
+              <div><dt>Active dot</dt><dd>#34C759 (iOS green)</dd></div>
+              <div><dt>Slider fill</dt><dd>#FFD60A (amber)</dd></div>
+            </dl>
+          </section>
+          <section>
+            <h3>Component</h3>
+            <dl>
+              <div><dt>Trigger radius</dt><dd>16px</dd></div>
+              <div><dt>Panel radius</dt><dd>20px</dd></div>
+              <div><dt>Tile radius</dt><dd>14px</dd></div>
+              <div><dt>Slider radius</dt><dd>14px</dd></div>
+              <div><dt>Dot size</dt><dd>8px · radius 50%</dd></div>
+              <div><dt>Icon tile</dt><dd>32 × 32 · radius 8px</dd></div>
+            </dl>
+          </section>
+          <section>
+            <h3>Motion</h3>
+            <dl>
+              <div><dt>Dropdown open</dt><dd>400ms · grid-row 0fr→1fr</dd></div>
+              <div><dt>Tile entrance</dt><dd>scale .92→1 · stagger 40ms</dd></div>
+              <div><dt>Hover spring</dt><dd>scale 1.03 · 400ms pop</dd></div>
+              <div><dt>Press</dt><dd>scale .97 · ripple 550ms</dd></div>
+              <div><dt>Dot pulse</dt><dd>scale 1→1.2 · 500ms pop</dd></div>
+              <div><dt>Chevron rotate</dt><dd>180° · 300ms</dd></div>
+            </dl>
+          </section>
+          <section>
+            <h3>Configurations</h3>
+            <dl>
+              <div><dt>Tile states</dt><dd>On (green dot) / Off (muted)</dd></div>
+              <div><dt>Grid layout</dt><dd>2 columns · square tiles</dd></div>
+              <div><dt>Stats</dt><dd>Temperature · humidity · noise</dd></div>
+              <div><dt>Slider</dt><dd>Brightness 0–100% · amber</dd></div>
+              <div><dt>Toggle on tap</dt><dd>Tile ↔ on/off</dd></div>
+            </dl>
+          </section>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    var app=document.getElementById('app'),trigger=document.getElementById('trigger');
+    trigger.addEventListener('click',function(){
+      var open=app.classList.toggle('is-open');
+      trigger.setAttribute('aria-expanded',String(open));
+    });
+
+    document.querySelectorAll('[data-tile]').forEach(function(t){
+      t.addEventListener('pointerdown',function(e){
+        var r=t.getBoundingClientRect(),s=document.createElement('span');
+        s.className='rip';s.style.left=(e.clientX-r.left)+'px';s.style.top=(e.clientY-r.top)+'px';
+        t.appendChild(s);setTimeout(function(){s.remove()},600);
+      });
+      t.addEventListener('click',function(){t.classList.toggle('is-on')});
+    });
+
+    var slider=document.getElementById('slider');
+    var dragging=false;
+    function setFill(e){
+      var r=slider.getBoundingClientRect();
+      var pct=Math.round(Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100)));
+      slider.style.setProperty('--fill',pct+'%');
+      slider.querySelector('.slider-label').innerHTML=pct+'<small>%</small>';
+    }
+    slider.addEventListener('pointerdown',function(e){dragging=true;setFill(e);slider.setPointerCapture(e.pointerId)});
+    slider.addEventListener('pointermove',function(e){if(dragging)setFill(e)});
+    slider.addEventListener('pointerup',function(){dragging=false});
+
+    var spec=document.getElementById('spec');
+    document.getElementById('openSpec').addEventListener('click',function(){spec.showModal()});
+    document.getElementById('closeSpec').addEventListener('click',function(){spec.close()});
+    spec.addEventListener('click',function(e){if(e.target===spec)spec.close()});
+
+    if(document.documentElement.classList.contains('is-preview')){
+      var center=function(){
+        var h=app.querySelector('.panel-inner');
+        document.documentElement.style.setProperty('--pv-top',Math.max(0,(innerHeight-app.offsetHeight*1.4)/2)+'px');
+      };
+      app.classList.add('is-open');trigger.setAttribute('aria-expanded','true');
+      center();document.fonts&&document.fonts.ready.then(center);addEventListener('resize',center);
+
+      var tiles=document.querySelectorAll('[data-tile]');
+      var idx=0;
+      setInterval(function(){
+        tiles[idx%tiles.length].classList.toggle('is-on');
+        idx++;
+      },900);
+    }
+  </script>
+</body>
+</html>
