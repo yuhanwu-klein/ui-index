@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Week 6 · UI Index</title>
+  <style>
+    * { box-sizing:border-box; }
+    :root { --page:#fff; --ink:#1a1a18; --muted:#7c7c77; --line:#e6e6e2; --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; --mono:"SF Mono","Courier New",monospace; }
+    html,body { min-height:100%; margin:0; color:var(--ink); font-family:var(--font); }
+    body { padding:28px; background:var(--page); }
+    main { width:min(100%,1440px); margin:0 auto; min-height:calc(100vh - 56px); display:grid; grid-template-rows:60px 1fr 40px; gap:20px; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:4px 2px; }
+    .header-main { display:flex; align-items:center; gap:14px; min-width:0; }
+    .back { min-height:40px; display:inline-flex; align-items:center; padding:0 14px; border:1px solid var(--line); border-radius:999px; color:var(--ink); background:#fff; font:650 12px/1 var(--font); text-decoration:none; white-space:nowrap; }
+    .back:hover { border-color:#a9a9a4; }
+    .back:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
+    h1 { margin:0; font-size:22px; font-weight:700; letter-spacing:-.02em; }
+    .count { color:var(--muted); font:600 11px/1 var(--mono); letter-spacing:.14em; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; align-content:start; }
+    .slot { min-width:0; aspect-ratio:1/1; border:1.5px dashed var(--line); border-radius:22px; background:#fff; }
+    .project { position:relative; min-width:0; aspect-ratio:1/1; overflow:hidden; display:grid; grid-template-rows:minmax(0,1fr) 54px; border:1px solid rgba(26,26,24,.045); border-radius:22px; background:#fff; color:inherit; text-decoration:none; box-shadow:0 10px 28px rgba(26,26,24,.07),0 1px 0 rgba(26,26,24,.03); transition:transform 220ms cubic-bezier(.22,1,.32,1),box-shadow 220ms ease; }
+    .project:hover { transform:translateY(-4px); box-shadow:0 18px 36px rgba(26,26,24,.12),0 1px 0 rgba(26,26,24,.04); }
+    .project:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
+    .preview { position:relative; min-height:0; overflow:hidden; background:#fff; border-bottom:1px solid var(--line); }
+    .preview iframe { position:absolute; inset:0; width:400%; height:400%; border:0; transform:scale(.25); transform-origin:0 0; pointer-events:none; }
+    .meta { display:flex; align-items:center; gap:12px; padding:0 16px; }
+    .number { color:var(--muted); font:700 10px/1 var(--mono); letter-spacing:.1em; }
+    h2 { margin:0; overflow:hidden; color:var(--ink); font-size:14px; font-weight:600; letter-spacing:-.015em; white-space:nowrap; text-overflow:ellipsis; }
+    .arrow { margin-left:auto; color:var(--muted); font-size:15px; transition:transform 220ms ease,color 220ms ease; }
+    .project:hover .arrow { color:var(--ink); transform:translate(2px,-2px); }
+    .foot { display:flex; align-items:center; gap:6px; color:var(--muted); font:600 11px/1 var(--mono); letter-spacing:.1em; text-transform:uppercase; padding:4px 2px; }
+    .foot .d { width:6px; height:6px; border-radius:2px; background:var(--ink); opacity:.65; }
+    @media (max-width:900px) { .grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; } }
+    @media (max-width:560px) { body { padding:16px; } main { min-height:calc(100vh - 32px); grid-template-rows:48px auto 32px; gap:12px; } .grid { grid-template-columns:1fr; gap:12px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header><div class="header-main"><a class="back" href="index.html">← Archive</a><h1>Week 6</h1></div><span class="count">01 / 04</span></header>
+    <section class="grid" aria-label="Week 6 projects">
+      <a class="project" href="menu-ascii-dropdown.html" aria-label="Open ASCII Dropdown Menu">
+        <span class="preview"><iframe src="menu-ascii-dropdown.html?preview=1&amp;v=1" title="ASCII Dropdown Menu preview" tabindex="-1"></iframe></span>
+        <span class="meta"><span class="number">01</span><h2>ASCII Dropdown</h2><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <div class="slot" aria-label="Empty slot"></div>
+      <div class="slot" aria-label="Empty slot"></div>
+    </section>
+    <div class="foot"><span class="d"></span>Built with care</div>
+  </main>
+</body>
+</html>
