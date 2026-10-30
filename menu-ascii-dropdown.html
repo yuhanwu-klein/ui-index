@@ -6,14 +6,18 @@
   <title>ASCII Dropdown · Week 6</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     :root{
-      --bg:#0a0e14; --surface:#0d1117; --fg:#c5cbd3; --dim:#5c6773; --accent:#39bae6;
-      --glow:rgba(57,186,230,0.12); --border:#2d3640; --hover:#1a1f28; --pressed:#0f1923;
-      --badge-bg:#e6b450; --badge-fg:#0a0e14; --danger:#f07178;
+      --bg:#0c0e1a; --surface:#141830; --fg:#e0e0f0; --dim:#6668a0;
+      --accent:#00d4ff; --gold:#ffc940; --gold-dim:#8a7030;
+      --badge-bg:#ff5c8a; --badge-fg:#fff;
+      --danger:#ff4757; --danger-hover:rgba(255,71,87,.08);
+      --border-hi:#4a4e80; --border-lo:#2a2e55;
+      --hover:#1e2248; --pressed:#101430;
+      --glow:rgba(0,212,255,.15);
       --ui:'JetBrains Mono','Courier New',monospace;
       --mono:'Space Mono','Courier New',monospace;
       --ease:cubic-bezier(.22,1,.32,1);
@@ -24,56 +28,101 @@
     html.is-preview body{padding:var(--pv-top,30vh) 24px 24px}
     html.is-preview .app{transform:scale(1.7);transform-origin:50% 0}
     button{font:inherit;color:inherit}
-    .app{width:min(100%,340px)}
+    .app{width:min(100%,360px)}
 
-    /* ── menu container ── */
-    .menu{background:var(--surface);border:1px solid var(--border);min-width:280px;padding:4px 0;box-shadow:0 4px 24px rgba(0,0,0,.3)}
+    /* ── pixel frame ── */
+    .menu{
+      background:var(--surface);
+      min-width:300px;
+      border:2px solid var(--border-hi);
+      box-shadow:inset 0 0 0 1px var(--border-lo),0 0 0 2px var(--bg),0 0 0 4px var(--border-lo),0 14px 44px rgba(0,0,0,.5);
+    }
 
-    .menu-cap{font:400 11px/1 var(--ui);color:var(--dim);padding:6px 12px 2px;letter-spacing:.02em;user-select:none;white-space:pre}
-    .menu-cap.bot{padding:2px 12px 6px}
+    /* title bar */
+    .menu-title{
+      display:flex;align-items:center;justify-content:center;gap:6px;
+      padding:7px 14px;
+      background:linear-gradient(180deg,#1c2050,var(--surface));
+      border-bottom:2px solid var(--border-hi);
+      font:700 11px/1 var(--ui);letter-spacing:.2em;text-transform:uppercase;
+      color:var(--gold);user-select:none;
+    }
+    .menu-title .px{letter-spacing:0;color:var(--gold-dim)}
+
+    .menu-body{padding:5px 0}
+
+    /* footer bar */
+    .menu-foot{
+      display:flex;align-items:center;gap:6px;
+      padding:5px 10px;
+      border-top:1px solid var(--border-lo);
+      font:400 9px/1 var(--ui);color:var(--dim);letter-spacing:.04em;user-select:none;
+    }
+    .foot-tag{color:var(--accent)}
+    .foot-bar{margin-left:auto;color:var(--gold-dim);letter-spacing:0}
 
     /* ── menu item ── */
-    .mi{position:relative;display:grid;grid-template-columns:28px 1fr auto;align-items:center;padding:0 12px;height:36px;cursor:pointer;transition:background 60ms var(--ease);color:var(--fg);text-decoration:none}
+    .mi{
+      position:relative;display:grid;grid-template-columns:20px 20px 1fr auto;
+      align-items:center;padding:0 10px;height:34px;
+      cursor:pointer;transition:background 80ms var(--ease);
+      color:var(--fg);text-decoration:none;
+    }
+    .mi-cursor{font-size:12px;color:transparent;text-align:center;transition:color 80ms,transform 80ms;transform:translateX(-3px)}
     .mi:hover{background:var(--hover)}
-    .mi:hover::before{content:">";position:absolute;left:5px;color:var(--accent);font-weight:700;font-size:12px}
+    .mi:hover .mi-cursor{color:var(--accent);transform:translateX(0)}
     .mi:hover .mi-ico{color:var(--accent)}
     .mi.is-pressed{background:var(--pressed);box-shadow:inset 0 0 0 1px var(--glow)}
-    .mi.is-pressed::before{content:">";position:absolute;left:5px;color:var(--accent);font-weight:700;font-size:12px}
+    .mi.is-pressed .mi-cursor{color:var(--accent);transform:translateX(0)}
+    .mi.is-pressed .mi-ico{color:var(--accent)}
     .mi.is-disabled{color:var(--dim);cursor:default;pointer-events:none}
+    .mi.is-disabled .mi-cursor{color:transparent!important;transform:translateX(-3px)!important}
     .mi.is-danger{color:var(--danger)}
-    .mi.is-danger:hover{background:rgba(240,113,120,.06)}
+    .mi.is-danger:hover{background:var(--danger-hover)}
+    .mi.is-danger:hover .mi-cursor{color:var(--danger)}
+    .mi.is-danger:hover .mi-ico{color:var(--danger)}
 
-    .mi-ico{font-size:12px;color:var(--dim);text-align:center;width:28px;transition:color 60ms}
-    .mi-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:13px}
-    .mi-right{display:flex;align-items:center;gap:8px;margin-left:20px}
+    .mi-ico{font-size:11px;color:var(--dim);text-align:center;transition:color 80ms}
+    .mi-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:13px;padding-left:2px}
+    .mi-right{display:flex;align-items:center;gap:8px;margin-left:16px}
     .mi-short{font-size:11px;color:var(--dim);letter-spacing:.04em;white-space:nowrap}
-    .mi-badge{font:600 10px/1 var(--ui);background:var(--badge-bg);color:var(--badge-fg);padding:1px 6px;letter-spacing:.04em;min-width:18px;text-align:center}
+    .mi-badge{font:700 9px/1 var(--ui);background:var(--badge-bg);color:var(--badge-fg);padding:2px 6px;letter-spacing:.02em;min-width:18px;text-align:center}
     .mi-arrow{font-size:11px;color:var(--accent)}
-    .mi-ext{font-size:11px;color:var(--dim)}
 
-    /* divider + section */
-    .menu-div{height:1px;background:var(--border);margin:4px 12px}
-    .menu-sec{font:600 10px/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding:8px 12px 4px 40px;user-select:none}
-    .menu-sec::before{content:"── ";color:var(--border)}
+    /* divider */
+    .menu-div{margin:3px 0;padding:0 10px;font-size:9px;line-height:10px;color:var(--border-hi);letter-spacing:1px;user-select:none;overflow:hidden}
+
+    /* section label */
+    .menu-sec{font:700 9px/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding:6px 10px 3px;user-select:none;white-space:nowrap;overflow:hidden}
 
     /* submenu */
     .sub-wrap{position:relative}
-    .sub-menu{position:absolute;left:calc(100% - 4px);top:-5px;background:var(--surface);border:1px solid var(--border);min-width:220px;padding:4px 0;box-shadow:0 4px 24px rgba(0,0,0,.3);display:none;z-index:2}
+    .sub-menu{position:absolute;left:calc(100% + 2px);top:-4px;z-index:2;display:none}
     .sub-wrap:hover>.sub-menu{display:block}
+    .sub-menu .menu{min-width:220px}
+    .sub-menu .menu-title{font-size:10px;padding:5px 14px}
 
-    /* trigger */
-    .trigger{font:13px/1 var(--ui);padding:8px 18px;background:var(--surface);color:var(--fg);border:1px solid var(--border);cursor:pointer;display:inline-flex;align-items:center;gap:10px;letter-spacing:.03em;transition:border-color .12s;margin-bottom:2px}
-    .trigger:hover{border-color:var(--accent)}
-    .trigger .caret{color:var(--dim);font-size:10px}
+    /* ── trigger ── */
+    .trigger{
+      font:600 12px/1 var(--ui);padding:8px 16px;
+      background:var(--surface);color:var(--fg);
+      border:2px solid var(--border-hi);
+      box-shadow:inset 0 0 0 1px var(--border-lo),0 0 0 2px var(--border-lo);
+      cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+      letter-spacing:.08em;text-transform:uppercase;
+      transition:border-color .15s,box-shadow .15s;margin-bottom:4px;
+    }
+    .trigger:hover{border-color:var(--accent);box-shadow:inset 0 0 0 1px rgba(0,212,255,.1),0 0 0 2px var(--accent)}
+    .trigger .px-ico{color:var(--gold);font-size:10px}
+    .trigger .caret{color:var(--dim);font-size:9px;margin-left:2px}
 
-    /* dropdown positioning */
     .dd-wrap{position:relative;display:inline-block}
     .dd-body{position:absolute;top:100%;left:0;z-index:10}
 
-    /* ── chrome: back + specs btn ── */
+    /* ── chrome ── */
     .chrome-back,.chrome-open{position:fixed;z-index:50;min-height:42px;display:inline-flex;align-items:center;border-radius:999px;font:650 13px/1 -apple-system,"SF Pro Text",system-ui,sans-serif;text-decoration:none;transition:transform 160ms var(--ease)}
-    .chrome-back{top:18px;left:18px;padding:0 15px;border:1px solid rgba(255,255,255,.12);background:rgba(13,17,23,.92);color:var(--fg);box-shadow:0 8px 24px rgba(0,0,0,.3)}
-    .chrome-open{right:18px;bottom:18px;padding:0 18px;border:1px solid rgba(57,186,230,.3);background:var(--surface);color:var(--accent);box-shadow:0 10px 28px rgba(0,0,0,.3);cursor:pointer;font-weight:700}
+    .chrome-back{top:18px;left:18px;padding:0 15px;border:1px solid rgba(255,255,255,.12);background:rgba(20,24,48,.92);color:var(--fg);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+    .chrome-open{right:18px;bottom:18px;padding:0 18px;border:1px solid rgba(0,212,255,.3);background:var(--surface);color:var(--accent);box-shadow:0 10px 28px rgba(0,0,0,.3);cursor:pointer;font-weight:700}
     .chrome-back:hover,.chrome-open:hover{transform:translateY(-2px)}
     html.is-preview .chrome-back,html.is-preview .chrome-open,html.is-preview dialog{display:none}
 
@@ -81,39 +130,36 @@
     dialog{width:min(980px,calc(100vw - 28px));max-height:calc(100vh - 28px);padding:0;border:0;border-radius:24px;background:var(--surface);color:var(--fg);box-shadow:0 28px 80px rgba(0,0,0,.5);overflow:hidden}
     dialog::backdrop{background:rgba(0,0,0,.7);backdrop-filter:blur(8px)}
     .spec{max-height:calc(100vh - 28px);overflow:auto;overscroll-behavior:contain;font-family:var(--ui)}
-    .spec header{position:sticky;top:0;z-index:5;display:flex;align-items:flex-start;gap:24px;padding:26px 30px 20px;border-bottom:1px solid var(--border);background:rgba(13,17,23,.96);backdrop-filter:blur(14px)}
+    .spec header{position:sticky;top:0;z-index:5;display:flex;align-items:flex-start;gap:24px;padding:26px 30px 20px;border-bottom:1px solid var(--border-lo);background:rgba(20,24,48,.96);backdrop-filter:blur(14px)}
     .kicker{margin:0 0 8px;color:var(--dim);font:700 10px/1.2 var(--mono);letter-spacing:.15em;text-transform:uppercase}
     .spec h2{margin:0;font-size:26px;line-height:1.05;letter-spacing:-.03em;font-family:var(--mono)}
     .tone{margin:8px 0 0;color:var(--dim);font-size:12px}
-    .close{margin-left:auto;width:40px;height:40px;border:1px solid var(--border);border-radius:50%;background:transparent;color:var(--fg);font:400 22px/1 inherit;cursor:pointer}
+    .close{margin-left:auto;width:40px;height:40px;border:1px solid var(--border-hi);border-radius:50%;background:transparent;color:var(--fg);font:400 22px/1 inherit;cursor:pointer}
     .close:hover{border-color:var(--accent)}
     .spec h3{margin:0 0 4px;font:600 10px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
     .spec .lede{margin:0 0 18px;color:var(--dim);font-size:12px;line-height:1.5}
-    .block{padding:24px 30px;border-bottom:1px solid var(--border)}
+    .block{padding:24px 30px;border-bottom:1px solid var(--border-lo)}
 
-    /* states strip */
     .states{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
     .state{display:flex;flex-direction:column;gap:8px}
-    .state .menu{box-shadow:none}
+    .state .menu{box-shadow:none;min-width:0}
     .state small{font:700 10px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
     .state p{margin:0;font-size:11px;line-height:1.45;color:var(--dim)}
 
-    /* token tables */
     .tables{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-    .tables section{padding:18px;border:1px solid var(--border);border-radius:0}
+    .tables section{padding:18px;border:1px solid var(--border-lo)}
     .tables section h3{margin-bottom:8px}
     .tables dl{margin:10px 0 0}
-    .tables dl div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:14px;padding:9px 0;border-top:1px solid var(--border)}
+    .tables dl div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:14px;padding:9px 0;border-top:1px solid var(--border-lo)}
     .tables dt,.tables dd{margin:0;font-size:12px;line-height:1.45}
     .tables dt{color:var(--dim)}
     .tables dd{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
-    .swatch{display:inline-block;width:10px;height:10px;vertical-align:middle;margin-right:6px;border:1px solid var(--border)}
+    .swatch{display:inline-block;width:10px;height:10px;vertical-align:middle;margin-right:6px;border:1px solid var(--border-hi)}
 
-    /* anatomy */
-    .anatomy{font-size:11px;line-height:1.55;color:var(--dim);overflow-x:auto;padding:24px;border:1px solid var(--border);background:var(--bg)}
+    .anatomy{font-size:11px;line-height:1.55;color:var(--dim);overflow-x:auto;padding:24px;border:1px solid var(--border-lo);background:var(--bg)}
 
     @media(max-width:720px){.states,.tables{grid-template-columns:1fr}.block{padding:20px 16px}.spec header{padding:20px 16px 16px}}
-    @media(max-width:560px){body{padding:16px}}
+    @media(max-width:560px){body{padding:max(96px,16vh) 16px 48px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
   </style>
 </head>
@@ -124,97 +170,114 @@
   <main class="app" id="app">
     <div class="dd-wrap">
       <button class="trigger" id="trig">
-        <span>[≡]</span> File <span class="caret">▼</span>
+        <span class="px-ico">◆</span> File <span class="caret">▾</span>
       </button>
       <div class="dd-body" id="dd" style="display:none">
         <div class="menu">
-          <div class="menu-cap">┌─── File ────────────────────────────┐</div>
-
-          <div class="mi" data-act>
-            <span class="mi-ico"></span>
-            <span class="mi-label">New Window</span>
-            <span class="mi-right"></span>
-          </div>
-          <div class="mi" data-act>
-            <span class="mi-ico">[+]</span>
-            <span class="mi-label">New File</span>
-            <span class="mi-right"><span class="mi-short">⌘N</span></span>
-          </div>
-          <div class="mi" data-act>
-            <span class="mi-ico">[/]</span>
-            <span class="mi-label">Open File</span>
-            <span class="mi-right"><span class="mi-short">⌘O</span></span>
-          </div>
-          <div class="mi" data-act>
-            <span class="mi-ico">[~]</span>
-            <span class="mi-label">Recent Files</span>
-            <span class="mi-right"><span class="mi-badge">12</span></span>
-          </div>
-
-          <div class="menu-div"></div>
-          <div class="menu-sec">Actions</div>
-
-          <div class="mi" data-act>
-            <span class="mi-ico">[&gt;]</span>
-            <span class="mi-label">Save</span>
-            <span class="mi-right"><span class="mi-short">⌘S</span></span>
-          </div>
-          <div class="mi" data-act>
-            <span class="mi-ico">[&gt;]</span>
-            <span class="mi-label">Save As…</span>
-            <span class="mi-right"><span class="mi-short">⇧⌘S</span></span>
-          </div>
-          <div class="mi" data-act>
-            <span class="mi-ico">[^]</span>
-            <span class="mi-label">Export</span>
-            <span class="mi-right"><span class="mi-ext">[↗]</span></span>
-          </div>
-
-          <div class="menu-div"></div>
-          <div class="menu-sec">Navigate</div>
-
-          <div class="sub-wrap">
+          <div class="menu-title"><span class="px">░▒▓█</span> File <span class="px">█▓▒░</span></div>
+          <div class="menu-body">
             <div class="mi" data-act>
-              <span class="mi-ico">[≡]</span>
-              <span class="mi-label">Share With</span>
-              <span class="mi-right"><span class="mi-arrow">──▶</span></span>
+              <span class="mi-cursor">▌</span>
+              <span class="mi-ico">◇</span>
+              <span class="mi-label">New Window</span>
+              <span class="mi-right"></span>
             </div>
-            <div class="sub-menu">
-              <div class="menu-cap">┌─── Share ─────────────────┐</div>
+            <div class="mi" data-act>
+              <span class="mi-cursor">▌</span>
+              <span class="mi-ico">◆</span>
+              <span class="mi-label">New File</span>
+              <span class="mi-right"><span class="mi-short">⌘N</span></span>
+            </div>
+            <div class="mi" data-act>
+              <span class="mi-cursor">▌</span>
+              <span class="mi-ico">◇</span>
+              <span class="mi-label">Open File</span>
+              <span class="mi-right"><span class="mi-short">⌘O</span></span>
+            </div>
+            <div class="mi" data-act>
+              <span class="mi-cursor">▌</span>
+              <span class="mi-ico">◈</span>
+              <span class="mi-label">Recent Files</span>
+              <span class="mi-right"><span class="mi-badge">12</span></span>
+            </div>
+
+            <div class="menu-div">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</div>
+            <div class="menu-sec">░░ Actions ░░░░░░░░░░░░░░░░░░░░</div>
+
+            <div class="mi" data-act>
+              <span class="mi-cursor">▌</span>
+              <span class="mi-ico">▹</span>
+              <span class="mi-label">Save</span>
+              <span class="mi-right"><span class="mi-short">⌘S</span></span>
+            </div>
+            <div class="mi" data-act>
+              <span class="mi-cursor">▌</span>
+              <span class="mi-ico">▹</span>
+              <span class="mi-label">Save As…</span>
+              <span class="mi-right"><span class="mi-short">⇧⌘S</span></span>
+            </div>
+            <div class="mi" data-act>
+              <span class="mi-cursor">▌</span>
+              <span class="mi-ico">▵</span>
+              <span class="mi-label">Export</span>
+              <span class="mi-right"><span class="mi-short" style="color:var(--accent)">[↗]</span></span>
+            </div>
+
+            <div class="menu-div">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</div>
+            <div class="menu-sec">░░ Navigate ░░░░░░░░░░░░░░░░░░░</div>
+
+            <div class="sub-wrap">
               <div class="mi" data-act>
-                <span class="mi-ico">[@]</span>
-                <span class="mi-label">Email</span>
-                <span class="mi-right"></span>
+                <span class="mi-cursor">▌</span>
+                <span class="mi-ico">◇</span>
+                <span class="mi-label">Share With</span>
+                <span class="mi-right"><span class="mi-arrow">▶</span></span>
               </div>
-              <div class="mi" data-act>
-                <span class="mi-ico">[#]</span>
-                <span class="mi-label">Slack</span>
-                <span class="mi-right"></span>
+              <div class="sub-menu">
+                <div class="menu">
+                  <div class="menu-title"><span class="px">░▒▓█</span> Share <span class="px">█▓▒░</span></div>
+                  <div class="menu-body">
+                    <div class="mi" data-act>
+                      <span class="mi-cursor">▌</span>
+                      <span class="mi-ico">◈</span>
+                      <span class="mi-label">Email</span>
+                      <span class="mi-right"></span>
+                    </div>
+                    <div class="mi" data-act>
+                      <span class="mi-cursor">▌</span>
+                      <span class="mi-ico">◈</span>
+                      <span class="mi-label">Slack</span>
+                      <span class="mi-right"></span>
+                    </div>
+                    <div class="mi" data-act>
+                      <span class="mi-cursor">▌</span>
+                      <span class="mi-ico">◈</span>
+                      <span class="mi-label">Copy Link</span>
+                      <span class="mi-right"><span class="mi-short">⌘L</span></span>
+                    </div>
+                  </div>
+                  <div class="menu-foot"><span class="foot-tag">▐░▌</span> 3 channels <span class="foot-bar">░▒▓█</span></div>
+                </div>
               </div>
-              <div class="mi" data-act>
-                <span class="mi-ico">[&amp;]</span>
-                <span class="mi-label">Copy Link</span>
-                <span class="mi-right"><span class="mi-short">⌘L</span></span>
-              </div>
-              <div class="menu-cap bot">└────────────────────────────┘</div>
+            </div>
+
+            <div class="mi is-disabled">
+              <span class="mi-cursor">▌</span>
+              <span class="mi-ico">⊘</span>
+              <span class="mi-label">Print</span>
+              <span class="mi-right"><span class="mi-short">⌘P</span></span>
+            </div>
+
+            <div class="menu-div">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</div>
+
+            <div class="mi is-danger" data-act>
+              <span class="mi-cursor">▌</span>
+              <span class="mi-ico">✕</span>
+              <span class="mi-label">Delete File</span>
+              <span class="mi-right"><span class="mi-short">⌘⌫</span></span>
             </div>
           </div>
-
-          <div class="mi is-disabled">
-            <span class="mi-ico">[⊘]</span>
-            <span class="mi-label">Print</span>
-            <span class="mi-right"><span class="mi-short">⌘P</span></span>
-          </div>
-
-          <div class="menu-div"></div>
-
-          <div class="mi is-danger" data-act>
-            <span class="mi-ico">[×]</span>
-            <span class="mi-label">Delete File</span>
-            <span class="mi-right"><span class="mi-short">⌘⌫</span></span>
-          </div>
-
-          <div class="menu-cap bot">└─────────────────────────────────────┘</div>
+          <div class="menu-foot"><span class="foot-tag">▐░▌</span> SYS v2.4 <span class="foot-bar">░▒▓█</span></div>
         </div>
       </div>
     </div>
@@ -227,74 +290,84 @@
         <div>
           <p class="kicker">Week 6 · Set A · Design specification</p>
           <h2 id="specTitle">ASCII Dropdown</h2>
-          <p class="tone">Tone: ASCII Art — terminal-native menu with box-drawing borders, monospace glyphs, and cursor-prefix hover.</p>
+          <p class="tone">Tone: Block Pixel — game-UI frame with ░▒▓█ gradient chrome, ▌ cursor selector, and geometric glyph icons.</p>
         </div>
         <button class="close" id="closeSpec" type="button" aria-label="Close specifications">×</button>
       </header>
 
       <div class="block">
         <h3>Anatomy</h3>
-        <p class="lede">One row grid: icon column (28 px) · label (fluid) · trailing area (auto). Box-drawing characters frame the menu. ">" cursor prefix appears on hover.</p>
+        <p class="lede">Pixel double-border frame. Title bar with block-gradient bookends. Four-column item grid: cursor (20 px) · icon (20 px) · label (fluid) · trailing area (auto). ▌ half-block cursor slides in on hover. System footer bar.</p>
         <pre class="anatomy">
-┌─── Menu Title ──────────────────────────────┐
-│                                              │
-│  [ico]  Label Text             Shortcut  ⌘K  │  ← default
-│                                              │
-│&gt; [ico]  Label Text             Shortcut  ⌘O  │  ← hover (&gt; prefix)
-│         ▲                      ▲              │
-│         │                      │              │
-│    icon col (28px)       right area           │
-│                                              │
-│  ── SECTION LABEL ─────────────              │
-│  ·····································(div)   │
-│                                              │
-│  [ico]  Label Text             [badge]  12   │  ← badge
-│  [ico]  Label Text                ──▶        │  ← submenu
-│  [×]    Danger Item                ⌘⌫        │  ← danger
-│                                              │
-└──────────────────────────────────────────────┘
+╔══════════════════════════════════════════════╗
+║  ░▒▓█  MENU TITLE  █▓▒░      ← title bar    ║
+╠══════════════════════════════════════════════╣
+║                                              ║
+║  ▌  ◆  Label Text             Shortcut  ⌘K  ║  ← hover (▌ cursor)
+║     ◇  Label Text             Shortcut  ⌘O  ║  ← default
+║     ▲                         ▲              ║
+║  cursor  icon                right area      ║
+║  (20px) (20px)               (auto)          ║
+║                                              ║
+║  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░(divider)  ║
+║  ░░ SECTION LABEL ░░░░░░░░░░░░░░░░░         ║
+║                                              ║
+║     ◈  Label Text             [badge] 12    ║  ← badge
+║     ◇  Label Text                  ▶        ║  ← submenu
+║     ✕  Danger Item                 ⌘⌫       ║  ← danger
+║                                              ║
+║  ▐░▌ SYS v2.4                   ░▒▓█       ║  ← footer
+╚══════════════════════════════════════════════╝
 
-Grid: | 28px icon | 1fr label | auto right |
-Item height: 36px · Padding: 0 12px</pre>
+Grid: | 20px cursor | 20px icon | 1fr label | auto right |
+Item height: 34px · Padding: 0 10px</pre>
       </div>
 
       <div class="block">
         <h3>States</h3>
-        <p class="lede">Every actionable item shows three states. The ">" cursor prefix and icon accent appear together on hover.</p>
+        <p class="lede">Three interaction states. The ▌ half-block cursor slides in from the left on hover alongside icon accent coloring.</p>
         <div class="states">
           <div class="state">
             <small>01 · Default</small>
             <div class="menu" style="min-width:0">
-              <div class="mi" style="pointer-events:none">
-                <span class="mi-ico">[+]</span>
-                <span class="mi-label">New File</span>
-                <span class="mi-right"><span class="mi-short">⌘N</span></span>
+              <div class="menu-body">
+                <div class="mi" style="pointer-events:none">
+                  <span class="mi-cursor">▌</span>
+                  <span class="mi-ico">◆</span>
+                  <span class="mi-label">New File</span>
+                  <span class="mi-right"><span class="mi-short">⌘N</span></span>
+                </div>
               </div>
             </div>
-            <p>Surface #0D1117 · dim icon · no prefix</p>
+            <p>Surface #141830 · transparent cursor · dim icon</p>
           </div>
           <div class="state">
             <small>02 · Hover</small>
             <div class="menu" style="min-width:0">
-              <div class="mi" style="background:var(--hover);pointer-events:none">
-                <span style="position:absolute;left:5px;color:var(--accent);font-weight:700;font-size:12px">&gt;</span>
-                <span class="mi-ico" style="color:var(--accent)">[+]</span>
-                <span class="mi-label">New File</span>
-                <span class="mi-right"><span class="mi-short">⌘N</span></span>
+              <div class="menu-body">
+                <div class="mi" style="background:var(--hover);pointer-events:none">
+                  <span class="mi-cursor" style="color:var(--accent);transform:translateX(0)">▌</span>
+                  <span class="mi-ico" style="color:var(--accent)">◆</span>
+                  <span class="mi-label">New File</span>
+                  <span class="mi-right"><span class="mi-short">⌘N</span></span>
+                </div>
               </div>
             </div>
-            <p>Fill #1A1F28 · accent icon · ">" prefix</p>
+            <p>Fill #1E2248 · ▌ cursor cyan · accent icon</p>
           </div>
           <div class="state">
             <small>03 · Pressed</small>
             <div class="menu" style="min-width:0">
-              <div class="mi is-pressed" style="pointer-events:none">
-                <span class="mi-ico" style="color:var(--accent)">[+]</span>
-                <span class="mi-label">New File</span>
-                <span class="mi-right"><span class="mi-short">⌘N</span></span>
+              <div class="menu-body">
+                <div class="mi is-pressed" style="pointer-events:none">
+                  <span class="mi-cursor" style="color:var(--accent);transform:translateX(0)">▌</span>
+                  <span class="mi-ico" style="color:var(--accent)">◆</span>
+                  <span class="mi-label">New File</span>
+                  <span class="mi-right"><span class="mi-short">⌘N</span></span>
+                </div>
               </div>
             </div>
-            <p>Fill #0F1923 · inset glow border</p>
+            <p>Fill #101430 · inset glow border</p>
           </div>
         </div>
       </div>
@@ -308,73 +381,83 @@ Item height: 36px · Padding: 0 12px</pre>
               <div><dt>Font family</dt><dd>JetBrains Mono</dd></div>
               <div><dt>Item label</dt><dd>13px / 1.5 · 400</dd></div>
               <div><dt>Shortcut text</dt><dd>11px · 400 · +0.04em</dd></div>
-              <div><dt>Section label</dt><dd>10px · 600 · +0.12em · uppercase</dd></div>
-              <div><dt>Badge text</dt><dd>10px · 600</dd></div>
-              <div><dt>Icon glyphs</dt><dd>12px · [ ] brackets</dd></div>
-              <div><dt>Box-drawing</dt><dd>11px · ┌─┐└─┘│</dd></div>
+              <div><dt>Section label</dt><dd>9px · 700 · +0.12em · uppercase</dd></div>
+              <div><dt>Badge text</dt><dd>9px · 700</dd></div>
+              <div><dt>Title bar</dt><dd>11px · 700 · +0.2em · uppercase</dd></div>
+              <div><dt>Footer text</dt><dd>9px · 400</dd></div>
+              <div><dt>Block glyphs</dt><dd>░▒▓█▌▐ shade chars</dd></div>
+              <div><dt>Icon glyphs</dt><dd>◆◇◈▹▵⊘✕ geometric</dd></div>
             </dl>
           </section>
           <section>
             <h3>Spacing</h3>
             <dl>
-              <div><dt>Item height</dt><dd>36px</dd></div>
-              <div><dt>Menu padding</dt><dd>4px 0 (block)</dd></div>
-              <div><dt>Item padding</dt><dd>0 12px</dd></div>
-              <div><dt>Icon column</dt><dd>28px</dd></div>
-              <div><dt>Label → right</dt><dd>20px gap</dd></div>
-              <div><dt>Divider margin</dt><dd>4px 12px</dd></div>
-              <div><dt>Section padding</dt><dd>8px 12px 4px 40px</dd></div>
-              <div><dt>Menu min width</dt><dd>280px</dd></div>
-              <div><dt>Submenu offset</dt><dd>left: calc(100% − 4px)</dd></div>
+              <div><dt>Item height</dt><dd>34px</dd></div>
+              <div><dt>Menu body padding</dt><dd>5px 0</dd></div>
+              <div><dt>Item padding</dt><dd>0 10px</dd></div>
+              <div><dt>Cursor column</dt><dd>20px</dd></div>
+              <div><dt>Icon column</dt><dd>20px</dd></div>
+              <div><dt>Label → right</dt><dd>16px gap</dd></div>
+              <div><dt>Divider margin</dt><dd>3px 0</dd></div>
+              <div><dt>Title bar padding</dt><dd>7px 14px</dd></div>
+              <div><dt>Footer padding</dt><dd>5px 10px</dd></div>
+              <div><dt>Menu min width</dt><dd>300px</dd></div>
             </dl>
           </section>
           <section>
             <h3>Colors</h3>
             <dl>
-              <div><dt>Background</dt><dd><span class="swatch" style="background:#0a0e14"></span>#0A0E14</dd></div>
-              <div><dt>Surface</dt><dd><span class="swatch" style="background:#0d1117"></span>#0D1117</dd></div>
-              <div><dt>Text</dt><dd><span class="swatch" style="background:#c5cbd3"></span>#C5CBD3</dd></div>
-              <div><dt>Text dim</dt><dd><span class="swatch" style="background:#5c6773"></span>#5C6773</dd></div>
-              <div><dt>Accent</dt><dd><span class="swatch" style="background:#39bae6"></span>#39BAE6</dd></div>
-              <div><dt>Hover</dt><dd><span class="swatch" style="background:#1a1f28"></span>#1A1F28</dd></div>
-              <div><dt>Pressed</dt><dd><span class="swatch" style="background:#0f1923"></span>#0F1923</dd></div>
-              <div><dt>Badge</dt><dd><span class="swatch" style="background:#e6b450"></span>#E6B450</dd></div>
-              <div><dt>Danger</dt><dd><span class="swatch" style="background:#f07178"></span>#F07178</dd></div>
-              <div><dt>Border</dt><dd><span class="swatch" style="background:#2d3640"></span>#2D3640</dd></div>
+              <div><dt>Background</dt><dd><span class="swatch" style="background:#0c0e1a"></span>#0C0E1A</dd></div>
+              <div><dt>Surface</dt><dd><span class="swatch" style="background:#141830"></span>#141830</dd></div>
+              <div><dt>Text</dt><dd><span class="swatch" style="background:#e0e0f0"></span>#E0E0F0</dd></div>
+              <div><dt>Text dim</dt><dd><span class="swatch" style="background:#6668a0"></span>#6668A0</dd></div>
+              <div><dt>Accent (cyan)</dt><dd><span class="swatch" style="background:#00d4ff"></span>#00D4FF</dd></div>
+              <div><dt>Gold</dt><dd><span class="swatch" style="background:#ffc940"></span>#FFC940</dd></div>
+              <div><dt>Hover</dt><dd><span class="swatch" style="background:#1e2248"></span>#1E2248</dd></div>
+              <div><dt>Pressed</dt><dd><span class="swatch" style="background:#101430"></span>#101430</dd></div>
+              <div><dt>Badge (pink)</dt><dd><span class="swatch" style="background:#ff5c8a"></span>#FF5C8A</dd></div>
+              <div><dt>Danger</dt><dd><span class="swatch" style="background:#ff4757"></span>#FF4757</dd></div>
+              <div><dt>Border bright</dt><dd><span class="swatch" style="background:#4a4e80"></span>#4A4E80</dd></div>
+              <div><dt>Border dim</dt><dd><span class="swatch" style="background:#2a2e55"></span>#2A2E55</dd></div>
             </dl>
           </section>
           <section>
             <h3>Component</h3>
             <dl>
-              <div><dt>Border radius</dt><dd>0px (sharp corners)</dd></div>
-              <div><dt>Border</dt><dd>1px solid var(--border)</dd></div>
-              <div><dt>Shadow</dt><dd>0 4px 24px rgba(0,0,0,.3)</dd></div>
-              <div><dt>Divider</dt><dd>1px solid · full bleed −12px</dd></div>
-              <div><dt>Badge padding</dt><dd>1px 6px</dd></div>
-              <div><dt>Trigger padding</dt><dd>8px 18px</dd></div>
-              <div><dt>Hover indicator</dt><dd>">" prefix · accent color</dd></div>
-              <div><dt>Pressed indicator</dt><dd>Inset glow · 1px accent</dd></div>
+              <div><dt>Border radius</dt><dd>0px (pixel sharp)</dd></div>
+              <div><dt>Frame border</dt><dd>2px solid · border-hi</dd></div>
+              <div><dt>Inner edge</dt><dd>inset 1px · border-lo</dd></div>
+              <div><dt>Outer edge</dt><dd>4px · border-lo</dd></div>
+              <div><dt>Shadow</dt><dd>0 14px 44px rgba(0,0,0,.5)</dd></div>
+              <div><dt>Title gradient</dt><dd>linear 180deg #1C2050 → surface</dd></div>
+              <div><dt>Badge padding</dt><dd>2px 6px</dd></div>
+              <div><dt>Trigger padding</dt><dd>8px 16px</dd></div>
+              <div><dt>Cursor indicator</dt><dd>▌ half-block · slide-in 80ms</dd></div>
+              <div><dt>Pressed indicator</dt><dd>Inset glow · 1px cyan</dd></div>
             </dl>
           </section>
           <section>
             <h3>Configurations</h3>
             <dl>
               <div><dt>Single text</dt><dd>Label only · no icon</dd></div>
-              <div><dt>Left icon</dt><dd>[+] [/] [~] mono glyphs</dd></div>
+              <div><dt>Left icon</dt><dd>◆ ◇ ◈ ▹ geometric glyphs</dd></div>
               <div><dt>Right shortcut</dt><dd>⌘N ⇧⌘S etc.</dd></div>
-              <div><dt>Right badge</dt><dd>#E6B450 bg · count</dd></div>
+              <div><dt>Right badge</dt><dd>#FF5C8A bg · count</dd></div>
               <div><dt>Right icon</dt><dd>[↗] external link</dd></div>
-              <div><dt>Submenu</dt><dd>──▶ arrow · flyout right</dd></div>
-              <div><dt>Section</dt><dd>── divider + uppercase label</dd></div>
-              <div><dt>Danger</dt><dd>#F07178 text · [×] icon</dd></div>
+              <div><dt>Submenu</dt><dd>▶ arrow · flyout right</dd></div>
+              <div><dt>Section</dt><dd>░░ label ░░░ block text</dd></div>
+              <div><dt>Divider</dt><dd>░░░░░ shade char strip</dd></div>
+              <div><dt>Danger</dt><dd>#FF4757 text · ✕ icon</dd></div>
+              <div><dt>Footer bar</dt><dd>▐░▌ tag · ░▒▓█ bar</dd></div>
             </dl>
           </section>
           <section>
             <h3>Motion</h3>
             <dl>
-              <div><dt>Hover fill</dt><dd>60ms</dd></div>
-              <div><dt>Icon color</dt><dd>60ms</dd></div>
-              <div><dt>Trigger border</dt><dd>120ms</dd></div>
+              <div><dt>Hover fill</dt><dd>80ms</dd></div>
+              <div><dt>Cursor slide</dt><dd>80ms · translateX</dd></div>
+              <div><dt>Icon color</dt><dd>80ms</dd></div>
+              <div><dt>Trigger border</dt><dd>150ms</dd></div>
               <div><dt>Easing</dt><dd>cubic-bezier(.22,1,.32,1)</dd></div>
             </dl>
           </section>
@@ -390,13 +473,13 @@ Item height: 36px · Padding: 0 12px</pre>
       e.stopPropagation();
       var open=dd.style.display!=='none';
       dd.style.display=open?'none':'block';
-      trig.querySelector('.caret').textContent=open?'▼':'▲';
+      trig.querySelector('.caret').textContent=open?'▾':'▴';
     });
 
     document.addEventListener('click',function(e){
       if(!dd.contains(e.target)&&e.target!==trig){
         dd.style.display='none';
-        trig.querySelector('.caret').textContent='▼';
+        trig.querySelector('.caret').textContent='▾';
       }
     });
 
@@ -407,45 +490,43 @@ Item height: 36px · Padding: 0 12px</pre>
       item.addEventListener('click',function(){
         if(!item.closest('.sub-wrap')||!item.querySelector('.mi-arrow')){
           dd.style.display='none';
-          trig.querySelector('.caret').textContent='▼';
+          trig.querySelector('.caret').textContent='▾';
         }
       });
     });
 
-    // spec dialog
     var spec=document.getElementById('spec');
     document.getElementById('openSpec').addEventListener('click',function(){spec.showModal()});
     document.getElementById('closeSpec').addEventListener('click',function(){spec.close()});
     spec.addEventListener('click',function(e){if(e.target===spec)spec.close()});
 
-    // preview animation
     if(document.documentElement.classList.contains('is-preview')){
-      var center=function(){document.documentElement.style.setProperty('--pv-top',Math.max(0,(innerHeight-trig.offsetHeight*1.7-360*1.7)/2)+'px')};
+      var center=function(){document.documentElement.style.setProperty('--pv-top',Math.max(0,(innerHeight-trig.offsetHeight*1.7-420*1.7)/2)+'px')};
       center();document.fonts&&document.fonts.ready.then(center);addEventListener('resize',center);
 
-      // open menu immediately in preview
       dd.style.display='block';
-      trig.querySelector('.caret').textContent='▲';
+      trig.querySelector('.caret').textContent='▴';
 
       var items=dd.querySelectorAll('.mi[data-act]');
       var idx=0;
       setInterval(function(){
-        items.forEach(function(it){it.classList.remove('is-hover-demo')});
+        items.forEach(function(it){
+          it.style.background='';
+          var cur=it.querySelector('.mi-cursor');if(cur){cur.style.color='';cur.style.transform=''}
+          var ico=it.querySelector('.mi-ico');if(ico)ico.style.color='';
+        });
         if(idx<items.length){
           var it=items[idx];
           it.style.background='var(--hover)';
-          var ico=it.querySelector('.mi-ico');
-          if(ico)ico.style.color='var(--accent)';
+          var cur=it.querySelector('.mi-cursor');if(cur){cur.style.color='var(--accent)';cur.style.transform='translateX(0)'}
+          var ico=it.querySelector('.mi-ico');if(ico)ico.style.color='var(--accent)';
         }
         idx++;
-        if(idx>items.length+1){
-          idx=0;
-          items.forEach(function(it){
-            it.style.background='';
-            var ico=it.querySelector('.mi-ico');
-            if(ico)ico.style.color='';
-          });
-        }
+        if(idx>items.length+1){idx=0;items.forEach(function(it){
+          it.style.background='';
+          var cur=it.querySelector('.mi-cursor');if(cur){cur.style.color='';cur.style.transform=''}
+          var ico=it.querySelector('.mi-ico');if(ico)ico.style.color='';
+        })}
       },800);
     }
   </script>
