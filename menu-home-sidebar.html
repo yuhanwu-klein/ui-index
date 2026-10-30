@@ -26,10 +26,10 @@
     /* ── header ── */
     .sb-head{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 6px}
     .sb-title{font-size:22px;font-weight:700;letter-spacing:-.03em}
-    .sb-gear{width:34px;height:34px;border-radius:50%;background:var(--soft);display:grid;place-items:center;transition:background .2s,transform .35s var(--pop)}
+    .sb-gear{width:30px;height:30px;border-radius:50%;background:var(--soft);display:grid;place-items:center;transition:background .2s,transform .35s var(--pop)}
     .sb-gear:hover{background:#e9e9ee;transform:rotate(60deg)}
     .sb-gear:active{transform:scale(.92) rotate(60deg)}
-    .sb-gear svg{width:18px;height:18px;color:var(--muted)}
+    .sb-gear svg{width:15px;height:15px;color:var(--muted)}
 
     /* ── section toggle ── */
     .sec{border-top:1px solid var(--line)}
@@ -37,11 +37,12 @@
     .sec-btn{display:flex;align-items:center;gap:12px;width:100%;padding:14px 18px;text-align:left;transition:background .15s}
     .sec-btn:hover{background:rgba(0,0,0,.025)}
     .sec-btn:active{background:rgba(0,0,0,.05)}
-    .sec-ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;transition:transform .35s var(--pop)}
+    .sec-ico{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex-shrink:0;transition:transform .35s var(--pop)}
+    .sec-ico svg{width:16px;height:16px}
     .sec-btn:hover .sec-ico{transform:scale(1.08)}
     .sec-name{flex:1;font-size:15px;font-weight:600;letter-spacing:-.01em}
     .sec-count{font-size:12px;font-weight:500;color:var(--muted);margin-right:2px}
-    .sec-chev{width:18px;height:18px;color:var(--muted);transition:transform .3s var(--ease)}
+    .sec-chev{width:14px;height:14px;color:var(--muted);transition:transform .3s var(--ease)}
     .sec.is-open .sec-chev{transform:rotate(90deg)}
 
     /* section icon colors */
@@ -70,13 +71,13 @@
     .dev.is-on{background:rgba(93,32,166,.06)}
     .dev.is-on:hover{background:rgba(93,32,166,.1)}
 
-    .dev-ico{width:28px;height:28px;display:grid;place-items:center;flex-shrink:0;color:var(--muted);transition:color .25s}
+    .dev-ico{width:24px;height:24px;display:grid;place-items:center;flex-shrink:0;color:var(--muted);transition:color .25s}
     .dev.is-on .dev-ico{color:var(--purple)}
-    .dev-ico svg{width:18px;height:18px}
+    .dev-ico svg{width:15px;height:15px}
     .dev-name{flex:1;font-size:14px;font-weight:500;letter-spacing:-.005em}
     .dev-status{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.01em;transition:color .25s}
     .dev.is-on .dev-status{color:var(--green)}
-    .dev-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s,transform .4s var(--pop)}
+    .dev-dot{width:6px;height:6px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s,transform .4s var(--pop)}
     .dev.is-on .dev-dot{background:var(--green);transform:scale(1.3)}
 
     /* ripple */
@@ -143,33 +144,33 @@
     <div class="sb-head">
       <span class="sb-title">My Home</span>
       <button class="sb-gear" type="button" aria-label="Settings">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
       </button>
     </div>
 
     <!-- Favorites -->
     <div class="sec is-open" data-sec>
       <button class="sec-btn" type="button" aria-expanded="true">
-        <span class="sec-ico fav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg></span>
+        <span class="sec-ico fav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z"/></svg></span>
         <span class="sec-name">Favorites</span>
         <span class="sec-count">3</span>
-        <svg class="sec-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <svg class="sec-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
       <div class="sec-body"><div class="sec-inner"><div class="sec-list">
         <div class="dev is-on" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span>
           <span class="dev-name">Living Room Lights</span>
           <span class="dev-status">On</span>
           <span class="dev-dot"></span>
         </div>
         <div class="dev" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4l2 1M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4l2 1M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z"/></svg></span>
           <span class="dev-name">Thermostat</span>
           <span class="dev-status">Off</span>
           <span class="dev-dot"></span>
         </div>
         <div class="dev is-on" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg></span>
           <span class="dev-name">HomePod</span>
           <span class="dev-status">Playing</span>
           <span class="dev-dot"></span>
@@ -180,32 +181,32 @@
     <!-- Kitchen -->
     <div class="sec" data-sec>
       <button class="sec-btn" type="button" aria-expanded="false">
-        <span class="sec-ico kitchen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2l-4 6 4 6M21 15v7"/></svg></span>
+        <span class="sec-ico kitchen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2l-4 6 4 6M21 15v7"/></svg></span>
         <span class="sec-name">Kitchen</span>
         <span class="sec-count">4</span>
-        <svg class="sec-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <svg class="sec-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
       <div class="sec-body"><div class="sec-inner"><div class="sec-list">
         <div class="dev is-on" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span>
           <span class="dev-name">Ceiling Light</span>
           <span class="dev-status">On</span>
           <span class="dev-dot"></span>
         </div>
         <div class="dev" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
           <span class="dev-name">Display</span>
           <span class="dev-status">Off</span>
           <span class="dev-dot"></span>
         </div>
         <div class="dev" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></span>
           <span class="dev-name">Motion Sensor</span>
           <span class="dev-status">Off</span>
           <span class="dev-dot"></span>
         </div>
         <div class="dev is-on" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg></span>
           <span class="dev-name">Smart Plug</span>
           <span class="dev-status">On</span>
           <span class="dev-dot"></span>
@@ -216,26 +217,26 @@
     <!-- Living Room -->
     <div class="sec" data-sec>
       <button class="sec-btn" type="button" aria-expanded="false">
-        <span class="sec-ico living"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0ZM4 18v2M20 18v2"/></svg></span>
+        <span class="sec-ico living"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0ZM4 18v2M20 18v2"/></svg></span>
         <span class="sec-name">Living Room</span>
         <span class="sec-count">3</span>
-        <svg class="sec-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <svg class="sec-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
       <div class="sec-body"><div class="sec-inner"><div class="sec-list">
         <div class="dev is-on" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span>
           <span class="dev-name">Floor Lamp</span>
           <span class="dev-status">On</span>
           <span class="dev-dot"></span>
         </div>
         <div class="dev is-on" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M17 2l-5 5-5-5"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M17 2l-5 5-5-5"/></svg></span>
           <span class="dev-name">Apple TV</span>
           <span class="dev-status">On</span>
           <span class="dev-dot"></span>
         </div>
         <div class="dev" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5ZM12 8v8M8 12h8"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5ZM12 8v8M8 12h8"/></svg></span>
           <span class="dev-name">Air Purifier</span>
           <span class="dev-status">Off</span>
           <span class="dev-dot"></span>
@@ -246,26 +247,26 @@
     <!-- Bedroom -->
     <div class="sec" data-sec>
       <button class="sec-btn" type="button" aria-expanded="false">
-        <span class="sec-ico bedroom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9"/></svg></span>
+        <span class="sec-ico bedroom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9"/></svg></span>
         <span class="sec-name">Bedroom</span>
         <span class="sec-count">3</span>
-        <svg class="sec-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <svg class="sec-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
       <div class="sec-body"><div class="sec-inner"><div class="sec-list">
         <div class="dev" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span>
           <span class="dev-name">Bedside Lamp</span>
           <span class="dev-status">Off</span>
           <span class="dev-dot"></span>
         </div>
         <div class="dev" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
           <span class="dev-name">Sleep Sensor</span>
           <span class="dev-status">Off</span>
           <span class="dev-dot"></span>
         </div>
         <div class="dev" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
           <span class="dev-name">Night Light</span>
           <span class="dev-status">Off</span>
           <span class="dev-dot"></span>
@@ -276,20 +277,20 @@
     <!-- Bathroom -->
     <div class="sec" data-sec>
       <button class="sec-btn" type="button" aria-expanded="false">
-        <span class="sec-ico bath"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1ZM6 12V5a2 2 0 0 1 2-2h3.5"/><path d="M4 20v2M20 20v2"/></svg></span>
+        <span class="sec-ico bath"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1ZM6 12V5a2 2 0 0 1 2-2h3.5"/><path d="M4 20v2M20 20v2"/></svg></span>
         <span class="sec-name">Bathroom</span>
         <span class="sec-count">2</span>
-        <svg class="sec-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <svg class="sec-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
       <div class="sec-body"><div class="sec-inner"><div class="sec-list">
         <div class="dev" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span>
           <span class="dev-name">Mirror Light</span>
           <span class="dev-status">Off</span>
           <span class="dev-dot"></span>
         </div>
         <div class="dev" data-dev>
-          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0Z"/></svg></span>
+          <span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0Z"/></svg></span>
           <span class="dev-name">Water Heater</span>
           <span class="dev-status">Off</span>
           <span class="dev-dot"></span>
@@ -307,7 +308,7 @@
       <div class="slider-wrap" id="slider" style="--fill:66%">
         <div class="slider-fill"></div>
         <span class="slider-label">66<small>%</small></span>
-        <svg class="slider-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="slider-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
       </div>
     </div>
   </div>
@@ -354,17 +355,17 @@
         <div class="states">
           <div class="state">
             <small>01 · Off / Default</small>
-            <div class="dev"><span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span><span class="dev-name">Light</span><span class="dev-status">Off</span><span class="dev-dot"></span></div>
+            <div class="dev"><span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span><span class="dev-name">Light</span><span class="dev-status">Off</span><span class="dev-dot"></span></div>
             <p>#F1F1F3 · muted icon/dot · at rest</p>
           </div>
           <div class="state">
             <small>02 · On / Active</small>
-            <div class="dev is-on"><span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span><span class="dev-name">Light</span><span class="dev-status">On</span><span class="dev-dot"></span></div>
+            <div class="dev is-on"><span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span><span class="dev-name">Light</span><span class="dev-status">On</span><span class="dev-dot"></span></div>
             <p>Purple 6% tint · green dot/status · purple icon</p>
           </div>
           <div class="state">
             <small>03 · Hover</small>
-            <div class="dev" style="background:#eaeaef"><span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span><span class="dev-name">Light</span><span class="dev-status">Off</span><span class="dev-dot"></span></div>
+            <div class="dev" style="background:#eaeaef"><span class="dev-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg></span><span class="dev-name">Light</span><span class="dev-status">Off</span><span class="dev-dot"></span></div>
             <p>#EAEAEF · subtle darken on hover</p>
           </div>
         </div>
