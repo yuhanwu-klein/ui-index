@@ -6,18 +6,19 @@
   <title>ASCII Dropdown · Week 6</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     :root{
-      --bg:#F0EDE4; --surface:#FDFCF8; --ink:#2A2A26; --muted:#96928A;
-      --frame:#B8B3A2; --frame-light:#D8D4C8;
-      --accent:#D95A1B; --accent-light:rgba(217,90,27,.06);
-      --badge-bg:#D95A1B; --badge-fg:#FDFCF8;
-      --danger:#C42020; --danger-light:rgba(196,32,32,.06);
-      --hover:rgba(0,0,0,.035); --pressed:rgba(0,0,0,.07);
-      --mono:'JetBrains Mono','Courier New',monospace;
+      --bg:#F0EDE4; --surface:#FDFCF8; --ink:#2044B8; --muted:rgba(32,68,184,.45);
+      --frame:#2044B8; --frame-light:rgba(32,68,184,.15);
+      --accent:#2044B8; --accent-light:rgba(32,68,184,.06);
+      --badge-bg:#2044B8; --badge-fg:#FDFCF8;
+      --danger:#2044B8; --danger-light:rgba(32,68,184,.06);
+      --hover:rgba(32,68,184,.06); --pressed:rgba(32,68,184,.12);
+      --mono:'Space Mono','Courier New',monospace;
+      --serif:'DM Serif Display',Georgia,serif;
       --ease:cubic-bezier(.22,1,.32,1);
     }
     html,body{min-height:100%;margin:0}
@@ -33,13 +34,13 @@
     /* frame lines — flexbox so corners stay visible */
     .fl{display:flex;align-items:center;color:var(--frame);font:400 13px/1 var(--mono);user-select:none;height:22px}
     .fl-l{flex-shrink:0;white-space:nowrap}
-    .fl-t{flex-shrink:0;white-space:nowrap;color:var(--ink);font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:0 1px}
-    .fl-e{flex-shrink:0;white-space:nowrap;color:var(--muted);font-weight:400;letter-spacing:.04em;font-size:11px;padding:0 1px}
+    .fl-t{flex-shrink:0;white-space:nowrap;color:var(--ink);font:italic 15px/1 var(--serif);letter-spacing:.02em;padding:0 3px}
+    .fl-e{flex-shrink:0;white-space:nowrap;color:var(--muted);font:italic 11px/1 var(--serif);padding:0 3px}
     .fl-f{flex:1;overflow:hidden;white-space:nowrap;min-width:8px}
     .fl-r{flex-shrink:0;white-space:nowrap}
 
     /* menu body — CSS borders for left/right sides */
-    .menu-body{border-left:1px solid var(--frame);border-right:1px solid var(--frame);padding:3px 0}
+    .menu-body{border-left:2px solid var(--frame);border-right:2px solid var(--frame);padding:3px 0}
 
     /* ── menu item ── */
     .mi{
@@ -77,11 +78,10 @@
 
     /* ── trigger ── */
     .trigger{
-      font:500 13px/1 var(--mono);padding:8px 14px;
+      font:italic 18px/1 var(--serif);padding:8px 16px;
       background:var(--surface);color:var(--ink);
-      border:1px solid var(--frame);
-      cursor:pointer;display:inline-flex;align-items:center;gap:6px;
-      letter-spacing:.06em;text-transform:uppercase;
+      border:2px solid var(--frame);
+      cursor:pointer;display:inline-flex;align-items:center;gap:8px;
       transition:border-color .15s;margin-bottom:4px;
     }
     .trigger:hover{border-color:var(--accent)}
@@ -93,8 +93,8 @@
 
     /* ── chrome ── */
     .chrome-back,.chrome-open{position:fixed;z-index:50;min-height:42px;display:inline-flex;align-items:center;border-radius:999px;font:650 13px/1 -apple-system,"SF Pro Text",system-ui,sans-serif;text-decoration:none;transition:transform 160ms var(--ease)}
-    .chrome-back{top:18px;left:18px;padding:0 15px;border:1px solid var(--frame);background:rgba(253,252,248,.92);color:var(--ink);box-shadow:0 4px 16px rgba(0,0,0,.07)}
-    .chrome-open{right:18px;bottom:18px;padding:0 18px;border:1px solid var(--accent);background:var(--surface);color:var(--accent);box-shadow:0 4px 16px rgba(0,0,0,.07);cursor:pointer;font-weight:700}
+    .chrome-back{top:18px;left:18px;padding:0 15px;border:2px solid var(--frame);background:rgba(253,252,248,.92);color:var(--ink);box-shadow:0 4px 16px rgba(0,0,0,.07)}
+    .chrome-open{right:18px;bottom:18px;padding:0 18px;border:2px solid var(--accent);background:var(--surface);color:var(--accent);box-shadow:0 4px 16px rgba(0,0,0,.07);cursor:pointer;font-weight:700}
     .chrome-back:hover,.chrome-open:hover{transform:translateY(-2px)}
     html.is-preview .chrome-back,html.is-preview .chrome-open,html.is-preview dialog{display:none}
 
@@ -104,7 +104,7 @@
     .spec{max-height:calc(100vh - 28px);overflow:auto;overscroll-behavior:contain;font-family:var(--mono)}
     .spec header{position:sticky;top:0;z-index:5;display:flex;align-items:flex-start;gap:24px;padding:26px 30px 20px;border-bottom:1px solid var(--frame-light);background:rgba(253,252,248,.96);backdrop-filter:blur(14px)}
     .kicker{margin:0 0 8px;color:var(--muted);font:700 10px/1.2 var(--mono);letter-spacing:.15em;text-transform:uppercase}
-    .spec h2{margin:0;font-size:26px;line-height:1.05;letter-spacing:-.03em}
+    .spec h2{margin:0;font:italic 28px/1.05 var(--serif);letter-spacing:-.01em}
     .tone{margin:8px 0 0;color:var(--muted);font-size:12px}
     .close{margin-left:auto;width:40px;height:40px;border:1px solid var(--frame);border-radius:50%;background:transparent;color:var(--ink);font:400 22px/1 inherit;cursor:pointer}
     .close:hover{border-color:var(--accent)}
@@ -192,7 +192,7 @@
               <span class="mi-cursor">▸</span>
               <span class="mi-ico">▵</span>
               <span class="mi-label">Export</span>
-              <span class="mi-right"><span class="mi-short" style="color:var(--accent)">[↗]</span></span>
+              <span class="mi-right"><span class="mi-short">[↗]</span></span>
             </div>
           </div>
           <div class="fl"><span class="fl-l">├</span><span class="fl-f">───────────────────────────────────────</span><span class="fl-r">─┤</span></div>
@@ -262,7 +262,7 @@
         <div>
           <p class="kicker">Week 6 · Set A · Design specification</p>
           <h2 id="specTitle">ASCII Dropdown</h2>
-          <p class="tone">Tone: Box-drawing frame — monospace type on warm paper, ▸ cursor selector, geometric glyph icons, and character-drawn borders.</p>
+          <p class="tone">Tone: Monochrome cobalt blue on cream — DM Serif Display headers, Space Mono body, box-drawing character frame, ▸ cursor selector.</p>
         </div>
         <button class="close" id="closeSpec" type="button" aria-label="Close specifications">×</button>
       </header>
@@ -308,7 +308,7 @@ Item height: 32px · Padding: 0 12px</pre>
                 </div>
               </div>
             </div>
-            <p>Surface #FDFCF8 · transparent cursor · dim icon</p>
+            <p>Surface #FDFCF8 · transparent cursor · dim blue icon</p>
           </div>
           <div class="state">
             <small>02 · Hover</small>
@@ -322,7 +322,7 @@ Item height: 32px · Padding: 0 12px</pre>
                 </div>
               </div>
             </div>
-            <p>Fill rgba(0,0,0,.035) · ▸ cursor accent · accent icon</p>
+            <p>Fill rgba(32,68,184,.06) · ▸ cursor · full blue icon</p>
           </div>
           <div class="state">
             <small>03 · Pressed</small>
@@ -336,7 +336,7 @@ Item height: 32px · Padding: 0 12px</pre>
                 </div>
               </div>
             </div>
-            <p>Fill rgba(0,0,0,.07) · deeper press</p>
+            <p>Fill rgba(32,68,184,.12) · deeper press</p>
           </div>
         </div>
       </div>
@@ -347,10 +347,11 @@ Item height: 32px · Padding: 0 12px</pre>
           <section>
             <h3>Typography</h3>
             <dl>
-              <div><dt>Font family</dt><dd>JetBrains Mono</dd></div>
+              <div><dt>Body font</dt><dd>Space Mono</dd></div>
+              <div><dt>Title font</dt><dd>DM Serif Display</dd></div>
               <div><dt>Item label</dt><dd>13px / 1.5 · 400</dd></div>
               <div><dt>Shortcut text</dt><dd>11px · 400 · +0.04em</dd></div>
-              <div><dt>Section label</dt><dd>in frame line · 700 · uppercase</dd></div>
+              <div><dt>Section label</dt><dd>in frame line · DM Serif italic 15px</dd></div>
               <div><dt>Badge text</dt><dd>9px · 700</dd></div>
               <div><dt>Frame line</dt><dd>13px · 400 · box-drawing</dd></div>
               <div><dt>Cursor glyph</dt><dd>▸ triangle · slide-in</dd></div>
@@ -376,21 +377,18 @@ Item height: 32px · Padding: 0 12px</pre>
             <dl>
               <div><dt>Background</dt><dd><span class="swatch" style="background:#F0EDE4"></span>#F0EDE4</dd></div>
               <div><dt>Surface</dt><dd><span class="swatch" style="background:#FDFCF8"></span>#FDFCF8</dd></div>
-              <div><dt>Text</dt><dd><span class="swatch" style="background:#2A2A26"></span>#2A2A26</dd></div>
-              <div><dt>Text dim</dt><dd><span class="swatch" style="background:#96928A"></span>#96928A</dd></div>
-              <div><dt>Accent</dt><dd><span class="swatch" style="background:#D95A1B"></span>#D95A1B</dd></div>
-              <div><dt>Frame</dt><dd><span class="swatch" style="background:#B8B3A2"></span>#B8B3A2</dd></div>
-              <div><dt>Badge bg</dt><dd><span class="swatch" style="background:#D95A1B"></span>#D95A1B</dd></div>
-              <div><dt>Danger</dt><dd><span class="swatch" style="background:#C42020"></span>#C42020</dd></div>
-              <div><dt>Hover</dt><dd>rgba(0,0,0,.035)</dd></div>
-              <div><dt>Pressed</dt><dd>rgba(0,0,0,.07)</dd></div>
+              <div><dt>Cobalt blue</dt><dd><span class="swatch" style="background:#2044B8"></span>#2044B8</dd></div>
+              <div><dt>Blue dim</dt><dd>rgba(32,68,184,.45)</dd></div>
+              <div><dt>Badge bg</dt><dd><span class="swatch" style="background:#2044B8"></span>#2044B8</dd></div>
+              <div><dt>Hover</dt><dd>rgba(32,68,184,.06)</dd></div>
+              <div><dt>Pressed</dt><dd>rgba(32,68,184,.12)</dd></div>
             </dl>
           </section>
           <section>
             <h3>Component</h3>
             <dl>
               <div><dt>Border radius</dt><dd>0px (sharp)</dd></div>
-              <div><dt>Side borders</dt><dd>1px solid · CSS</dd></div>
+              <div><dt>Side borders</dt><dd>2px solid · CSS</dd></div>
               <div><dt>Frame chars</dt><dd>┌ ─ ┐ │ └ ┘ ├ ┤</dd></div>
               <div><dt>Title line</dt><dd>┌─── ◆ TITLE ◆ ───┐</dd></div>
               <div><dt>Section line</dt><dd>├── LABEL ─────────┤</dd></div>
@@ -411,7 +409,7 @@ Item height: 32px · Padding: 0 12px</pre>
               <div><dt>Submenu</dt><dd>▶ arrow · flyout right</dd></div>
               <div><dt>Section</dt><dd>├── LABEL ──┤ inline</dd></div>
               <div><dt>Divider</dt><dd>├───────────┤ full rule</dd></div>
-              <div><dt>Danger</dt><dd>#C42020 text · ✕ icon</dd></div>
+              <div><dt>Danger</dt><dd>Same blue · ✕ icon</dd></div>
             </dl>
           </section>
           <section>
