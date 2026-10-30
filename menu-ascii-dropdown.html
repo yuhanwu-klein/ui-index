@@ -6,19 +6,16 @@
   <title>ASCII Dropdown · Week 6</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     :root{
-      --bg:#F0EDE4; --surface:#FDFCF8; --ink:#2044B8; --muted:rgba(32,68,184,.45);
+      --bg:#F0EDE4; --surface:#FDFCF8; --ink:#2044B8; --muted:rgba(32,68,184,.4);
       --frame:#2044B8; --frame-light:rgba(32,68,184,.15);
-      --accent:#2044B8; --accent-light:rgba(32,68,184,.06);
-      --badge-bg:#2044B8; --badge-fg:#FDFCF8;
-      --danger:#2044B8; --danger-light:rgba(32,68,184,.06);
       --hover:rgba(32,68,184,.06); --pressed:rgba(32,68,184,.12);
       --mono:'Space Mono','Courier New',monospace;
-      --serif:'DM Serif Display',Georgia,serif;
+      --serif:'Young Serif',Georgia,serif;
       --ease:cubic-bezier(.22,1,.32,1);
     }
     html,body{min-height:100%;margin:0}
@@ -28,73 +25,65 @@
     button{font:inherit;color:inherit}
     .app{width:min(100%,360px)}
 
-    /* ── ASCII frame menu ── */
-    .menu{background:var(--surface);width:320px}
+    /* ── menu container ── */
+    .menu{background:var(--surface);width:320px;border:2.5px solid var(--frame)}
 
-    /* frame lines — flexbox so corners stay visible */
-    .fl{display:flex;align-items:center;color:var(--frame);font:400 13px/1 var(--mono);user-select:none;height:22px}
-    .fl-l{flex-shrink:0;white-space:nowrap}
-    .fl-t{flex-shrink:0;white-space:nowrap;color:var(--ink);font:italic 15px/1 var(--serif);letter-spacing:.02em;padding:0 3px}
-    .fl-e{flex-shrink:0;white-space:nowrap;color:var(--muted);font:italic 11px/1 var(--serif);padding:0 3px}
-    .fl-f{flex:1;overflow:hidden;white-space:nowrap;min-width:8px}
-    .fl-r{flex-shrink:0;white-space:nowrap}
+    /* section heading inside bordered area */
+    .sec-head{font:400 22px/1 var(--serif);padding:10px 14px 2px;color:var(--ink)}
 
-    /* menu body — CSS borders for left/right sides */
-    .menu-body{border-left:2px solid var(--frame);border-right:2px solid var(--frame);padding:3px 0}
+    /* horizontal rule divider */
+    .hr{border:0;border-top:2.5px solid var(--frame);margin:0}
 
     /* ── menu item ── */
     .mi{
-      position:relative;display:grid;grid-template-columns:18px 18px 1fr auto;
-      align-items:center;padding:0 12px;height:32px;
+      position:relative;display:grid;grid-template-columns:16px 1fr auto;
+      align-items:center;padding:0 14px;height:30px;
       cursor:pointer;transition:background 80ms var(--ease);
       color:var(--ink);text-decoration:none;
     }
-    .mi-cursor{font-size:10px;color:transparent;text-align:center;transition:color 80ms,transform 80ms;transform:translateX(-2px)}
+    .mi-ico{font-size:9px;color:var(--muted);text-align:center;transition:color 80ms}
     .mi:hover{background:var(--hover)}
-    .mi:hover .mi-cursor{color:var(--accent);transform:translateX(0)}
-    .mi:hover .mi-ico{color:var(--accent)}
+    .mi:hover .mi-ico{color:var(--ink)}
     .mi.is-pressed{background:var(--pressed)}
-    .mi.is-pressed .mi-cursor{color:var(--accent);transform:translateX(0)}
-    .mi.is-pressed .mi-ico{color:var(--accent)}
+    .mi.is-pressed .mi-ico{color:var(--ink)}
     .mi.is-disabled{color:var(--muted);cursor:default;pointer-events:none}
-    .mi.is-disabled .mi-cursor{color:transparent!important;transform:translateX(-2px)!important}
-    .mi.is-danger{color:var(--danger)}
-    .mi.is-danger:hover{background:var(--danger-light)}
-    .mi.is-danger:hover .mi-cursor{color:var(--danger)}
-    .mi.is-danger:hover .mi-ico{color:var(--danger)}
 
-    .mi-ico{font-size:10px;color:var(--muted);text-align:center;transition:color 80ms}
-    .mi-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:13px;padding-left:2px}
+    .mi-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding-left:4px}
     .mi-right{display:flex;align-items:center;gap:8px;margin-left:14px}
-    .mi-short{font-size:11px;color:var(--muted);letter-spacing:.04em;white-space:nowrap}
-    .mi-badge{font:700 9px/1 var(--mono);background:var(--badge-bg);color:var(--badge-fg);padding:2px 6px;letter-spacing:.02em;min-width:18px;text-align:center;border-radius:2px}
-    .mi-arrow{font-size:10px;color:var(--accent)}
+    .mi-short{font:400 11px/1 var(--mono);color:var(--muted);letter-spacing:.04em;white-space:nowrap}
+    .mi-badge{font:700 9px/1 var(--mono);background:var(--ink);color:var(--surface);padding:2px 6px;letter-spacing:.02em;min-width:18px;text-align:center}
+    .mi-arrow{font-size:10px;color:var(--ink)}
+
+    /* body padding */
+    .menu-body{padding:4px 0}
 
     /* submenu */
     .sub-wrap{position:relative}
-    .sub-menu{position:absolute;left:calc(100% + 4px);top:-4px;z-index:2;display:none}
+    .sub-menu{position:absolute;left:calc(100% + 6px);top:-4px;z-index:2;display:none}
     .sub-wrap:hover>.sub-menu{display:block}
-    .sub-menu .menu{width:240px}
+    .sub-menu .menu{width:220px}
 
     /* ── trigger ── */
     .trigger{
-      font:italic 18px/1 var(--serif);padding:8px 16px;
+      font:400 22px/1 var(--serif);padding:10px 18px;
       background:var(--surface);color:var(--ink);
-      border:2px solid var(--frame);
-      cursor:pointer;display:inline-flex;align-items:center;gap:8px;
-      transition:border-color .15s;margin-bottom:4px;
+      border:2.5px solid var(--frame);
+      cursor:pointer;display:inline-flex;align-items:center;gap:10px;
+      transition:background .15s;margin-bottom:6px;
     }
-    .trigger:hover{border-color:var(--accent)}
-    .trigger .px-ico{color:var(--accent);font-size:10px}
-    .trigger .caret{color:var(--muted);font-size:10px;margin-left:2px}
+    .trigger:hover{background:var(--hover)}
+    .trigger .caret{font:700 12px/1 var(--mono)}
 
     .dd-wrap{position:relative;display:inline-block}
     .dd-body{position:absolute;top:100%;left:0;z-index:10}
 
+    /* ── footer ── */
+    .menu-foot{display:flex;justify-content:space-between;padding:6px 14px 8px;font:400 10px/1 var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+
     /* ── chrome ── */
     .chrome-back,.chrome-open{position:fixed;z-index:50;min-height:42px;display:inline-flex;align-items:center;border-radius:999px;font:650 13px/1 -apple-system,"SF Pro Text",system-ui,sans-serif;text-decoration:none;transition:transform 160ms var(--ease)}
     .chrome-back{top:18px;left:18px;padding:0 15px;border:2px solid var(--frame);background:rgba(253,252,248,.92);color:var(--ink);box-shadow:0 4px 16px rgba(0,0,0,.07)}
-    .chrome-open{right:18px;bottom:18px;padding:0 18px;border:2px solid var(--accent);background:var(--surface);color:var(--accent);box-shadow:0 4px 16px rgba(0,0,0,.07);cursor:pointer;font-weight:700}
+    .chrome-open{right:18px;bottom:18px;padding:0 18px;border:2px solid var(--ink);background:var(--surface);color:var(--ink);box-shadow:0 4px 16px rgba(0,0,0,.07);cursor:pointer;font-weight:700}
     .chrome-back:hover,.chrome-open:hover{transform:translateY(-2px)}
     html.is-preview .chrome-back,html.is-preview .chrome-open,html.is-preview dialog{display:none}
 
@@ -104,11 +93,11 @@
     .spec{max-height:calc(100vh - 28px);overflow:auto;overscroll-behavior:contain;font-family:var(--mono)}
     .spec header{position:sticky;top:0;z-index:5;display:flex;align-items:flex-start;gap:24px;padding:26px 30px 20px;border-bottom:1px solid var(--frame-light);background:rgba(253,252,248,.96);backdrop-filter:blur(14px)}
     .kicker{margin:0 0 8px;color:var(--muted);font:700 10px/1.2 var(--mono);letter-spacing:.15em;text-transform:uppercase}
-    .spec h2{margin:0;font:italic 28px/1.05 var(--serif);letter-spacing:-.01em}
+    .spec h2{margin:0;font:400 28px/1.05 var(--serif)}
     .tone{margin:8px 0 0;color:var(--muted);font-size:12px}
-    .close{margin-left:auto;width:40px;height:40px;border:1px solid var(--frame);border-radius:50%;background:transparent;color:var(--ink);font:400 22px/1 inherit;cursor:pointer}
-    .close:hover{border-color:var(--accent)}
-    .spec h3{margin:0 0 4px;font:600 10px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+    .close{margin-left:auto;width:40px;height:40px;border:2px solid var(--frame);border-radius:50%;background:transparent;color:var(--ink);font:400 22px/1 inherit;cursor:pointer}
+    .close:hover{background:var(--hover)}
+    .spec h3{margin:0 0 4px;font:600 10px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
     .spec .lede{margin:0 0 18px;color:var(--muted);font-size:12px;line-height:1.5}
     .block{padding:24px 30px;border-bottom:1px solid var(--frame-light)}
 
@@ -119,16 +108,16 @@
     .state p{margin:0;font-size:11px;line-height:1.45;color:var(--muted)}
 
     .tables{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-    .tables section{padding:18px;border:1px solid var(--frame-light)}
+    .tables section{padding:18px;border:2px solid var(--frame-light)}
     .tables section h3{margin-bottom:8px}
     .tables dl{margin:10px 0 0}
-    .tables dl div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:14px;padding:9px 0;border-top:1px solid rgba(0,0,0,.06)}
+    .tables dl div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:14px;padding:9px 0;border-top:1px solid rgba(32,68,184,.08)}
     .tables dt,.tables dd{margin:0;font-size:12px;line-height:1.45}
     .tables dt{color:var(--muted)}
-    .tables dd{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+    .tables dd{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
     .swatch{display:inline-block;width:10px;height:10px;vertical-align:middle;margin-right:6px;border:1px solid var(--frame)}
 
-    .anatomy{font-size:11px;line-height:1.55;color:var(--muted);overflow-x:auto;padding:24px;border:1px solid var(--frame-light);background:var(--bg)}
+    .anatomy{font-size:11px;line-height:1.55;color:var(--muted);overflow-x:auto;padding:24px;border:2px solid var(--frame-light);background:var(--bg)}
 
     @media(max-width:720px){.states,.tables{grid-template-columns:1fr}.block{padding:20px 16px}.spec header{padding:20px 16px 16px}}
     @media(max-width:560px){body{padding:max(96px,16vh) 16px 48px}}
@@ -142,114 +131,101 @@
   <main class="app" id="app">
     <div class="dd-wrap">
       <button class="trigger" id="trig">
-        <span class="px-ico">◆</span> File <span class="caret">▾</span>
+        File <span class="caret">▾</span>
       </button>
       <div class="dd-body" id="dd" style="display:none">
         <div class="menu">
-          <div class="fl"><span class="fl-l">┌───</span><span class="fl-t">◆ File ◆</span><span class="fl-f">──────────────────────────────</span><span class="fl-r">─┐</span></div>
+          <div class="sec-head">File</div>
           <div class="menu-body">
             <div class="mi" data-act>
-              <span class="mi-cursor">▸</span>
               <span class="mi-ico">◇</span>
               <span class="mi-label">New Window</span>
               <span class="mi-right"></span>
             </div>
             <div class="mi" data-act>
-              <span class="mi-cursor">▸</span>
               <span class="mi-ico">◆</span>
               <span class="mi-label">New File</span>
               <span class="mi-right"><span class="mi-short">⌘N</span></span>
             </div>
             <div class="mi" data-act>
-              <span class="mi-cursor">▸</span>
               <span class="mi-ico">◇</span>
               <span class="mi-label">Open File</span>
               <span class="mi-right"><span class="mi-short">⌘O</span></span>
             </div>
             <div class="mi" data-act>
-              <span class="mi-cursor">▸</span>
               <span class="mi-ico">◈</span>
               <span class="mi-label">Recent Files</span>
               <span class="mi-right"><span class="mi-badge">12</span></span>
             </div>
           </div>
-          <div class="fl"><span class="fl-l">├</span><span class="fl-f">───────────────────────────────────────</span><span class="fl-r">─┤</span></div>
-          <div class="fl"><span class="fl-l">├──</span><span class="fl-t">Actions</span><span class="fl-f">──────────────────────────────</span><span class="fl-r">─┤</span></div>
+          <hr class="hr">
+          <div class="sec-head">Actions</div>
           <div class="menu-body">
             <div class="mi" data-act>
-              <span class="mi-cursor">▸</span>
               <span class="mi-ico">▹</span>
               <span class="mi-label">Save</span>
               <span class="mi-right"><span class="mi-short">⌘S</span></span>
             </div>
             <div class="mi" data-act>
-              <span class="mi-cursor">▸</span>
               <span class="mi-ico">▹</span>
               <span class="mi-label">Save As…</span>
               <span class="mi-right"><span class="mi-short">⇧⌘S</span></span>
             </div>
             <div class="mi" data-act>
-              <span class="mi-cursor">▸</span>
               <span class="mi-ico">▵</span>
               <span class="mi-label">Export</span>
               <span class="mi-right"><span class="mi-short">[↗]</span></span>
             </div>
           </div>
-          <div class="fl"><span class="fl-l">├</span><span class="fl-f">───────────────────────────────────────</span><span class="fl-r">─┤</span></div>
-          <div class="fl"><span class="fl-l">├──</span><span class="fl-t">Navigate</span><span class="fl-f">──────────────────────────────</span><span class="fl-r">─┤</span></div>
+          <hr class="hr">
+          <div class="sec-head">Navigate</div>
           <div class="menu-body">
             <div class="sub-wrap">
               <div class="mi" data-act>
-                <span class="mi-cursor">▸</span>
                 <span class="mi-ico">◇</span>
                 <span class="mi-label">Share With</span>
                 <span class="mi-right"><span class="mi-arrow">▶</span></span>
               </div>
               <div class="sub-menu">
                 <div class="menu">
-                  <div class="fl"><span class="fl-l">┌──</span><span class="fl-t">Share</span><span class="fl-f">──────────────────────────────</span><span class="fl-r">─┐</span></div>
+                  <div class="sec-head">Share</div>
                   <div class="menu-body">
                     <div class="mi" data-act>
-                      <span class="mi-cursor">▸</span>
                       <span class="mi-ico">◈</span>
                       <span class="mi-label">Email</span>
                       <span class="mi-right"></span>
                     </div>
                     <div class="mi" data-act>
-                      <span class="mi-cursor">▸</span>
                       <span class="mi-ico">◈</span>
                       <span class="mi-label">Slack</span>
                       <span class="mi-right"></span>
                     </div>
                     <div class="mi" data-act>
-                      <span class="mi-cursor">▸</span>
                       <span class="mi-ico">◈</span>
                       <span class="mi-label">Copy Link</span>
                       <span class="mi-right"><span class="mi-short">⌘L</span></span>
                     </div>
                   </div>
-                  <div class="fl"><span class="fl-l">└──</span><span class="fl-e">3 channels</span><span class="fl-f">──────────────────────────────</span><span class="fl-r">─┘</span></div>
+                  <div class="menu-foot"><span>3 channels</span></div>
                 </div>
               </div>
             </div>
 
             <div class="mi is-disabled">
-              <span class="mi-cursor">▸</span>
               <span class="mi-ico">⊘</span>
               <span class="mi-label">Print</span>
               <span class="mi-right"><span class="mi-short">⌘P</span></span>
             </div>
           </div>
-          <div class="fl"><span class="fl-l">├</span><span class="fl-f">───────────────────────────────────────</span><span class="fl-r">─┤</span></div>
+          <hr class="hr">
           <div class="menu-body">
-            <div class="mi is-danger" data-act>
-              <span class="mi-cursor">▸</span>
+            <div class="mi" data-act>
               <span class="mi-ico">✕</span>
               <span class="mi-label">Delete File</span>
               <span class="mi-right"><span class="mi-short">⌘⌫</span></span>
             </div>
           </div>
-          <div class="fl"><span class="fl-l">└──</span><span class="fl-e">v2.4</span><span class="fl-f">──────────────────────────────</span><span class="fl-r">─┘</span></div>
+          <div class="menu-foot"><span>v2.4</span><span>4 sections</span></div>
         </div>
       </div>
     </div>
@@ -262,75 +238,74 @@
         <div>
           <p class="kicker">Week 6 · Set A · Design specification</p>
           <h2 id="specTitle">ASCII Dropdown</h2>
-          <p class="tone">Tone: Monochrome cobalt blue on cream — DM Serif Display headers, Space Mono body, box-drawing character frame, ▸ cursor selector.</p>
+          <p class="tone">Tone: Monochrome cobalt blue on cream — Young Serif section headers, Space Mono uppercase body, thick-ruled grid sections like a printed cafe menu card.</p>
         </div>
         <button class="close" id="closeSpec" type="button" aria-label="Close specifications">×</button>
       </header>
 
       <div class="block">
         <h3>Anatomy</h3>
-        <p class="lede">Box-drawing character frame (┌─┐│└─┘). Section labels woven into horizontal rules. Four-column item grid: cursor (18 px) · icon (18 px) · label (fluid) · trailing area (auto). ▸ triangle cursor slides in on hover. Version footer in bottom frame line.</p>
+        <p class="lede">Thick-bordered card with horizontal rules dividing sections. Each section opens with a large serif heading. Three-column item grid: icon (16 px) · label (fluid, uppercase mono) · trailing area (auto). Footer with version and section count.</p>
         <pre class="anatomy">
-┌─── ◆ FILE ◆ ────────────────────────┐  ← title line
-│                                      │
-│  ▸  ◆  Label Text         Shortcut  │  ← hover (▸ cursor)
-│     ◇  Label Text         Shortcut  │  ← default
-│     ▲                     ▲          │
-│  cursor icon            right        │
-│  (18px)(18px)           (auto)       │
-│                                      │
-├──────────────────────────────────────┤  ← divider
-├── SECTION LABEL ─────────────────────┤  ← section
-│                                      │
-│     ◈  Label Text         [badge]12  │  ← badge
-│     ◇  Label Text              ▶    │  ← submenu
-│     ✕  Danger Item             ⌘⌫   │  ← danger
-│                                      │
-└── v2.4 ──────────────────────────────┘  ← footer
+┌──────────────────────────────────────┐
+│  File                    ← serif 22px│
+│  ◆  NEW FILE               ⌘N       │
+│  ◇  OPEN FILE              ⌘O       │
+│  ◈  RECENT FILES           [12]     │
+├──────────────────────────────────────┤
+│  Actions                             │
+│  ▹  SAVE                   ⌘S       │
+│  ▹  SAVE AS…               ⇧⌘S     │
+├──────────────────────────────────────┤
+│  Navigate                            │
+│  ◇  SHARE WITH              ▶       │
+│  ⊘  PRINT                  ⌘P       │
+├──────────────────────────────────────┤
+│  ✕  DELETE FILE             ⌘⌫      │
+│  v2.4                  4 sections    │
+└──────────────────────────────────────┘
 
-Grid: | 18px cursor | 18px icon | 1fr label | auto right |
-Item height: 32px · Padding: 0 12px</pre>
+Grid: | 16px icon | 1fr label | auto right |
+Item height: 30px · Padding: 0 14px
+Border: 2.5px solid</pre>
       </div>
 
       <div class="block">
         <h3>States</h3>
-        <p class="lede">Three interaction states. The ▸ triangle cursor slides in from the left on hover alongside icon accent coloring.</p>
+        <p class="lede">Two interaction states. Hover fills with a light blue tint and brings the icon to full opacity.</p>
         <div class="states">
           <div class="state">
             <small>01 · Default</small>
             <div class="menu" style="width:auto">
-              <div class="menu-body" style="border:1px solid var(--frame)">
+              <div class="menu-body" style="border:2px solid var(--frame)">
                 <div class="mi" style="pointer-events:none">
-                  <span class="mi-cursor">▸</span>
                   <span class="mi-ico">◆</span>
                   <span class="mi-label">New File</span>
                   <span class="mi-right"><span class="mi-short">⌘N</span></span>
                 </div>
               </div>
             </div>
-            <p>Surface #FDFCF8 · transparent cursor · dim blue icon</p>
+            <p>Surface #FDFCF8 · dim blue icon · uppercase label</p>
           </div>
           <div class="state">
             <small>02 · Hover</small>
             <div class="menu" style="width:auto">
-              <div class="menu-body" style="border:1px solid var(--frame)">
+              <div class="menu-body" style="border:2px solid var(--frame)">
                 <div class="mi" style="background:var(--hover);pointer-events:none">
-                  <span class="mi-cursor" style="color:var(--accent);transform:translateX(0)">▸</span>
-                  <span class="mi-ico" style="color:var(--accent)">◆</span>
+                  <span class="mi-ico" style="color:var(--ink)">◆</span>
                   <span class="mi-label">New File</span>
                   <span class="mi-right"><span class="mi-short">⌘N</span></span>
                 </div>
               </div>
             </div>
-            <p>Fill rgba(32,68,184,.06) · ▸ cursor · full blue icon</p>
+            <p>Fill rgba(32,68,184,.06) · full blue icon</p>
           </div>
           <div class="state">
             <small>03 · Pressed</small>
             <div class="menu" style="width:auto">
-              <div class="menu-body" style="border:1px solid var(--frame)">
+              <div class="menu-body" style="border:2px solid var(--frame)">
                 <div class="mi is-pressed" style="pointer-events:none">
-                  <span class="mi-cursor" style="color:var(--accent);transform:translateX(0)">▸</span>
-                  <span class="mi-ico" style="color:var(--accent)">◆</span>
+                  <span class="mi-ico" style="color:var(--ink)">◆</span>
                   <span class="mi-label">New File</span>
                   <span class="mi-right"><span class="mi-short">⌘N</span></span>
                 </div>
@@ -347,28 +322,25 @@ Item height: 32px · Padding: 0 12px</pre>
           <section>
             <h3>Typography</h3>
             <dl>
+              <div><dt>Heading font</dt><dd>Young Serif</dd></div>
               <div><dt>Body font</dt><dd>Space Mono</dd></div>
-              <div><dt>Title font</dt><dd>DM Serif Display</dd></div>
-              <div><dt>Item label</dt><dd>13px / 1.5 · 400</dd></div>
+              <div><dt>Section heading</dt><dd>22px · 400 · serif</dd></div>
+              <div><dt>Item label</dt><dd>11px · 700 · uppercase · +0.1em</dd></div>
               <div><dt>Shortcut text</dt><dd>11px · 400 · +0.04em</dd></div>
-              <div><dt>Section label</dt><dd>in frame line · DM Serif italic 15px</dd></div>
               <div><dt>Badge text</dt><dd>9px · 700</dd></div>
-              <div><dt>Frame line</dt><dd>13px · 400 · box-drawing</dd></div>
-              <div><dt>Cursor glyph</dt><dd>▸ triangle · slide-in</dd></div>
-              <div><dt>Icon glyphs</dt><dd>◆◇◈▹▵⊘✕ geometric</dd></div>
-              <div><dt>Box chars</dt><dd>┌─┐│└─┘├┤ frame</dd></div>
+              <div><dt>Footer</dt><dd>10px · 400 · uppercase</dd></div>
+              <div><dt>Icon glyphs</dt><dd>◆◇◈▹▵⊘✕</dd></div>
             </dl>
           </section>
           <section>
             <h3>Spacing</h3>
             <dl>
-              <div><dt>Item height</dt><dd>32px</dd></div>
-              <div><dt>Menu body padding</dt><dd>3px 0</dd></div>
-              <div><dt>Item padding</dt><dd>0 12px</dd></div>
-              <div><dt>Cursor column</dt><dd>18px</dd></div>
-              <div><dt>Icon column</dt><dd>18px</dd></div>
+              <div><dt>Item height</dt><dd>30px</dd></div>
+              <div><dt>Menu body padding</dt><dd>4px 0</dd></div>
+              <div><dt>Item padding</dt><dd>0 14px</dd></div>
+              <div><dt>Icon column</dt><dd>16px</dd></div>
               <div><dt>Label → right</dt><dd>14px gap</dd></div>
-              <div><dt>Frame line height</dt><dd>22px</dd></div>
+              <div><dt>Heading padding</dt><dd>10px 14px 2px</dd></div>
               <div><dt>Menu width</dt><dd>320px</dd></div>
             </dl>
           </section>
@@ -378,8 +350,7 @@ Item height: 32px · Padding: 0 12px</pre>
               <div><dt>Background</dt><dd><span class="swatch" style="background:#F0EDE4"></span>#F0EDE4</dd></div>
               <div><dt>Surface</dt><dd><span class="swatch" style="background:#FDFCF8"></span>#FDFCF8</dd></div>
               <div><dt>Cobalt blue</dt><dd><span class="swatch" style="background:#2044B8"></span>#2044B8</dd></div>
-              <div><dt>Blue dim</dt><dd>rgba(32,68,184,.45)</dd></div>
-              <div><dt>Badge bg</dt><dd><span class="swatch" style="background:#2044B8"></span>#2044B8</dd></div>
+              <div><dt>Blue dim</dt><dd>rgba(32,68,184,.4)</dd></div>
               <div><dt>Hover</dt><dd>rgba(32,68,184,.06)</dd></div>
               <div><dt>Pressed</dt><dd>rgba(32,68,184,.12)</dd></div>
             </dl>
@@ -387,38 +358,33 @@ Item height: 32px · Padding: 0 12px</pre>
           <section>
             <h3>Component</h3>
             <dl>
+              <div><dt>Container border</dt><dd>2.5px solid</dd></div>
+              <div><dt>Divider rule</dt><dd>2.5px solid</dd></div>
               <div><dt>Border radius</dt><dd>0px (sharp)</dd></div>
-              <div><dt>Side borders</dt><dd>2px solid · CSS</dd></div>
-              <div><dt>Frame chars</dt><dd>┌ ─ ┐ │ └ ┘ ├ ┤</dd></div>
-              <div><dt>Title line</dt><dd>┌─── ◆ TITLE ◆ ───┐</dd></div>
-              <div><dt>Section line</dt><dd>├── LABEL ─────────┤</dd></div>
-              <div><dt>Footer line</dt><dd>└── v2.4 ──────────┘</dd></div>
-              <div><dt>Trigger padding</dt><dd>8px 14px</dd></div>
-              <div><dt>Badge radius</dt><dd>2px</dd></div>
-              <div><dt>Cursor indicator</dt><dd>▸ triangle · slide 80ms</dd></div>
+              <div><dt>Trigger padding</dt><dd>10px 18px</dd></div>
+              <div><dt>Trigger font</dt><dd>Young Serif 22px</dd></div>
+              <div><dt>Badge style</dt><dd>Filled blue · white text</dd></div>
             </dl>
           </section>
           <section>
             <h3>Configurations</h3>
             <dl>
-              <div><dt>Single text</dt><dd>Label only · no icon</dd></div>
-              <div><dt>Left icon</dt><dd>◆ ◇ ◈ ▹ geometric glyphs</dd></div>
+              <div><dt>Left icon</dt><dd>◆ ◇ ◈ ▹ geometric</dd></div>
               <div><dt>Right shortcut</dt><dd>⌘N ⇧⌘S etc.</dd></div>
-              <div><dt>Right badge</dt><dd>Accent bg · count</dd></div>
+              <div><dt>Right badge</dt><dd>Blue bg · count</dd></div>
               <div><dt>Right icon</dt><dd>[↗] external link</dd></div>
               <div><dt>Submenu</dt><dd>▶ arrow · flyout right</dd></div>
-              <div><dt>Section</dt><dd>├── LABEL ──┤ inline</dd></div>
-              <div><dt>Divider</dt><dd>├───────────┤ full rule</dd></div>
-              <div><dt>Danger</dt><dd>Same blue · ✕ icon</dd></div>
+              <div><dt>Section heading</dt><dd>Young Serif inside bordered area</dd></div>
+              <div><dt>Divider</dt><dd>2.5px solid hr</dd></div>
+              <div><dt>Disabled</dt><dd>40% opacity blue</dd></div>
             </dl>
           </section>
           <section>
             <h3>Motion</h3>
             <dl>
               <div><dt>Hover fill</dt><dd>80ms</dd></div>
-              <div><dt>Cursor slide</dt><dd>80ms · translateX</dd></div>
               <div><dt>Icon color</dt><dd>80ms</dd></div>
-              <div><dt>Trigger border</dt><dd>150ms</dd></div>
+              <div><dt>Trigger bg</dt><dd>150ms</dd></div>
               <div><dt>Easing</dt><dd>cubic-bezier(.22,1,.32,1)</dd></div>
             </dl>
           </section>
@@ -473,19 +439,16 @@ Item height: 32px · Padding: 0 12px</pre>
       setInterval(function(){
         items.forEach(function(it){
           it.style.background='';
-          var cur=it.querySelector('.mi-cursor');if(cur){cur.style.color='';cur.style.transform=''}
           var ico=it.querySelector('.mi-ico');if(ico)ico.style.color='';
         });
         if(idx<items.length){
           var it=items[idx];
           it.style.background='var(--hover)';
-          var cur=it.querySelector('.mi-cursor');if(cur){cur.style.color='var(--accent)';cur.style.transform='translateX(0)'}
-          var ico=it.querySelector('.mi-ico');if(ico)ico.style.color='var(--accent)';
+          var ico=it.querySelector('.mi-ico');if(ico)ico.style.color='var(--ink)';
         }
         idx++;
         if(idx>items.length+1){idx=0;items.forEach(function(it){
           it.style.background='';
-          var cur=it.querySelector('.mi-cursor');if(cur){cur.style.color='';cur.style.transform=''}
           var ico=it.querySelector('.mi-ico');if(ico)ico.style.color='';
         })}
       },800);
