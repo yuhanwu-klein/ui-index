@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sidebar Expanding · Week 6</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    :root{
+      --bg:#F0EDE4; --surface:#FDFCF8; --ink:#2044B8; --muted:rgba(32,68,184,.4);
+      --frame:#2044B8; --frame-light:rgba(32,68,184,.15);
+      --hover:rgba(32,68,184,.06); --pressed:rgba(32,68,184,.12);
+      --mono:'Space Mono','Courier New',monospace;
+      --serif:'Young Serif',Georgia,serif;
+      --ease:cubic-bezier(.22,1,.32,1);
+    }
+    html,body{min-height:100%;margin:0}
+    body{min-height:100vh;min-height:100svh;display:flex;align-items:flex-start;justify-content:center;padding:max(96px,16vh) 24px 72px;background:var(--bg);color:var(--ink);font-family:var(--mono)}
+    html.is-preview body{padding:var(--pv-top,24vh) 24px 24px}
+    html.is-preview .app{transform:scale(1.5);transform-origin:50% 0}
+    button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+    .app{width:min(100%,300px)}
+
+    /* ── sidebar container ── */
+    .sidebar{background:var(--surface);border:2.5px solid var(--frame);width:280px}
+
+    /* ── section ── */
+    .sec{border-bottom:2.5px solid var(--frame)}
+    .sec:last-child{border-bottom:0}
+
+    /* section header — clickable */
+    .sec-toggle{
+      display:flex;align-items:center;justify-content:space-between;
+      width:100%;padding:12px 16px;
+      font:400 20px/1 var(--serif);color:var(--ink);
+      transition:background 80ms var(--ease);
+      text-align:left;
+    }
+    .sec-toggle:hover{background:var(--hover)}
+    .sec-toggle .caret{font:700 11px/1 var(--mono);transition:transform 200ms var(--ease)}
+    .sec.is-open .sec-toggle .caret{transform:rotate(90deg)}
+    .sec-toggle .count{font:400 10px/1 var(--mono);color:var(--muted);letter-spacing:.06em;margin-left:auto;margin-right:12px}
+
+    /* collapsible body */
+    .sec-body{
+      display:grid;grid-template-rows:0fr;
+      transition:grid-template-rows 250ms var(--ease);
+    }
+    .sec.is-open .sec-body{grid-template-rows:1fr}
+    .sec-inner{overflow:hidden}
+
+    /* ── menu item ── */
+    .mi{
+      display:grid;grid-template-columns:16px 1fr auto;
+      align-items:center;padding:0 16px;height:30px;
+      cursor:pointer;transition:background 80ms var(--ease);
+      color:var(--ink);text-decoration:none;
+    }
+    .mi-ico{font-size:9px;color:var(--muted);text-align:center;transition:color 80ms}
+    .mi:hover{background:var(--hover)}
+    .mi:hover .mi-ico{color:var(--ink)}
+    .mi.is-disabled{color:var(--muted);cursor:default;pointer-events:none}
+
+    .mi-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding-left:4px}
+    .mi-right{display:flex;align-items:center;gap:8px;margin-left:14px}
+    .mi-short{font:400 11px/1 var(--mono);color:var(--muted);letter-spacing:.04em;white-space:nowrap}
+    .mi-badge{font:700 9px/1 var(--mono);background:var(--ink);color:var(--surface);padding:2px 6px;letter-spacing:.02em;min-width:18px;text-align:center}
+
+    /* item body padding */
+    .item-group{padding:2px 0 8px}
+
+    /* sidebar footer */
+    .side-foot{display:flex;justify-content:space-between;padding:8px 16px;font:400 10px/1 var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+
+    /* ── chrome ── */
+    .chrome-back,.chrome-open{position:fixed;z-index:50;min-height:42px;display:inline-flex;align-items:center;border-radius:999px;font:650 13px/1 -apple-system,"SF Pro Text",system-ui,sans-serif;text-decoration:none;transition:transform 160ms var(--ease)}
+    .chrome-back{top:18px;left:18px;padding:0 15px;border:2px solid var(--frame);background:rgba(253,252,248,.92);color:var(--ink);box-shadow:0 4px 16px rgba(0,0,0,.07)}
+    .chrome-open{right:18px;bottom:18px;padding:0 18px;border:2px solid var(--ink);background:var(--surface);color:var(--ink);box-shadow:0 4px 16px rgba(0,0,0,.07);cursor:pointer;font-weight:700}
+    .chrome-back:hover,.chrome-open:hover{transform:translateY(-2px)}
+    html.is-preview .chrome-back,html.is-preview .chrome-open,html.is-preview dialog{display:none}
+
+    /* ── spec dialog ── */
+    dialog{width:min(980px,calc(100vw - 28px));max-height:calc(100vh - 28px);padding:0;border:0;border-radius:16px;background:var(--surface);color:var(--ink);box-shadow:0 24px 60px rgba(0,0,0,.14);overflow:hidden}
+    dialog::backdrop{background:rgba(0,0,0,.25);backdrop-filter:blur(6px)}
+    .spec{max-height:calc(100vh - 28px);overflow:auto;overscroll-behavior:contain;font-family:var(--mono)}
+    .spec header{position:sticky;top:0;z-index:5;display:flex;align-items:flex-start;gap:24px;padding:26px 30px 20px;border-bottom:1px solid var(--frame-light);background:rgba(253,252,248,.96);backdrop-filter:blur(14px)}
+    .kicker{margin:0 0 8px;color:var(--muted);font:700 10px/1.2 var(--mono);letter-spacing:.15em;text-transform:uppercase}
+    .spec h2{margin:0;font:400 28px/1.05 var(--serif)}
+    .tone{margin:8px 0 0;color:var(--muted);font-size:12px}
+    .close{margin-left:auto;width:40px;height:40px;border:2px solid var(--frame);border-radius:50%;background:transparent;color:var(--ink);font:400 22px/1 inherit;cursor:pointer}
+    .close:hover{background:var(--hover)}
+    .spec h3{margin:0 0 4px;font:600 10px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+    .spec .lede{margin:0 0 18px;color:var(--muted);font-size:12px;line-height:1.5}
+    .block{padding:24px 30px;border-bottom:1px solid var(--frame-light)}
+
+    .states{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .state{display:flex;flex-direction:column;gap:8px}
+    .state .sidebar{min-width:0;width:auto}
+    .state small{font:700 10px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+    .state p{margin:0;font-size:11px;line-height:1.45;color:var(--muted)}
+
+    .tables{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .tables section{padding:18px;border:2px solid var(--frame-light)}
+    .tables section h3{margin-bottom:8px}
+    .tables dl{margin:10px 0 0}
+    .tables dl div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:14px;padding:9px 0;border-top:1px solid rgba(32,68,184,.08)}
+    .tables dt,.tables dd{margin:0;font-size:12px;line-height:1.45}
+    .tables dt{color:var(--muted)}
+    .tables dd{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+    .swatch{display:inline-block;width:10px;height:10px;vertical-align:middle;margin-right:6px;border:1px solid var(--frame)}
+
+    .anatomy{font-size:11px;line-height:1.55;color:var(--muted);overflow-x:auto;padding:24px;border:2px solid var(--frame-light);background:var(--bg)}
+
+    @media(max-width:720px){.states,.tables{grid-template-columns:1fr}.block{padding:20px 16px}.spec header{padding:20px 16px 16px}}
+    @media(max-width:560px){body{padding:max(96px,16vh) 16px 48px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <a class="chrome-back" href="week6.html">← Week 6</a>
+  <button class="chrome-open" id="openSpec" type="button">View specs</button>
+
+  <main class="app" id="app">
+    <div class="sidebar" id="sidebar">
+      <div class="sec is-open" data-sec>
+        <button class="sec-toggle" data-toggle>
+          File <span class="count">4</span><span class="caret">▸</span>
+        </button>
+        <div class="sec-body">
+          <div class="sec-inner">
+            <div class="item-group">
+              <div class="mi" data-act>
+                <span class="mi-ico">◇</span>
+                <span class="mi-label">New Window</span>
+                <span class="mi-right"></span>
+              </div>
+              <div class="mi" data-act>
+                <span class="mi-ico">◆</span>
+                <span class="mi-label">New File</span>
+                <span class="mi-right"><span class="mi-short">⌘N</span></span>
+              </div>
+              <div class="mi" data-act>
+                <span class="mi-ico">◇</span>
+                <span class="mi-label">Open File</span>
+                <span class="mi-right"><span class="mi-short">⌘O</span></span>
+              </div>
+              <div class="mi" data-act>
+                <span class="mi-ico">◈</span>
+                <span class="mi-label">Recent Files</span>
+                <span class="mi-right"><span class="mi-badge">12</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec" data-sec>
+        <button class="sec-toggle" data-toggle>
+          Actions <span class="count">3</span><span class="caret">▸</span>
+        </button>
+        <div class="sec-body">
+          <div class="sec-inner">
+            <div class="item-group">
+              <div class="mi" data-act>
+                <span class="mi-ico">▹</span>
+                <span class="mi-label">Save</span>
+                <span class="mi-right"><span class="mi-short">⌘S</span></span>
+              </div>
+              <div class="mi" data-act>
+                <span class="mi-ico">▹</span>
+                <span class="mi-label">Save As…</span>
+                <span class="mi-right"><span class="mi-short">⇧⌘S</span></span>
+              </div>
+              <div class="mi" data-act>
+                <span class="mi-ico">▵</span>
+                <span class="mi-label">Export</span>
+                <span class="mi-right"><span class="mi-short">[↗]</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec" data-sec>
+        <button class="sec-toggle" data-toggle>
+          Navigate <span class="count">2</span><span class="caret">▸</span>
+        </button>
+        <div class="sec-body">
+          <div class="sec-inner">
+            <div class="item-group">
+              <div class="mi" data-act>
+                <span class="mi-ico">◇</span>
+                <span class="mi-label">Share With</span>
+                <span class="mi-right"><span class="mi-short">▶</span></span>
+              </div>
+              <div class="mi is-disabled">
+                <span class="mi-ico">⊘</span>
+                <span class="mi-label">Print</span>
+                <span class="mi-right"><span class="mi-short">⌘P</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec" data-sec>
+        <button class="sec-toggle" data-toggle>
+          Danger <span class="count">1</span><span class="caret">▸</span>
+        </button>
+        <div class="sec-body">
+          <div class="sec-inner">
+            <div class="item-group">
+              <div class="mi" data-act>
+                <span class="mi-ico">✕</span>
+                <span class="mi-label">Delete File</span>
+                <span class="mi-right"><span class="mi-short">⌘⌫</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-foot"><span>v2.4</span><span>4 sections</span></div>
+    </div>
+  </main>
+
+  <!-- ── SPEC DIALOG ── -->
+  <dialog id="spec" aria-labelledby="specTitle">
+    <div class="spec">
+      <header>
+        <div>
+          <p class="kicker">Week 6 · Set B · Design specification</p>
+          <h2 id="specTitle">Sidebar Expanding</h2>
+          <p class="tone">Tone: Accordion sidebar in cobalt blue on cream — Young Serif section toggles, Space Mono uppercase items, thick-ruled sections with animated expand/collapse.</p>
+        </div>
+        <button class="close" id="closeSpec" type="button" aria-label="Close specifications">×</button>
+      </header>
+
+      <div class="block">
+        <h3>Anatomy</h3>
+        <p class="lede">Thick-bordered sidebar panel with accordion sections. Each section has a serif toggle header with item count and caret indicator. Items reveal on click with a smooth grid-row animation. Footer with version and section count.</p>
+        <pre class="anatomy">
+┌──────────────────────────────────────┐
+│  File                      4    ▸   │ ← toggle (serif 20px)
+├──────────────────────────────────────┤
+│  Actions                   3    ▸   │ ← collapsed
+├──────────────────────────────────────┤
+│  Navigate                  2    ▾   │ ← open
+│   ◇  SHARE WITH            ▶       │ ← item
+│   ⊘  PRINT                 ⌘P      │ ← disabled
+├──────────────────────────────────────┤
+│  Danger                    1    ▸   │
+│  v2.4                  4 sections   │
+└──────────────────────────────────────┘
+
+Toggle: | serif label | count | caret |
+Item grid: | 16px icon | 1fr label | auto right |
+Section border: 2.5px solid
+Item height: 30px · Toggle padding: 12px 16px</pre>
+      </div>
+
+      <div class="block">
+        <h3>States</h3>
+        <p class="lede">Section headers toggle between collapsed (▸) and expanded (▾ rotated). Item hover fills with blue tint.</p>
+        <div class="states">
+          <div class="state">
+            <small>01 · Collapsed</small>
+            <div class="sidebar" style="width:auto">
+              <div class="sec" style="border-bottom:2px solid var(--frame)">
+                <div class="sec-toggle" style="pointer-events:none;font:400 16px/1 var(--serif)">Actions <span class="count" style="font:400 10px/1 var(--mono);color:var(--muted);margin-left:auto;margin-right:12px">3</span><span style="font:700 11px/1 var(--mono)">▸</span></div>
+              </div>
+            </div>
+            <p>Caret ▸ right · items hidden · zero height</p>
+          </div>
+          <div class="state">
+            <small>02 · Expanded</small>
+            <div class="sidebar" style="width:auto">
+              <div class="sec is-open" style="border-bottom:2px solid var(--frame)">
+                <div class="sec-toggle" style="pointer-events:none;font:400 16px/1 var(--serif)">Actions <span class="count" style="font:400 10px/1 var(--mono);color:var(--muted);margin-left:auto;margin-right:12px">3</span><span style="font:700 11px/1 var(--mono);transform:rotate(90deg);display:inline-block">▸</span></div>
+                <div style="padding:2px 0 8px">
+                  <div class="mi" style="pointer-events:none"><span class="mi-ico">▹</span><span class="mi-label">Save</span><span class="mi-right"><span class="mi-short">⌘S</span></span></div>
+                </div>
+              </div>
+            </div>
+            <p>Caret rotated 90° · items revealed · grid-row 1fr</p>
+          </div>
+          <div class="state">
+            <small>03 · Item hover</small>
+            <div class="sidebar" style="width:auto">
+              <div class="sec is-open" style="border-bottom:2px solid var(--frame)">
+                <div class="sec-toggle" style="pointer-events:none;font:400 16px/1 var(--serif)">Actions <span class="count" style="font:400 10px/1 var(--mono);color:var(--muted);margin-left:auto;margin-right:12px">3</span><span style="font:700 11px/1 var(--mono);transform:rotate(90deg);display:inline-block">▸</span></div>
+                <div style="padding:2px 0 8px">
+                  <div class="mi" style="background:var(--hover);pointer-events:none"><span class="mi-ico" style="color:var(--ink)">▹</span><span class="mi-label">Save</span><span class="mi-right"><span class="mi-short">⌘S</span></span></div>
+                </div>
+              </div>
+            </div>
+            <p>Fill rgba(32,68,184,.06) · full blue icon</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block" style="border-bottom:0">
+        <h3>Tokens</h3>
+        <div class="tables" style="margin-top:14px">
+          <section>
+            <h3>Typography</h3>
+            <dl>
+              <div><dt>Heading font</dt><dd>Young Serif</dd></div>
+              <div><dt>Body font</dt><dd>Space Mono</dd></div>
+              <div><dt>Section toggle</dt><dd>20px · 400 · serif</dd></div>
+              <div><dt>Item label</dt><dd>11px · 700 · uppercase · +0.1em</dd></div>
+              <div><dt>Shortcut text</dt><dd>11px · 400 · +0.04em</dd></div>
+              <div><dt>Count text</dt><dd>10px · 400 · mono</dd></div>
+              <div><dt>Caret</dt><dd>▸ · 700 · rotate 90° on open</dd></div>
+            </dl>
+          </section>
+          <section>
+            <h3>Spacing</h3>
+            <dl>
+              <div><dt>Toggle padding</dt><dd>12px 16px</dd></div>
+              <div><dt>Item height</dt><dd>30px</dd></div>
+              <div><dt>Item padding</dt><dd>0 16px</dd></div>
+              <div><dt>Icon column</dt><dd>16px</dd></div>
+              <div><dt>Item group pad</dt><dd>2px 0 8px</dd></div>
+              <div><dt>Sidebar width</dt><dd>280px</dd></div>
+            </dl>
+          </section>
+          <section>
+            <h3>Colors</h3>
+            <dl>
+              <div><dt>Background</dt><dd><span class="swatch" style="background:#F0EDE4"></span>#F0EDE4</dd></div>
+              <div><dt>Surface</dt><dd><span class="swatch" style="background:#FDFCF8"></span>#FDFCF8</dd></div>
+              <div><dt>Cobalt blue</dt><dd><span class="swatch" style="background:#2044B8"></span>#2044B8</dd></div>
+              <div><dt>Blue dim</dt><dd>rgba(32,68,184,.4)</dd></div>
+              <div><dt>Hover</dt><dd>rgba(32,68,184,.06)</dd></div>
+              <div><dt>Pressed</dt><dd>rgba(32,68,184,.12)</dd></div>
+            </dl>
+          </section>
+          <section>
+            <h3>Component</h3>
+            <dl>
+              <div><dt>Container border</dt><dd>2.5px solid</dd></div>
+              <div><dt>Section divider</dt><dd>2.5px solid</dd></div>
+              <div><dt>Border radius</dt><dd>0px (sharp)</dd></div>
+              <div><dt>Badge style</dt><dd>Filled blue · white text</dd></div>
+              <div><dt>Expand animation</dt><dd>grid-template-rows 0fr→1fr</dd></div>
+            </dl>
+          </section>
+          <section>
+            <h3>Configurations</h3>
+            <dl>
+              <div><dt>Left icon</dt><dd>◆ ◇ ◈ ▹ geometric</dd></div>
+              <div><dt>Right shortcut</dt><dd>⌘N ⇧⌘S etc.</dd></div>
+              <div><dt>Right badge</dt><dd>Blue bg · count</dd></div>
+              <div><dt>Section count</dt><dd>Dim number beside label</dd></div>
+              <div><dt>Disabled</dt><dd>40% opacity blue</dd></div>
+              <div><dt>Accordion</dt><dd>One or many open</dd></div>
+            </dl>
+          </section>
+          <section>
+            <h3>Motion</h3>
+            <dl>
+              <div><dt>Expand/collapse</dt><dd>250ms · grid-row</dd></div>
+              <div><dt>Caret rotate</dt><dd>200ms</dd></div>
+              <div><dt>Hover fill</dt><dd>80ms</dd></div>
+              <div><dt>Easing</dt><dd>cubic-bezier(.22,1,.32,1)</dd></div>
+            </dl>
+          </section>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    document.querySelectorAll('[data-toggle]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        btn.closest('[data-sec]').classList.toggle('is-open');
+      });
+    });
+
+    var spec=document.getElementById('spec');
+    document.getElementById('openSpec').addEventListener('click',function(){spec.showModal()});
+    document.getElementById('closeSpec').addEventListener('click',function(){spec.close()});
+    spec.addEventListener('click',function(e){if(e.target===spec)spec.close()});
+
+    if(document.documentElement.classList.contains('is-preview')){
+      var sb=document.getElementById('sidebar');
+      var center=function(){document.documentElement.style.setProperty('--pv-top',Math.max(0,(innerHeight-sb.offsetHeight*1.5)/2)+'px')};
+      center();document.fonts&&document.fonts.ready.then(center);addEventListener('resize',center);
+
+      var secs=document.querySelectorAll('[data-sec]');
+      var idx=0;
+      setInterval(function(){
+        secs.forEach(function(s){s.classList.remove('is-open')});
+        if(idx<secs.length)secs[idx].classList.add('is-open');
+        idx=(idx+1)%(secs.length+1);
+      },1200);
+    }
+  </script>
+</body>
+</html>
