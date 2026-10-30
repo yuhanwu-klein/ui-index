@@ -8,14 +8,14 @@
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     :root{
-      --ink:#fff;--muted:rgba(255,255,255,.5);--soft:#1e1e1e;--line:#2a2a2a;
+      --ink:#1c1c1e;--muted:rgba(0,0,0,.4);--soft:#f1f1f3;--line:#e5e5e2;
       --green:#34c759;--pink:#f06c9b;--orange:#f58220;--blue:#2044b8;
       --lemon:#f5a623;--red:#e8352d;--teal:#3aa655;
       --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
       --ease:cubic-bezier(.22,1,.32,1);--pop:cubic-bezier(.34,1.4,.5,1);
     }
     html,body{min-height:100%;margin:0}
-    body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:max(80px,14vh) 24px 72px;background:#0a0a0a;color:var(--ink);font-family:var(--font)}
+    body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:max(80px,14vh) 24px 72px;background:#fff;color:var(--ink);font-family:var(--font)}
     html.is-preview body{padding:var(--pv-top,20vh) 24px 24px}
     html.is-preview .app{transform:scale(1.4);transform-origin:50% 0}
     button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
@@ -25,12 +25,12 @@
     .trigger{
       display:flex;align-items:center;justify-content:space-between;
       width:100%;padding:14px 18px;
-      background:#161616;border-radius:16px;
-      box-shadow:0 2px 12px rgba(0,0,0,.4);
+      background:#fff;border-radius:16px;
+      box-shadow:0 2px 12px rgba(0,0,0,.08);
       font-size:17px;font-weight:600;letter-spacing:-.02em;
       transition:transform .35s var(--pop),box-shadow .25s;
     }
-    .trigger:hover{box-shadow:0 4px 20px rgba(0,0,0,.5)}
+    .trigger:hover{box-shadow:0 4px 20px rgba(0,0,0,.12)}
     .trigger:active{transform:scale(.98)}
     .trigger .t-left{display:flex;align-items:center;gap:10px}
     .trigger .t-ico{width:32px;height:32px;border-radius:8px;background:var(--pink);display:grid;place-items:center}
@@ -41,8 +41,8 @@
     /* ── dropdown panel ── */
     .panel{
       margin-top:8px;padding:14px;
-      background:#161616;border-radius:20px;
-      box-shadow:0 12px 40px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.3);
+      background:#fff;border-radius:20px;
+      box-shadow:0 12px 40px rgba(0,0,0,.1),0 1px 3px rgba(0,0,0,.06);
       display:grid;grid-template-rows:0fr;
       transition:grid-template-rows .4s var(--ease),opacity .25s;
       opacity:0;pointer-events:none;
@@ -70,7 +70,7 @@
     .is-open .tile:nth-child(4){transition-delay:.12s}
     .is-open .tile:nth-child(5){transition-delay:.16s}
     .is-open .tile:nth-child(6){transition-delay:.2s}
-    .tile:hover{transform:scale(1.04);box-shadow:0 6px 20px rgba(0,0,0,.3);filter:brightness(1.1)}
+    .tile:hover{transform:scale(1.04);box-shadow:0 6px 20px rgba(0,0,0,.15);filter:brightness(1.1)}
     .tile:active{transform:scale(.97);filter:brightness(.9)}
     .tile.is-on{filter:brightness(1.15)}
     .tile.is-on:hover{filter:brightness(1.25)}
@@ -107,13 +107,13 @@
     .slider-wrap:active{transform:scaleY(.96)}
     .slider-fill{position:absolute;left:0;top:0;bottom:0;width:var(--fill,66%);background:var(--pink);border-radius:14px;transition:width .3s var(--ease)}
     .slider-label{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:17px;font-weight:500;z-index:2;font-variant-numeric:tabular-nums;color:#fff}
-    .slider-label small{font-size:13px;color:rgba(255,255,255,.5)}
-    .slider-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);z-index:2;width:22px;height:22px;color:rgba(255,255,255,.35)}
+    .slider-label small{font-size:13px;color:rgba(255,255,255,.6)}
+    .slider-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);z-index:2;width:22px;height:22px;color:rgba(0,0,0,.3)}
 
     /* ── chrome ── */
     .chrome-back,.chrome-open{position:fixed;z-index:50;min-height:42px;display:inline-flex;align-items:center;border-radius:999px;font:650 13px/1 -apple-system,"SF Pro Text",system-ui,sans-serif;text-decoration:none;transition:transform 160ms var(--ease)}
-    .chrome-back{top:18px;left:18px;padding:0 15px;border:1px solid rgba(255,255,255,.12);background:rgba(22,22,22,.94);color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.3)}
-    .chrome-open{right:18px;bottom:18px;padding:0 18px;border:1px solid rgba(255,255,255,.16);background:#171715;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.24);cursor:pointer;font-weight:700}
+    .chrome-back{top:18px;left:18px;padding:0 15px;border:1px solid var(--line);background:rgba(255,255,255,.94);color:var(--ink);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+    .chrome-open{right:18px;bottom:18px;padding:0 18px;border:1px solid var(--line);background:#fff;color:var(--ink);box-shadow:0 10px 28px rgba(0,0,0,.08);cursor:pointer;font-weight:700}
     .chrome-back:hover,.chrome-open:hover{transform:translateY(-2px)}
     html.is-preview .chrome-back,html.is-preview .chrome-open,html.is-preview dialog{display:none}
 

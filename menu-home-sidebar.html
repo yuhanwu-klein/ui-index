@@ -8,27 +8,27 @@
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     :root{
-      --ink:#fff;--muted:rgba(255,255,255,.45);--soft:#1e1e1e;--line:#2a2a2a;
+      --ink:#1c1c1e;--muted:rgba(0,0,0,.4);--soft:#f1f1f3;--line:#e5e5e2;
       --green:#34c759;--pink:#f06c9b;--orange:#f58220;--blue:#2044b8;
       --lemon:#f5a623;--red:#e8352d;--teal:#3aa655;
       --font:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
       --ease:cubic-bezier(.22,1,.32,1);--pop:cubic-bezier(.34,1.4,.5,1);
     }
     html,body{min-height:100%;margin:0}
-    body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:max(60px,10vh) 24px 72px;background:#0a0a0a;color:var(--ink);font-family:var(--font)}
+    body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:max(60px,10vh) 24px 72px;background:#fff;color:var(--ink);font-family:var(--font)}
     html.is-preview body{padding:var(--pv-top,8vh) 24px 24px}
     html.is-preview .sidebar{transform:scale(1.25);transform-origin:50% 0}
     button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
     /* ── sidebar panel ── */
-    .sidebar{width:min(100%,300px);background:#141414;border-radius:22px;box-shadow:0 12px 40px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.3);overflow:hidden;opacity:0;transform:translateY(18px) scale(.97);animation:panel-in .5s var(--ease) .1s forwards}
+    .sidebar{width:min(100%,300px);background:#fff;border-radius:22px;box-shadow:0 12px 40px rgba(0,0,0,.1),0 1px 3px rgba(0,0,0,.06);overflow:hidden;opacity:0;transform:translateY(18px) scale(.97);animation:panel-in .5s var(--ease) .1s forwards}
     @keyframes panel-in{to{opacity:1;transform:none}}
 
     /* ── header ── */
     .sb-head{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 6px}
     .sb-title{font-size:22px;font-weight:700;letter-spacing:-.03em}
     .sb-gear{width:30px;height:30px;border-radius:50%;background:var(--soft);display:grid;place-items:center;transition:background .2s,transform .35s var(--pop)}
-    .sb-gear:hover{background:#282828;transform:rotate(60deg)}
+    .sb-gear:hover{background:#e8e8ed;transform:rotate(60deg)}
     .sb-gear:active{transform:scale(.92) rotate(60deg)}
     .sb-gear svg{width:15px;height:15px;color:var(--muted)}
 
@@ -36,8 +36,8 @@
     .sec{border-top:1px solid var(--line)}
     .sec:first-of-type{border-top:0}
     .sec-btn{display:flex;align-items:center;gap:12px;width:100%;padding:14px 18px;text-align:left;transition:background .15s}
-    .sec-btn:hover{background:rgba(255,255,255,.04)}
-    .sec-btn:active{background:rgba(255,255,255,.07)}
+    .sec-btn:hover{background:rgba(0,0,0,.03)}
+    .sec-btn:active{background:rgba(0,0,0,.06)}
     .sec-ico{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex-shrink:0;transition:transform .35s var(--pop)}
     .sec-ico svg{width:16px;height:16px}
     .sec-btn:hover .sec-ico{transform:scale(1.08)}
@@ -67,8 +67,8 @@
     .sec.is-open .dev:nth-child(3){transition-delay:.08s}
     .sec.is-open .dev:nth-child(4){transition-delay:.12s}
     .sec.is-open .dev:nth-child(5){transition-delay:.16s}
-    .dev:hover{background:#282828}
-    .dev:active{background:#303030;transform:scale(.98)!important}
+    .dev:hover{background:#e8e8ed}
+    .dev:active{background:#dddde2;transform:scale(.98)!important}
     .dev.is-on{background:rgba(240,108,155,.1)}
     .dev.is-on:hover{background:rgba(240,108,155,.16)}
 
@@ -82,7 +82,7 @@
     .dev.is-on .dev-dot{background:var(--green);transform:scale(1.3)}
 
     /* ripple */
-    .rip{position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.1);transform:translate(-50%,-50%) scale(0);pointer-events:none;animation:rip .5s var(--ease) forwards}
+    .rip{position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(0,0,0,.06);transform:translate(-50%,-50%) scale(0);pointer-events:none;animation:rip .5s var(--ease) forwards}
     @keyframes rip{to{transform:translate(-50%,-50%) scale(1);opacity:0}}
 
     /* ── footer stats ── */
@@ -96,13 +96,13 @@
     .slider-wrap:active{transform:scaleY(.95)}
     .slider-fill{position:absolute;left:0;top:0;bottom:0;width:var(--fill,66%);background:var(--pink);border-radius:12px;transition:width .25s var(--ease)}
     .slider-label{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;font-weight:600;z-index:2;font-variant-numeric:tabular-nums}
-    .slider-label small{font-size:11px;color:rgba(255,255,255,.45)}
-    .slider-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2;width:18px;height:18px;color:rgba(255,255,255,.35)}
+    .slider-label small{font-size:11px;color:rgba(0,0,0,.4)}
+    .slider-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2;width:18px;height:18px;color:rgba(0,0,0,.3)}
 
     /* ── chrome ── */
     .chrome-back,.chrome-open{position:fixed;z-index:50;min-height:42px;display:inline-flex;align-items:center;border-radius:999px;font:650 13px/1 -apple-system,"SF Pro Text",system-ui,sans-serif;text-decoration:none;transition:transform 160ms var(--ease)}
-    .chrome-back{top:18px;left:18px;padding:0 15px;border:1px solid rgba(255,255,255,.12);background:rgba(22,22,22,.94);color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.3)}
-    .chrome-open{right:18px;bottom:18px;padding:0 18px;border:1px solid rgba(255,255,255,.16);background:#171715;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.24);cursor:pointer;font-weight:700}
+    .chrome-back{top:18px;left:18px;padding:0 15px;border:1px solid var(--line);background:rgba(255,255,255,.94);color:var(--ink);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+    .chrome-open{right:18px;bottom:18px;padding:0 18px;border:1px solid var(--line);background:#fff;color:var(--ink);box-shadow:0 10px 28px rgba(0,0,0,.08);cursor:pointer;font-weight:700}
     .chrome-back:hover,.chrome-open:hover{transform:translateY(-2px)}
     html.is-preview .chrome-back,html.is-preview .chrome-open,html.is-preview dialog{display:none}
 
