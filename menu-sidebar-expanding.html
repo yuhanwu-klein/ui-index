@@ -26,7 +26,8 @@
     .app{width:min(100%,300px)}
 
     /* ── sidebar container ── */
-    .sidebar{background:var(--surface);border:2.5px solid var(--frame);width:280px}
+    .sidebar{background:var(--surface);border:2.5px solid var(--frame);width:280px;animation:sidebar-in 500ms var(--ease) both}
+    @keyframes sidebar-in{from{opacity:0;transform:translateY(12px)}}
 
     /* ── section ── */
     .sec{border-bottom:2.5px solid var(--frame)}
@@ -41,9 +42,11 @@
       text-align:left;
     }
     .sec-toggle:hover{background:var(--hover)}
-    .sec-toggle .caret{font:700 11px/1 var(--mono);transition:transform 200ms var(--ease)}
+    .sec-toggle:active{transform:scale(.97);transition:transform 60ms}
+    .sec-toggle .caret{font:700 11px/1 var(--mono);transition:transform 280ms cubic-bezier(.34,1.56,.64,1)}
     .sec.is-open .sec-toggle .caret{transform:rotate(90deg)}
-    .sec-toggle .count{font:400 10px/1 var(--mono);color:var(--muted);letter-spacing:.06em;margin-left:auto;margin-right:12px}
+    .sec-toggle .count{font:400 10px/1 var(--mono);color:var(--muted);letter-spacing:.06em;margin-left:auto;margin-right:12px;transition:letter-spacing 200ms var(--ease),color 200ms}
+    .sec-toggle:hover .count{letter-spacing:.12em;color:var(--ink)}
 
     /* collapsible body */
     .sec-body{
@@ -55,20 +58,33 @@
 
     /* ── menu item ── */
     .mi{
+      position:relative;
       display:grid;grid-template-columns:16px 1fr auto;
       align-items:center;padding:0 16px;height:30px;
-      cursor:pointer;transition:background 80ms var(--ease);
+      cursor:pointer;transition:background 120ms var(--ease);
       color:var(--ink);text-decoration:none;
+      opacity:0;transform:translateX(-10px);
+      animation:none;
     }
-    .mi-ico{font-size:9px;color:var(--muted);text-align:center;transition:color 80ms}
+    .sec.is-open .mi{animation:item-in 300ms var(--ease) forwards;animation-delay:calc(var(--i,0) * 50ms)}
+    @keyframes item-in{to{opacity:1;transform:translateX(0)}}
+
+    /* hover accent bar */
+    .mi::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:var(--ink);transform:scaleY(0);transition:transform 180ms var(--ease);border-radius:0 2px 2px 0}
+    .mi:hover::before{transform:scaleY(1)}
+
+    .mi-ico{font-size:9px;color:var(--muted);text-align:center;transition:color 120ms, transform 200ms var(--ease)}
     .mi:hover{background:var(--hover)}
-    .mi:hover .mi-ico{color:var(--ink)}
+    .mi:hover .mi-ico{color:var(--ink);transform:rotate(15deg) scale(1.15)}
     .mi.is-disabled{color:var(--muted);cursor:default;pointer-events:none}
+    .mi.is-disabled::before{display:none}
 
     .mi-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding-left:4px}
     .mi-right{display:flex;align-items:center;gap:8px;margin-left:14px}
     .mi-short{font:400 11px/1 var(--mono);color:var(--muted);letter-spacing:.04em;white-space:nowrap}
-    .mi-badge{font:700 9px/1 var(--mono);background:var(--ink);color:var(--surface);padding:2px 6px;letter-spacing:.02em;min-width:18px;text-align:center}
+    .mi-badge{font:700 9px/1 var(--mono);background:var(--ink);color:var(--surface);padding:2px 6px;letter-spacing:.02em;min-width:18px;text-align:center;transition:transform 200ms var(--ease)}
+    .mi:hover .mi-badge{animation:badge-pop 350ms var(--ease)}
+    @keyframes badge-pop{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
 
     /* item body padding */
     .item-group{padding:2px 0 8px}
@@ -376,9 +392,21 @@ Item height: 30px · Toggle padding: 12px 16px</pre>
   </dialog>
 
   <script>
+    document.querySelectorAll('[data-sec]').forEach(function(sec){
+      sec.querySelectorAll('.mi').forEach(function(mi,i){mi.style.setProperty('--i',i)});
+    });
     document.querySelectorAll('[data-toggle]').forEach(function(btn){
       btn.addEventListener('click',function(){
-        btn.closest('[data-sec]').classList.toggle('is-open');
+        var sec=btn.closest('[data-sec]');
+        var opening=!sec.classList.contains('is-open');
+        sec.classList.toggle('is-open');
+        if(opening){
+          sec.querySelectorAll('.mi').forEach(function(mi){
+            mi.style.animation='none';
+            mi.offsetHeight;
+            mi.style.animation='';
+          });
+        }
       });
     });
 
