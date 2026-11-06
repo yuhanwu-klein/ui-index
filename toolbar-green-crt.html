@@ -11,80 +11,50 @@
     html,body{height:100%;background:#fff;font-family:'Silkscreen',monospace}
     body{display:flex;align-items:center;justify-content:center;padding:24px}
 
-    .fui{
+    .frame{
       width:560px;max-width:85vw;aspect-ratio:4/3;
-      background:#c0c0c0;border:2px solid #000;
-      border-radius:8px;overflow:hidden;
-      display:grid;grid-template-rows:22px 20px 1fr 30px;
-      box-shadow:0 16px 48px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.06);
-    }
-
-    .tb-title{
-      background:#000;
-      background:repeating-linear-gradient(0deg,#000 0px,#000 1px,#fff 1px,#fff 3px);
-      display:flex;align-items:center;padding:0 5px;gap:6px;
-      border-bottom:1px solid #000;
-    }
-    .close-box{width:12px;height:12px;background:#fff;border:1px solid #000;flex-shrink:0;cursor:pointer}
-    .tb-name{background:#fff;padding:0 8px;font:bold 10px 'Silkscreen',monospace;letter-spacing:.02em;white-space:nowrap;line-height:18px}
-
-    .menu-bar{
-      background:#fff;border-bottom:1px solid #000;
-      display:flex;align-items:center;padding:0 2px;
-    }
-    .mi{padding:1px 8px;font:10px 'Silkscreen',monospace;cursor:pointer;line-height:18px}
-    .mi:hover{background:#000;color:#fff}
-
-    .main{display:grid;grid-template-columns:54px 1fr;border-bottom:1px solid #000}
-
-    .tools{
-      background:#c0c0c0;border-right:1px solid #000;
-      display:grid;grid-template-columns:1fr 1fr;
-      padding:3px 2px;gap:1px;align-content:start;
-    }
-    .tool{
-      width:24px;height:22px;
-      background:#fff;border:1.5px solid #888;
       display:flex;align-items:center;justify-content:center;
-      cursor:pointer;color:#000;position:relative;
-      transition:color .25s;
     }
-    .tool.on{background:#c0c0c0;border:1.5px inset #444}
+
+    .bar{
+      display:flex;align-items:center;gap:2px;
+      background:#fff;
+      border-radius:18px;
+      padding:6px;
+      box-shadow:0 2px 12px rgba(0,0,0,.08),0 0 0 1px rgba(0,0,0,.04);
+    }
+
+    .tool{
+      width:48px;height:48px;
+      border:none;background:transparent;
+      border-radius:12px;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;color:#444;position:relative;
+      transition:color .2s,background .25s,transform .15s;
+    }
     .tool svg{
-      width:14px;height:14px;
+      width:22px;height:22px;
       shape-rendering:crispEdges;
       transition:transform .15s;
     }
-    .tool:hover{color:var(--h,#000)}
+    .tool.on{
+      background:var(--h,#eee);
+      color:#fff;
+      transform:scale(1);
+    }
+    .tool:not(.on):hover{
+      color:var(--h,#000);
+      background:color-mix(in srgb,var(--h,#000) 10%,transparent);
+    }
     .tool:hover svg{animation:var(--a,pop) .35s ease}
 
-    .canvas{
-      background:#fff;position:relative;overflow:hidden;
-      background-image:radial-gradient(circle,#ccc .4px,transparent .4px);
-      background-size:6px 6px;
+    .tool .label{
+      position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);
+      font:9px/1 'Silkscreen',monospace;color:#999;
+      white-space:nowrap;opacity:0;transition:opacity .15s;
+      pointer-events:none;
     }
-    .canvas-art{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
-
-    .palette{
-      background:#c0c0c0;display:flex;align-items:center;
-      padding:3px 4px;gap:3px;
-    }
-    .fg-bg{
-      width:22px;height:20px;position:relative;flex-shrink:0;
-    }
-    .fg{position:absolute;top:0;left:0;width:14px;height:14px;background:#000;border:1px solid #000;z-index:1}
-    .bg{position:absolute;bottom:0;right:0;width:14px;height:14px;background:#fff;border:1px solid #000}
-    .swatches{
-      display:grid;grid-template-columns:repeat(14,1fr);grid-template-rows:1fr 1fr;
-      flex:1;height:22px;
-    }
-    .sw{border:.5px solid #808080;cursor:pointer;min-width:0;transition:transform .1s}
-    .sw:hover{transform:scale(1.3);z-index:1;border-color:#000}
-
-    .status-msg{
-      margin-left:auto;font:10px 'Silkscreen',monospace;color:#444;
-      padding-right:4px;white-space:nowrap;
-    }
+    .tool:hover .label{opacity:1}
 
     @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.3)}100%{transform:scale(1)}}
     @keyframes wiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-12deg)}60%{transform:rotate(10deg)}80%{transform:rotate(-4deg)}}
@@ -94,57 +64,24 @@
     @keyframes pour{0%,100%{transform:rotate(0) translateY(0)}50%{transform:rotate(-25deg) translateY(-2px)}}
     @keyframes stamp{0%{transform:scale(1)}30%{transform:scale(1.15)}50%{transform:scale(.9)}100%{transform:scale(1)}}
 
-    html.is-preview .fui{border:none;border-radius:0}
+    html.is-preview .frame{aspect-ratio:auto;width:100%;height:100%}
   </style>
 </head>
 <body>
-<div class="fui">
-  <div class="tb-title">
-    <div class="close-box"></div>
-    <span class="tb-name">Pixel Paint</span>
-  </div>
-  <div class="menu-bar">
-    <span class="mi">File</span>
-    <span class="mi">Edit</span>
-    <span class="mi">View</span>
-    <span class="mi">Image</span>
-    <span class="mi">Colors</span>
-    <span class="mi">Help</span>
-  </div>
-  <div class="main">
-    <div class="tools" id="tools">
-      <button class="tool on" data-icon="pointer" style="--h:#4a90d9;--a:pop" data-name="Pointer"></button>
-      <button class="tool" data-icon="select" style="--h:#9b59b6;--a:pop" data-name="Select"></button>
-      <button class="tool" data-icon="pencil" style="--h:#e67e22;--a:tilt" data-name="Pencil"></button>
-      <button class="tool" data-icon="eraser" style="--h:#e74c8c;--a:shake" data-name="Eraser"></button>
-      <button class="tool" data-icon="bucket" style="--h:#f39c12;--a:pour" data-name="Fill"></button>
-      <button class="tool" data-icon="dropper" style="--h:#27ae60;--a:bounce" data-name="Eyedropper"></button>
-      <button class="tool" data-icon="text_a" style="--h:#5b5ea6;--a:stamp" data-name="Text"></button>
-      <button class="tool" data-icon="brush" style="--h:#e74c3c;--a:wiggle" data-name="Brush"></button>
-      <button class="tool" data-icon="line" style="--h:#1abc9c;--a:tilt" data-name="Line"></button>
-      <button class="tool" data-icon="spray" style="--h:#ff6b6b;--a:shake" data-name="Spray"></button>
-      <button class="tool" data-icon="rect" style="--h:#3498db;--a:pop" data-name="Rectangle"></button>
-      <button class="tool" data-icon="oval" style="--h:#e91e63;--a:pop" data-name="Ellipse"></button>
-    </div>
-    <div class="canvas">
-      <svg class="canvas-art" width="120" height="120" viewBox="0 0 16 16" shape-rendering="crispEdges">
-        <rect x="5" y="2" width="6" height="1" fill="#000"/>
-        <rect x="4" y="3" width="1" height="1" fill="#000"/><rect x="11" y="3" width="1" height="1" fill="#000"/>
-        <rect x="3" y="4" width="1" height="1" fill="#000"/><rect x="12" y="4" width="1" height="1" fill="#000"/>
-        <rect x="3" y="5" width="1" height="1" fill="#000"/><rect x="6" y="5" width="1" height="1" fill="#000"/><rect x="9" y="5" width="1" height="1" fill="#000"/><rect x="12" y="5" width="1" height="1" fill="#000"/>
-        <rect x="3" y="6" width="1" height="1" fill="#000"/><rect x="12" y="6" width="1" height="1" fill="#000"/>
-        <rect x="3" y="7" width="1" height="1" fill="#000"/><rect x="12" y="7" width="1" height="1" fill="#000"/>
-        <rect x="3" y="8" width="1" height="1" fill="#000"/><rect x="5" y="8" width="1" height="1" fill="#000"/><rect x="10" y="8" width="1" height="1" fill="#000"/><rect x="12" y="8" width="1" height="1" fill="#000"/>
-        <rect x="3" y="9" width="1" height="1" fill="#000"/><rect x="6" y="9" width="4" height="1" fill="#000"/><rect x="12" y="9" width="1" height="1" fill="#000"/>
-        <rect x="4" y="10" width="1" height="1" fill="#000"/><rect x="11" y="10" width="1" height="1" fill="#000"/>
-        <rect x="5" y="11" width="6" height="1" fill="#000"/>
-      </svg>
-    </div>
-  </div>
-  <div class="palette">
-    <div class="fg-bg"><div class="fg"></div><div class="bg"></div></div>
-    <div class="swatches" id="swatches"></div>
-    <span class="status-msg" id="status">Pointer</span>
+<div class="frame">
+  <div class="bar" id="bar">
+    <button class="tool on" data-icon="pencil" style="--h:#e67e22;--a:tilt" data-name="Pencil"></button>
+    <button class="tool" data-icon="eraser" style="--h:#e74c8c;--a:shake" data-name="Eraser"></button>
+    <button class="tool" data-icon="brush" style="--h:#e74c3c;--a:wiggle" data-name="Brush"></button>
+    <button class="tool" data-icon="bucket" style="--h:#f39c12;--a:pour" data-name="Fill"></button>
+    <button class="tool" data-icon="dropper" style="--h:#27ae60;--a:bounce" data-name="Dropper"></button>
+    <button class="tool" data-icon="select" style="--h:#9b59b6;--a:pop" data-name="Select"></button>
+    <button class="tool" data-icon="line" style="--h:#1abc9c;--a:tilt" data-name="Line"></button>
+    <button class="tool" data-icon="rect" style="--h:#3498db;--a:pop" data-name="Rect"></button>
+    <button class="tool" data-icon="oval" style="--h:#e91e63;--a:pop" data-name="Oval"></button>
+    <button class="tool" data-icon="text_a" style="--h:#5b5ea6;--a:stamp" data-name="Text"></button>
+    <button class="tool" data-icon="spray" style="--h:#ff6b6b;--a:shake" data-name="Spray"></button>
+    <button class="tool" data-icon="pointer" style="--h:#4a90d9;--a:pop" data-name="Move"></button>
   </div>
 </div>
 
@@ -190,32 +127,19 @@
     p.setAttribute('d',d);
     p.setAttribute('fill','currentColor');
     svg.appendChild(p);
+
+    var lbl=document.createElement('span');
+    lbl.className='label';
+    lbl.textContent=el.dataset.name;
     el.appendChild(svg);
+    el.appendChild(lbl);
   });
 
-  // Tool selection
   document.querySelectorAll('.tool').forEach(function(btn){
     btn.addEventListener('click',function(){
       document.querySelectorAll('.tool').forEach(function(b){b.classList.remove('on')});
       btn.classList.add('on');
-      document.getElementById('status').textContent=btn.dataset.name||'';
     });
-  });
-
-  // Color palette
-  var colors=[
-    '#000','#808080','#800000','#ff0000','#804000','#ff8000','#808000','#ffff00','#008000','#00ff00','#008080','#00ffff','#000080','#0000ff',
-    '#fff','#c0c0c0','#ff8080','#ffb0b0','#ffc080','#ffe0b0','#ffff80','#ffffb0','#80ff80','#b0ffb0','#80ffff','#b0ffff','#8080ff','#ff00ff'
-  ];
-  var sw=document.getElementById('swatches');
-  colors.forEach(function(c){
-    var d=document.createElement('div');
-    d.className='sw';
-    d.style.background=c;
-    d.addEventListener('click',function(){
-      document.querySelector('.fg').style.background=c;
-    });
-    sw.appendChild(d);
   });
 })();
 </script>
