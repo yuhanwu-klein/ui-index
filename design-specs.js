@@ -192,23 +192,23 @@
     'toolbar-amber-crt.html': {
       title: 'Amber CRT Toolbar', tone: 'Serene · Quiet phosphor glow, industrial calm, Alien Romulus-inspired retro-futuristic', week: 'Week 7', back: 'week7.html',
       sections: {
-        Typography: [['Body font', 'Share Tech Mono'], ['Pixel font', 'Press Start 2P'], ['Body size', '12 px'], ['Line height', '16 px'], ['Letter spacing', '0.05 em'], ['Transform', 'Uppercase']],
-        Spacing: [['Button height', '32 px'], ['Button padding', '6 × 12 px'], ['Button gap', '2 px'], ['Toolbar min-height', '44 px'], ['Toolbar padding', '6 × 8 px'], ['Separator', '1 × 20 px']],
-        Component: [['Icon size', '16 × 16 px'], ['Border', '1 px solid'], ['Roundness', '0 px'], ['Page max-width', '800 px'], ['Scanline pattern', '2 px / 4 px repeat · 15% opacity']],
-        Colors: [['Background', '#0A0A06'], ['Panel', '#111108'], ['Amber', '#C8A030'], ['Amber dim', '#8A6E20'], ['Amber glow', '#E8C848'], ['Amber bright', '#FFE070'], ['Border', '#2A2510']],
-        States: [['Default', 'Transparent bg · amber text'], ['Hover', 'rgba(200,160,48,.08) fill · dim border · 8 px glow'], ['Pressed', 'rgba(200,160,48,.15) fill · amber border · 12 px glow']],
-        Motion: [['State transitions', '150 ms'], ['Easing', 'Linear (CSS transition)']]
+        Layout: [['Grid', '44 px top · 48 px sides · 32 px bottom'], ['Viewport', '2 × 2 dashboard panels'], ['Gap', '1 px border lines'], ['Scanlines', '2 px / 4 px · 15% opacity'], ['Vignette', 'Radial · 55% center']],
+        Typography: [['Body font', 'Share Tech Mono'], ['Label font', 'Press Start 2P'], ['Body size', '12 px · 0.05 em'], ['Label size', '7–8 px · 0.1–0.15 em'], ['Readout size', '20 px mono']],
+        Spacing: [['Button height', '32 px (h) · 36 px (v)'], ['Button padding', '0 12 px (h) · 0 (v)'], ['Button min-width', '32 px'], ['Separator', '1 × 20 px (h) · 24 × 1 px (v)']],
+        Component: [['Icon size', '16 × 16 px'], ['Border', '1 px solid'], ['Roundness', '0 px'], ['Corner brackets', '12 × 12 px · 1 px dim']],
+        Colors: [['Background', '#0A0A06'], ['Panel', '#111108'], ['Amber', '#C8A030'], ['Amber dim', '#8A6E20'], ['Amber glow', '#E8C848'], ['Border', '#2A2510']],
+        States: [['Default', 'Transparent bg · amber text'], ['Hover', 'rgba(200,160,48,.08) · dim border · 8 px glow'], ['Active', 'rgba(200,160,48,.15) · amber border · 12 px glow']]
       }
     },
     'toolbar-green-crt.html': {
       title: 'Green Phosphor Toolbar', tone: 'Mysterious · Mining ship terminal, Commodore 64 pixel grid, low-res monochrome display', week: 'Week 7', back: 'week7.html',
       sections: {
-        Typography: [['Font', 'Press Start 2P'], ['Size', '11 px'], ['Line height', '16 px'], ['Letter spacing', '0.08 em'], ['Transform', 'Uppercase']],
-        Spacing: [['Button height', '32 px'], ['Button padding', '4 × 14 px'], ['Button gap', '0 px'], ['Toolbar min-height', '40 px'], ['Toolbar padding', '4 px'], ['Separator', '1 × 18 px']],
-        Component: [['Icon size', '14 × 14 px'], ['Border', '1 px solid'], ['Roundness', '0 px'], ['Page max-width', '800 px'], ['Scanline pattern', '1 px / 3 px repeat · 12% opacity'], ['Vignette', 'Radial gradient · 50% transparent center']],
-        Colors: [['Background', '#040A06'], ['Panel', '#081208'], ['Green', '#30C860'], ['Green dim', '#1A7838'], ['Green glow', '#50E880'], ['Green bright', '#80FFA0'], ['Border', '#0A2A12']],
-        States: [['Default', 'Transparent bg · green text'], ['Hover', 'rgba(48,200,96,.06) fill · dim border · 10 px glow'], ['Pressed', 'rgba(48,200,96,.12) fill · green border · 16 px glow']],
-        Motion: [['State transitions', '120 ms'], ['Easing', 'Linear (CSS transition)']]
+        Layout: [['Grid', '40 px top · 44 px sides · 28 px bottom'], ['Viewport', '2 × 2 dashboard panels'], ['Gap', '1 px border lines'], ['Scanlines', '1 px / 3 px · 12% opacity'], ['Vignette', 'Radial · 45% center (stronger)']],
+        Typography: [['Primary font', 'Press Start 2P'], ['Mono font', 'Share Tech Mono'], ['Button size', '11 px pixel · 0.08 em'], ['Label size', '6–7 px pixel · 0.15 em'], ['Log size', '10 px mono']],
+        Spacing: [['Button height', '30 px (h) · 34 px (v)'], ['Button padding', '0 10 px (h) · 0 (v)'], ['Button gap', '0 px (tight)'], ['Separator', '1 × 18 px (h) · 20 × 1 px (v)']],
+        Component: [['Icon size', '14 × 14 px'], ['Border', '1 px solid'], ['Roundness', '0 px'], ['Corner brackets', '10 × 10 px · 1 px dim'], ['Meter track', '6 px high']],
+        Colors: [['Background', '#040A06'], ['Panel', '#081208'], ['Green', '#30C860'], ['Green dim', '#1A7838'], ['Green glow', '#50E880'], ['Border', '#0A2A12']],
+        States: [['Default', 'Transparent bg · green text'], ['Hover', 'rgba(48,200,96,.06) · dim border · 10 px glow'], ['Active', 'rgba(48,200,96,.12) · green border · 16 px glow']]
       }
     }
   };

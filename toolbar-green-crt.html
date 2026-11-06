@@ -4,261 +4,228 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Green Phosphor Toolbar · Mysterious</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap');
     *{box-sizing:border-box;margin:0}
     :root{
-      --bg:#040a06;--panel:#081208;--green:#30c860;--green-dim:#1a7838;--green-glow:#50e880;
-      --green-bright:#80ffa0;--scanline:rgba(0,0,0,.4);--border:#0a2a12;
-      --font-pixel:'Press Start 2P',monospace;--font-mono:'Share Tech Mono',monospace;
+      --bg:#040a06;--panel:#081208;--green:#30c860;--dim:#1a7838;--glow:#50e880;
+      --bright:#80ffa0;--border:#0a2a12;
+      --px:'Press Start 2P',monospace;--mono:'Share Tech Mono',monospace;
     }
-    html,body{min-height:100vh;background:var(--bg);color:var(--green);font-family:var(--font-mono)}
+    html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--green);font-family:var(--mono)}
 
-    .page{max-width:800px;margin:0 auto;padding:40px 24px}
+    .fui{display:grid;grid-template-rows:40px 1fr 28px;grid-template-columns:44px 1fr 44px;height:100vh;gap:1px;background:var(--border);position:relative}
+    .fui::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 1px,rgba(0,0,0,.35) 1px,rgba(0,0,0,.35) 3px);pointer-events:none;opacity:.12;z-index:100}
+    .fui::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.55));pointer-events:none;z-index:101}
 
-    .section-label{font:10px/1 var(--font-pixel);color:var(--green-dim);letter-spacing:.2em;text-transform:uppercase;margin-bottom:16px}
-    .tone-badge{display:inline-block;font:9px/1 var(--font-pixel);color:var(--bg);background:var(--green-dim);padding:4px 10px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:32px}
-    h1{font:20px/1.2 var(--font-pixel);color:var(--green-glow);margin-bottom:8px;text-shadow:0 0 14px rgba(48,200,96,.35)}
+    .tb{background:var(--panel);display:flex;align-items:center}
+    .tb-h{grid-column:1/-1;gap:0;padding:0 4px}
+    .tb-h.spread{justify-content:space-between}
+    .tb-v{flex-direction:column;padding:4px 0;gap:0}
+    .tb-bar{grid-column:1/-1;gap:10px;padding:0 10px}
 
-    .toolbar-wrap{margin:20px 0 40px;position:relative}
-    .toolbar-wrap::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 1px,var(--scanline) 1px,var(--scanline) 3px);pointer-events:none;opacity:.12;z-index:10}
-    .toolbar-wrap::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.5));pointer-events:none;z-index:11}
-
-    .toolbar{
-      display:flex;align-items:center;gap:0;
-      padding:4px;background:var(--panel);
-      border:1px solid var(--border);
-      position:relative;min-height:40px;
-    }
-    .toolbar.center{justify-content:center}
-    .toolbar.right{justify-content:flex-end}
-    .toolbar.spread{justify-content:space-between}
-
-    .tb-btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:6px;
-      padding:4px 14px;height:32px;
-      background:transparent;border:1px solid transparent;
-      color:var(--green);font:11px var(--font-pixel);
-      cursor:pointer;position:relative;
-      transition:all .12s;
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:5px;
+      height:30px;min-width:30px;padding:0 10px;
+      background:0;border:1px solid transparent;
+      color:var(--green);font:11px var(--px);cursor:pointer;
       letter-spacing:.08em;text-transform:uppercase;
+      transition:all .12s;
     }
-    .tb-btn:hover{
-      background:rgba(48,200,96,.06);border-color:var(--green-dim);
-      color:var(--green-glow);text-shadow:0 0 10px rgba(48,200,96,.5);
-      box-shadow:inset 0 0 20px rgba(48,200,96,.04);
-    }
-    .tb-btn:active,.tb-btn.pressed{
-      background:rgba(48,200,96,.12);border-color:var(--green);
-      color:var(--green-bright);text-shadow:0 0 16px rgba(48,200,96,.7);
-      box-shadow:inset 0 0 30px rgba(48,200,96,.06);
-    }
+    .btn:hover{background:rgba(48,200,96,.06);border-color:var(--dim);color:var(--glow);text-shadow:0 0 10px rgba(48,200,96,.5)}
+    .btn:active,.btn.on{background:rgba(48,200,96,.12);border-color:var(--green);color:var(--bright);text-shadow:0 0 16px rgba(48,200,96,.7)}
+    .tb-v .btn{height:34px;width:34px;padding:0}
+    .btn-mono{font:12px var(--mono);letter-spacing:.05em}
 
-    .tb-sep{width:1px;height:18px;background:var(--green-dim);margin:0 4px;flex-shrink:0;opacity:.4}
+    .sep{background:var(--dim);flex-shrink:0;opacity:.3}
+    .tb-h .sep,.tb-bar .sep{width:1px;height:18px;margin:0 4px}
+    .tb-v .sep{height:1px;width:20px;margin:3px 0}
+    .g{display:flex;align-items:center;gap:0}
+    .tb-v .g{flex-direction:column}
 
-    .tb-group{display:flex;align-items:center;gap:0}
+    svg.i{width:14px;height:14px;fill:currentColor}
 
-    .state-label{font:9px/1 var(--font-pixel);color:var(--green-dim);letter-spacing:.15em;text-transform:uppercase;margin:12px 0 8px;opacity:.6}
+    .st{font:7px var(--px);color:var(--dim);letter-spacing:.1em;white-space:nowrap}
+    .st b{color:var(--green);font-weight:400}
+    .blink{animation:bk 1.2s step-end infinite}
+    @keyframes bk{50%{opacity:.2}}
 
-    .demo-area{padding:20px 0}
-    .demo-area + .demo-area{border-top:1px solid var(--border)}
+    .vp{background:var(--border);display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1px}
+    .p{background:var(--panel);position:relative;overflow:hidden}
+    .p::before,.p::after{content:'';position:absolute;width:10px;height:10px;border-color:var(--dim);border-style:solid;pointer-events:none;z-index:3;opacity:.4}
+    .p::before{top:3px;left:3px;border-width:1px 0 0 1px}
+    .p::after{bottom:3px;right:3px;border-width:0 1px 1px 0}
+    .p-label{position:absolute;top:0;left:0;font:6px var(--px);color:var(--dim);letter-spacing:.15em;text-transform:uppercase;padding:7px 9px;z-index:2}
+    .p-c{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
 
-    svg.px-icon{width:14px;height:14px;fill:currentColor;image-rendering:pixelated}
+    /* spectrum bars */
+    .bars{display:flex;align-items:flex-end;gap:6px;height:60%;padding:0 12%}
+    .bar{flex:1;background:var(--green);opacity:.7;min-width:8px;position:relative;transition:height .3s}
+    .bar::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--glow);box-shadow:0 0 6px rgba(48,200,96,.5)}
 
-    .blink{animation:blink 1.2s step-end infinite}
-    @keyframes blink{50%{opacity:.3}}
+    /* terminal log */
+    .log{padding:22px 10px 8px;font:10px var(--mono);color:var(--dim);line-height:1.7;width:100%;overflow:hidden}
+    .log span{color:var(--green)}
+    .log .hi{color:var(--glow);text-shadow:0 0 4px rgba(48,200,96,.3)}
+
+    /* meters */
+    .meters{padding:22px 12px 10px;width:100%;display:flex;flex-direction:column;gap:10px}
+    .meter{display:flex;flex-direction:column;gap:3px}
+    .m-label{display:flex;justify-content:space-between;font:6px var(--px);color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+    .m-label b{color:var(--green);font-weight:400}
+    .m-track{height:6px;background:rgba(48,200,96,.08);position:relative}
+    .m-fill{height:100%;background:var(--green);position:relative}
+    .m-fill::after{content:'';position:absolute;right:0;top:-1px;bottom:-1px;width:2px;background:var(--glow);box-shadow:0 0 6px rgba(48,200,96,.5)}
+
+    @keyframes sweep{to{transform:rotate(360deg)}}
+    @keyframes pulse{0%,100%{opacity:.7}50%{opacity:.15}}
+
+    html.is-preview .fui::before,html.is-preview .fui::after{display:none}
   </style>
 </head>
 <body>
-  <div class="page">
-    <span class="tone-badge">Tone: Mysterious</span>
-    <h1>Green Phosphor<br>Toolbar</h1>
-    <p style="color:var(--green-dim);font-size:14px;line-height:1.6;margin-bottom:8px;font-family:var(--font-mono)">Mining ship terminal. Commodore 64 pixel grid. Low-resolution monochrome display.</p>
+<div class="fui">
+  <!-- TOP TOOLBAR: spread — icon+text left, text center, icon right -->
+  <nav class="tb tb-h spread">
+    <div class="g">
+      <button class="btn" aria-label="Menu"><svg class="i" viewBox="0 0 14 14"><rect x="1" y="2" width="12" height="2"/><rect x="1" y="6" width="8" height="2"/><rect x="1" y="10" width="12" height="2"/></svg></button>
+      <div class="sep"></div>
+      <button class="btn btn-mono"><svg class="i" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="1"/><line x1="7" y1="7" x2="11" y2="3" stroke="currentColor" stroke-width="1.5"/></svg> Scan</button>
+      <button class="btn btn-mono"><svg class="i" viewBox="0 0 14 14"><rect x="1" y="2" width="12" height="10" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="5" width="2" height="1.5"/><rect x="5" y="6.5" width="2" height="1.5"/><rect x="7" y="8" width="4" height="1.5"/></svg> Log</button>
+    </div>
+    <div class="g">
+      <button class="btn">Sys</button>
+      <button class="btn on">Nav</button>
+      <button class="btn">Eng</button>
+    </div>
+    <div class="g">
+      <button class="btn" aria-label="Signal"><svg class="i" viewBox="0 0 14 14"><rect x="2" y="10" width="2" height="2"/><rect x="5" y="7" width="2" height="5"/><rect x="8" y="4" width="2" height="8"/><rect x="11" y="1" width="2" height="11"/></svg></button>
+      <button class="btn" aria-label="Lock"><svg class="i" viewBox="0 0 14 14"><rect x="3" y="6" width="8" height="7" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="2" width="4" height="5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="6" y="9" width="2" height="2"/></svg></button>
+    </div>
+  </nav>
 
-    <!-- 1. LEFT ALIGNED — TEXT BUTTONS (pixel font) -->
-    <div class="demo-area">
-      <p class="section-label">Left aligned · Text buttons</p>
-      <p class="state-label">Default</p>
-      <div class="toolbar-wrap">
-        <div class="toolbar">
-          <button class="tb-btn">Sys</button>
-          <button class="tb-btn">Nav</button>
-          <button class="tb-btn">Eng</button>
-          <div class="tb-sep"></div>
-          <button class="tb-btn">Comm</button>
-          <button class="tb-btn">Log</button>
-        </div>
+  <!-- LEFT TOOLBAR: vertical icons -->
+  <aside class="tb tb-v">
+    <div class="g">
+      <button class="btn on" aria-label="Radar"><svg class="i" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="7" y1="7" x2="11" y2="3" stroke="currentColor" stroke-width="1.5"/></svg></button>
+      <button class="btn" aria-label="Camera"><svg class="i" viewBox="0 0 14 14"><rect x="1" y="4" width="12" height="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="8" r="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="2" width="4" height="2"/></svg></button>
+      <button class="btn" aria-label="Terminal"><svg class="i" viewBox="0 0 14 14"><rect x="1" y="2" width="12" height="10" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="5" width="2" height="1.5"/><rect x="5" y="6.5" width="2" height="1.5"/></svg></button>
+    </div>
+    <div class="sep"></div>
+    <div class="g">
+      <button class="btn" aria-label="Grid"><svg class="i" viewBox="0 0 14 14"><rect x="1" y="1" width="5" height="5"/><rect x="8" y="1" width="5" height="5"/><rect x="1" y="8" width="5" height="5"/><rect x="8" y="8" width="5" height="5"/></svg></button>
+      <button class="btn" aria-label="Settings"><svg class="i" viewBox="0 0 14 14"><rect x="3" y="6" width="8" height="1.5"/><rect x="5" y="2" width="4" height="1.5"/><rect x="5" y="10" width="4" height="1.5"/><rect x="1" y="6" width="2" height="1.5"/><rect x="11" y="6" width="2" height="1.5"/></svg></button>
+    </div>
+  </aside>
+
+  <!-- VIEWPORT: 2×2 dashboard -->
+  <main class="vp">
+    <!-- SONAR -->
+    <div class="p">
+      <span class="p-label">Sonar</span>
+      <div class="p-c">
+        <svg viewBox="0 0 200 200" style="width:min(70%,160px)">
+          <circle cx="100" cy="100" r="85" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".3"/>
+          <circle cx="100" cy="100" r="56" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".25"/>
+          <circle cx="100" cy="100" r="28" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".2"/>
+          <line x1="100" y1="12" x2="100" y2="188" stroke="var(--dim)" stroke-width=".3" opacity=".2"/>
+          <line x1="12" y1="100" x2="188" y2="100" stroke="var(--dim)" stroke-width=".3" opacity=".2"/>
+          <line x1="38" y1="38" x2="162" y2="162" stroke="var(--dim)" stroke-width=".3" opacity=".12"/>
+          <line x1="162" y1="38" x2="38" y2="162" stroke="var(--dim)" stroke-width=".3" opacity=".12"/>
+          <g style="transform-origin:100px 100px;animation:sweep 5s linear infinite">
+            <line x1="100" y1="100" x2="100" y2="15" stroke="var(--green)" stroke-width="1" opacity=".6"/>
+          </g>
+          <circle cx="65" cy="62" r="3" fill="var(--glow)" style="animation:pulse 2.2s ease infinite"/>
+          <circle cx="142" cy="88" r="2" fill="var(--glow)" style="animation:pulse 3.4s ease infinite .7s"/>
+          <circle cx="78" cy="135" r="2.5" fill="var(--glow)" style="animation:pulse 2.8s ease infinite 1.2s"/>
+          <circle cx="120" cy="52" r="1.5" fill="var(--glow)" style="animation:pulse 4s ease infinite .3s"/>
+        </svg>
       </div>
-      <p class="state-label">Hover (Nav)</p>
-      <div class="toolbar-wrap">
-        <div class="toolbar">
-          <button class="tb-btn">Sys</button>
-          <button class="tb-btn" style="background:rgba(48,200,96,.06);border-color:#1a7838;color:#50e880;text-shadow:0 0 10px rgba(48,200,96,.5)">Nav</button>
-          <button class="tb-btn">Eng</button>
-          <div class="tb-sep"></div>
-          <button class="tb-btn">Comm</button>
-          <button class="tb-btn">Log</button>
-        </div>
-      </div>
-      <p class="state-label">Pressed (Nav)</p>
-      <div class="toolbar-wrap">
-        <div class="toolbar">
-          <button class="tb-btn">Sys</button>
-          <button class="tb-btn pressed">Nav</button>
-          <button class="tb-btn">Eng</button>
-          <div class="tb-sep"></div>
-          <button class="tb-btn">Comm</button>
-          <button class="tb-btn">Log</button>
+    </div>
+
+    <!-- SPECTRUM -->
+    <div class="p">
+      <span class="p-label">Freq</span>
+      <div class="p-c">
+        <div class="bars">
+          <div class="bar" style="height:72%"></div>
+          <div class="bar" style="height:45%"></div>
+          <div class="bar" style="height:88%"></div>
+          <div class="bar" style="height:34%"></div>
+          <div class="bar" style="height:60%"></div>
+          <div class="bar" style="height:92%"></div>
+          <div class="bar" style="height:28%"></div>
+          <div class="bar" style="height:55%"></div>
+          <div class="bar" style="height:78%"></div>
+          <div class="bar" style="height:40%"></div>
         </div>
       </div>
     </div>
 
-    <!-- 2. CENTER ALIGNED — ICON BUTTONS -->
-    <div class="demo-area">
-      <p class="section-label">Center aligned · Icon buttons</p>
-      <p class="state-label">Default</p>
-      <div class="toolbar-wrap">
-        <div class="toolbar center">
-          <button class="tb-btn" aria-label="Radar">
-            <svg class="px-icon" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="1"/><line x1="7" y1="7" x2="11" y2="3" stroke="currentColor" stroke-width="1.5"/></svg>
-          </button>
-          <button class="tb-btn" aria-label="Terminal">
-            <svg class="px-icon" viewBox="0 0 14 14"><rect x="1" y="2" width="12" height="10" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="5" width="2" height="1.5"/><rect x="5" y="6.5" width="2" height="1.5"/><rect x="7" y="8" width="4" height="1.5"/></svg>
-          </button>
-          <div class="tb-sep"></div>
-          <button class="tb-btn" aria-label="Camera">
-            <svg class="px-icon" viewBox="0 0 14 14"><rect x="1" y="4" width="12" height="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="8" r="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="2" width="4" height="2"/></svg>
-          </button>
-          <button class="tb-btn" aria-label="Signal">
-            <svg class="px-icon" viewBox="0 0 14 14"><rect x="2" y="10" width="2" height="2"/><rect x="5" y="7" width="2" height="5"/><rect x="8" y="4" width="2" height="8"/><rect x="11" y="1" width="2" height="11"/></svg>
-          </button>
-        </div>
-      </div>
-      <p class="state-label">Hover (Radar)</p>
-      <div class="toolbar-wrap">
-        <div class="toolbar center">
-          <button class="tb-btn" aria-label="Radar" style="background:rgba(48,200,96,.06);border-color:#1a7838;color:#50e880;text-shadow:0 0 10px rgba(48,200,96,.5)">
-            <svg class="px-icon" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="1"/><line x1="7" y1="7" x2="11" y2="3" stroke="currentColor" stroke-width="1.5"/></svg>
-          </button>
-          <button class="tb-btn" aria-label="Terminal">
-            <svg class="px-icon" viewBox="0 0 14 14"><rect x="1" y="2" width="12" height="10" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="5" width="2" height="1.5"/><rect x="5" y="6.5" width="2" height="1.5"/><rect x="7" y="8" width="4" height="1.5"/></svg>
-          </button>
-          <div class="tb-sep"></div>
-          <button class="tb-btn" aria-label="Camera">
-            <svg class="px-icon" viewBox="0 0 14 14"><rect x="1" y="4" width="12" height="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="8" r="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="2" width="4" height="2"/></svg>
-          </button>
-          <button class="tb-btn" aria-label="Signal">
-            <svg class="px-icon" viewBox="0 0 14 14"><rect x="2" y="10" width="2" height="2"/><rect x="5" y="7" width="2" height="5"/><rect x="8" y="4" width="2" height="8"/><rect x="11" y="1" width="2" height="11"/></svg>
-          </button>
-        </div>
+    <!-- LOG -->
+    <div class="p">
+      <span class="p-label">Log</span>
+      <div class="log">
+        <div>[<span>14:22:08</span>] SYS.INIT <span class="hi">OK</span></div>
+        <div>[<span>14:22:09</span>] NAV.BEACON LOCK</div>
+        <div>[<span>14:22:11</span>] COMM.FREQ 2447.8</div>
+        <div>[<span>14:22:14</span>] SCAN.RANGE 800M</div>
+        <div>[<span>14:22:15</span>] ENG.THRUST <span class="hi">IDLE</span></div>
+        <div>[<span>14:22:18</span>] LIFE.O2 <span class="hi">NOM</span></div>
+        <div style="color:var(--green)">>&nbsp;<span class="blink">_</span></div>
       </div>
     </div>
 
-    <!-- 3. RIGHT ALIGNED — ICON + TEXT BUTTONS -->
-    <div class="demo-area">
-      <p class="section-label">Right aligned · Icon + text buttons</p>
-      <p class="state-label">Default</p>
-      <div class="toolbar-wrap">
-        <div class="toolbar right">
-          <button class="tb-btn">
-            <svg class="px-icon" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="1"/><line x1="7" y1="7" x2="11" y2="3" stroke="currentColor" stroke-width="1.5"/></svg>
-            Scan
-          </button>
-          <button class="tb-btn">
-            <svg class="px-icon" viewBox="0 0 14 14"><rect x="1" y="4" width="12" height="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="8" r="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="2" width="4" height="2"/></svg>
-            View
-          </button>
-          <div class="tb-sep"></div>
-          <button class="tb-btn">
-            <svg class="px-icon" viewBox="0 0 14 14"><rect x="3" y="1" width="8" height="12" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="10" width="4" height="1.5"/></svg>
-            Data
-          </button>
+    <!-- METERS -->
+    <div class="p">
+      <span class="p-label">Vitals</span>
+      <div class="meters">
+        <div class="meter">
+          <div class="m-label"><span>O₂ Supply</span><b>84%</b></div>
+          <div class="m-track"><div class="m-fill" style="width:84%"></div></div>
         </div>
-      </div>
-      <p class="state-label">Hover (Scan)</p>
-      <div class="toolbar-wrap">
-        <div class="toolbar right">
-          <button class="tb-btn" style="background:rgba(48,200,96,.06);border-color:#1a7838;color:#50e880;text-shadow:0 0 10px rgba(48,200,96,.5)">
-            <svg class="px-icon" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="1"/><line x1="7" y1="7" x2="11" y2="3" stroke="currentColor" stroke-width="1.5"/></svg>
-            Scan
-          </button>
-          <button class="tb-btn">
-            <svg class="px-icon" viewBox="0 0 14 14"><rect x="1" y="4" width="12" height="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="8" r="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="2" width="4" height="2"/></svg>
-            View
-          </button>
-          <div class="tb-sep"></div>
-          <button class="tb-btn">
-            <svg class="px-icon" viewBox="0 0 14 14"><rect x="3" y="1" width="8" height="12" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="10" width="4" height="1.5"/></svg>
-            Data
-          </button>
+        <div class="meter">
+          <div class="m-label"><span>Fuel Cell</span><b>67%</b></div>
+          <div class="m-track"><div class="m-fill" style="width:67%"></div></div>
+        </div>
+        <div class="meter">
+          <div class="m-label"><span>Hull Int</span><b>98%</b></div>
+          <div class="m-track"><div class="m-fill" style="width:98%"></div></div>
+        </div>
+        <div class="meter">
+          <div class="m-label"><span>Comms Pwr</span><b>52%</b></div>
+          <div class="m-track"><div class="m-fill" style="width:52%"></div></div>
         </div>
       </div>
     </div>
+  </main>
 
-    <!-- 4. SPREAD — FULL SYSTEM -->
-    <div class="demo-area">
-      <p class="section-label">Spread layout · Full system</p>
-      <p class="state-label">Default</p>
-      <div class="toolbar-wrap">
-        <div class="toolbar spread">
-          <div class="tb-group">
-            <button class="tb-btn">
-              <svg class="px-icon" viewBox="0 0 14 14"><rect x="1" y="2" width="12" height="2"/><rect x="1" y="6" width="8" height="2"/><rect x="1" y="10" width="12" height="2"/></svg>
-            </button>
-            <div class="tb-sep"></div>
-            <button class="tb-btn">Sys</button>
-            <button class="tb-btn">Nav</button>
-            <button class="tb-btn">Eng</button>
-          </div>
-          <div class="tb-group">
-            <span class="blink" style="font:9px var(--font-pixel);color:var(--green-dim);letter-spacing:.1em;padding:0 12px">REC</span>
-          </div>
-          <div class="tb-group">
-            <button class="tb-btn">
-              <svg class="px-icon" viewBox="0 0 14 14"><rect x="2" y="10" width="2" height="2"/><rect x="5" y="7" width="2" height="5"/><rect x="8" y="4" width="2" height="8"/><rect x="11" y="1" width="2" height="11"/></svg>
-            </button>
-            <button class="tb-btn">
-              <svg class="px-icon" viewBox="0 0 14 14"><rect x="3" y="7" width="8" height="1.5"/><rect x="5" y="3" width="4" height="1.5"/><rect x="5" y="10" width="4" height="1.5"/><rect x="1" y="7" width="2" height="1.5"/><rect x="11" y="7" width="2" height="1.5"/></svg>
-            </button>
-          </div>
-        </div>
-      </div>
+  <!-- RIGHT TOOLBAR: vertical icons -->
+  <aside class="tb tb-v">
+    <div class="g">
+      <button class="btn" aria-label="Layers"><svg class="i" viewBox="0 0 14 14"><rect x="2" y="1" width="10" height="3" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="5" width="10" height="3" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="9" width="10" height="3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+      <button class="btn" aria-label="Info"><svg class="i" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="6" y="6" width="2" height="4"/><circle cx="7" cy="4" r="1"/></svg></button>
+      <button class="btn" aria-label="Fullscreen"><svg class="i" viewBox="0 0 14 14"><rect x="1" y="1" width="5" height="1.5"/><rect x="1" y="1" width="1.5" height="5"/><rect x="8" y="1" width="5" height="1.5"/><rect x="11.5" y="1" width="1.5" height="5"/><rect x="1" y="11.5" width="5" height="1.5"/><rect x="1" y="8" width="1.5" height="5"/><rect x="8" y="11.5" width="5" height="1.5"/><rect x="11.5" y="8" width="1.5" height="5"/></svg></button>
     </div>
+  </aside>
 
-    <!-- INTERACTIVE -->
-    <div class="demo-area">
-      <p class="section-label">Interactive demo</p>
-      <div class="toolbar-wrap" id="interactive-wrap">
-        <div class="toolbar" id="live-toolbar">
-          <button class="tb-btn" data-action="sys">Sys</button>
-          <button class="tb-btn" data-action="nav">Nav</button>
-          <button class="tb-btn" data-action="eng">Eng</button>
-          <div class="tb-sep"></div>
-          <button class="tb-btn" data-action="scan">
-            <svg class="px-icon" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="1"/><line x1="7" y1="7" x2="11" y2="3" stroke="currentColor" stroke-width="1.5"/></svg>
-            Scan
-          </button>
-          <button class="tb-btn" data-action="log">
-            <svg class="px-icon" viewBox="0 0 14 14"><rect x="1" y="2" width="12" height="10" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="5" width="2" height="1.5"/><rect x="5" y="6.5" width="2" height="1.5"/><rect x="7" y="8" width="4" height="1.5"/></svg>
-            Log
-          </button>
-          <div class="tb-sep"></div>
-          <button class="tb-btn" data-action="lock">
-            <svg class="px-icon" viewBox="0 0 14 14"><rect x="3" y="6" width="8" height="7" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="2" width="4" height="5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="6" y="9" width="2" height="2"/></svg>
-          </button>
-        </div>
-      </div>
-      <p style="color:var(--green-dim);font-size:11px;margin-top:8px;font-family:var(--font-pixel);letter-spacing:.1em">Click buttons to see states</p>
-    </div>
-  </div>
+  <!-- BOTTOM TOOLBAR: status bar -->
+  <nav class="tb tb-h tb-bar">
+    <span class="st blink" style="color:var(--green)">Rec</span>
+    <div class="sep"></div>
+    <span class="st">Freq:<b>2447.8</b></span>
+    <div class="sep"></div>
+    <span class="st">Range:<b>800m</b></span>
+    <span style="flex:1"></span>
+    <span class="st" id="clk">--:--:--</span>
+  </nav>
+</div>
 
-  <script>
-    document.querySelectorAll('#live-toolbar .tb-btn').forEach(btn => {
-      btn.addEventListener('mousedown', () => btn.classList.add('pressed'));
-      btn.addEventListener('mouseup', () => btn.classList.remove('pressed'));
-      btn.addEventListener('mouseleave', () => btn.classList.remove('pressed'));
-    });
-  </script>
-  <script src="design-specs.js"></script>
+<script>
+  var c=document.getElementById('clk');
+  if(c)setInterval(function(){var d=new Date();c.textContent=[d.getHours(),d.getMinutes(),d.getSeconds()].map(function(n){return String(n).padStart(2,'0')}).join(':')},1000);
+</script>
+<script src="design-specs.js"></script>
 </body>
 </html>
