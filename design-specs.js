@@ -192,8 +192,8 @@
     'toolbar-amber-crt.html': {
       title: 'Amber CRT Toolbar', tone: 'Serene · Quiet phosphor glow, industrial calm, Alien Romulus-inspired retro-futuristic', week: 'Week 7', back: 'week7.html',
       sections: {
-        Layout: [['Page', 'White bg · centered FUI container'], ['Container', '560 px · 4 : 3 · 8 px radius'], ['Grid', '34 px top · 36 px sides · 24 px bottom'], ['Viewport', '2 × 2 dashboard panels'], ['Scanlines', '2 px / 4 px · 10% opacity']],
-        Typography: [['Body font', 'Share Tech Mono'], ['Label font', 'Press Start 2P'], ['Body size', '10 px · 0.05 em'], ['Label size', '5–6 px · 0.08–0.12 em'], ['Readout size', '14 px mono']],
+        Layout: [['Page', 'White bg · centered FUI container'], ['Container', '560 px · 4 : 3 · 8 px radius'], ['Grid', '34 px top · 36 px sides · 24 px bottom'], ['Viewport', '2 × 2 panels: Terrain · Heartrate · Biometric · Heading'], ['Scanlines', '2 px / 4 px · 10% opacity']],
+        Typography: [['Body font', 'Share Tech Mono'], ['Label font', 'Press Start 2P'], ['Body size', '10 px · 0.05 em'], ['Label size', '5–6 px · 0.08–0.12 em'], ['BPM readout', '20 px mono · glow shadow']],
         Spacing: [['Button height', '24 px (h) · 28 px (v)'], ['Button padding', '0 8 px (h) · 0 (v)'], ['Button min-width', '24 px'], ['Separator', '1 × 14 px (h) · 18 × 1 px (v)']],
         Component: [['Icon size', '13 × 13 px'], ['Border', '1 px solid'], ['Roundness', '0 px (FUI) · 8 px (container)'], ['Corner brackets', '8 × 8 px · 1 px dim']],
         Colors: [['Background', '#0A0A06'], ['Panel', '#111108'], ['Amber', '#C8A030'], ['Amber dim', '#8A6E20'], ['Amber glow', '#E8C848'], ['Border', '#2A2510']],

@@ -64,11 +64,15 @@
     .p-label{position:absolute;top:0;left:0;font:5px var(--px);color:var(--dim);letter-spacing:.12em;text-transform:uppercase;padding:5px 7px;z-index:2}
     .p-c{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
 
-    .rd{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:18px 8px 8px;width:100%}
-    .r{display:flex;flex-direction:column;gap:1px}
-    .r-l{font:5px var(--px);color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
-    .r-v{font:14px var(--mono);color:var(--glow);text-shadow:0 0 4px rgba(200,160,48,.2);letter-spacing:.03em}
-    .r-u{font:5px var(--px);color:var(--dim)}
+    .bpm{position:absolute;top:4px;right:8px;z-index:2;text-align:right}
+    .bpm-v{font:20px var(--mono);color:var(--glow);text-shadow:0 0 8px rgba(200,160,48,.3)}
+    .bpm-u{font:5px var(--px);color:var(--dim);letter-spacing:.08em}
+    .scan-ln{position:absolute;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,var(--amber),transparent);opacity:.4;z-index:2;animation:scanh 3s ease-in-out infinite}
+    @keyframes scanh{0%,100%{left:10%}50%{left:90%}}
+    .ecg-scan{position:absolute;top:0;bottom:0;width:1px;background:var(--glow);opacity:.5;z-index:2;animation:ecgscan 2.5s linear infinite}
+    @keyframes ecgscan{from{left:0}to{left:100%}}
+    .p-data{position:absolute;bottom:4px;left:7px;font:5px var(--px);color:var(--dim);letter-spacing:.06em;z-index:2}
+    .p-data b{color:var(--amber);font-weight:400}
 
     @keyframes sweep{to{transform:rotate(360deg)}}
     @keyframes pulse{0%,100%{opacity:.7}50%{opacity:.25}}
@@ -110,51 +114,134 @@
   </aside>
 
   <main class="vp" id="vp">
+    <!-- TERRAIN — perspective grid with elevation profile -->
     <div class="p">
-      <span class="p-label">Scanner</span>
+      <span class="p-label">Terrain</span>
+      <div class="p-c">
+        <svg viewBox="0 0 300 200" style="width:92%;height:88%">
+          <line x1="0" y1="75" x2="300" y2="75" stroke="var(--dim)" stroke-width=".3" opacity=".12"/>
+          <line x1="0" y1="95" x2="300" y2="95" stroke="var(--dim)" stroke-width=".3" opacity=".16"/>
+          <line x1="0" y1="120" x2="300" y2="120" stroke="var(--dim)" stroke-width=".3" opacity=".2"/>
+          <line x1="0" y1="150" x2="300" y2="150" stroke="var(--dim)" stroke-width=".3" opacity=".25"/>
+          <line x1="0" y1="185" x2="300" y2="185" stroke="var(--dim)" stroke-width=".3" opacity=".3"/>
+          <line x1="150" y1="50" x2="0" y2="200" stroke="var(--dim)" stroke-width=".3" opacity=".1"/>
+          <line x1="150" y1="50" x2="60" y2="200" stroke="var(--dim)" stroke-width=".3" opacity=".13"/>
+          <line x1="150" y1="50" x2="120" y2="200" stroke="var(--dim)" stroke-width=".3" opacity=".16"/>
+          <line x1="150" y1="50" x2="150" y2="200" stroke="var(--dim)" stroke-width=".3" opacity=".18"/>
+          <line x1="150" y1="50" x2="180" y2="200" stroke="var(--dim)" stroke-width=".3" opacity=".16"/>
+          <line x1="150" y1="50" x2="240" y2="200" stroke="var(--dim)" stroke-width=".3" opacity=".13"/>
+          <line x1="150" y1="50" x2="300" y2="200" stroke="var(--dim)" stroke-width=".3" opacity=".1"/>
+          <path d="M0,145 Q30,140 50,125 T90,118 T120,100 T150,108 T180,92 T210,105 T240,95 T270,110 T300,130 L300,200 L0,200 Z" fill="rgba(200,160,48,.04)"/>
+          <path d="M0,145 Q30,140 50,125 T90,118 T120,100 T150,108 T180,92 T210,105 T240,95 T270,110 T300,130" fill="none" stroke="var(--amber)" stroke-width="1.5" style="filter:drop-shadow(0 0 6px rgba(200,160,48,.35))"/>
+          <polygon points="148,80 150,74 152,80 150,78" fill="var(--glow)" style="filter:drop-shadow(0 0 3px rgba(200,160,48,.5))"/>
+          <text x="4" y="78" style="fill:var(--dim);font:5px var(--px);letter-spacing:.06em">FL340</text>
+          <text x="4" y="98" style="fill:var(--dim);font:5px var(--px);letter-spacing:.06em">FL280</text>
+          <text x="4" y="123" style="fill:var(--dim);font:5px var(--px);letter-spacing:.06em">FL220</text>
+          <text x="4" y="153" style="fill:var(--dim);font:5px var(--px);letter-spacing:.06em">FL160</text>
+          <text x="150" y="198" style="fill:var(--dim);font:5px var(--px);letter-spacing:.04em;text-anchor:middle">0 NM</text>
+          <text x="240" y="198" style="fill:var(--dim);font:4px var(--px);letter-spacing:.04em;text-anchor:middle">40</text>
+          <text x="60" y="198" style="fill:var(--dim);font:4px var(--px);letter-spacing:.04em;text-anchor:middle">-40</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- HEARTRATE — ECG waveform + BPM -->
+    <div class="p">
+      <span class="p-label">Heartrate</span>
+      <div class="bpm"><span class="bpm-v" id="bpm">75</span><br><span class="bpm-u">BPM</span></div>
+      <div class="ecg-scan"></div>
+      <div class="p-c" style="flex-direction:column;gap:4px">
+        <svg viewBox="0 0 300 100" preserveAspectRatio="none" style="width:88%;height:45%">
+          <line x1="0" y1="50" x2="300" y2="50" stroke="var(--dim)" stroke-width=".3" opacity=".12"/>
+          <line x1="0" y1="25" x2="300" y2="25" stroke="var(--dim)" stroke-width=".2" opacity=".06"/>
+          <line x1="0" y1="75" x2="300" y2="75" stroke="var(--dim)" stroke-width=".2" opacity=".06"/>
+          <path d="M0,50 L18,50 L22,44 L26,50 L36,50 L38,52 L40,12 L42,80 L44,50 L56,50 L62,40 L70,50 L100,50 L118,50 L122,44 L126,50 L136,50 L138,52 L140,12 L142,80 L144,50 L156,50 L162,40 L170,50 L200,50 L218,50 L222,44 L226,50 L236,50 L238,52 L240,12 L242,80 L244,50 L256,50 L262,40 L270,50 L300,50" fill="none" stroke="var(--amber)" stroke-width="2" style="filter:drop-shadow(0 0 6px rgba(200,160,48,.4))"/>
+        </svg>
+        <div style="display:flex;gap:8px;padding:0 12px">
+          <span style="font:5px var(--px);color:var(--dim);letter-spacing:.08em">MODE:<b style="color:var(--amber);font-weight:400"> ECG</b></span>
+          <span style="font:5px var(--px);color:var(--dim);letter-spacing:.08em">LEAD:<b style="color:var(--amber);font-weight:400"> II</b></span>
+          <span style="font:5px var(--px);color:var(--dim);letter-spacing:.08em">GAIN:<b style="color:var(--amber);font-weight:400"> 1X</b></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BIOMETRIC — wireframe head scan -->
+    <div class="p">
+      <span class="p-label">Biometric</span>
+      <div class="scan-ln"></div>
       <div class="p-c">
         <svg viewBox="0 0 200 200" style="width:min(70%,140px)">
-          <circle cx="100" cy="100" r="85" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".4"/>
-          <circle cx="100" cy="100" r="55" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".3"/>
-          <circle cx="100" cy="100" r="25" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".2"/>
-          <line x1="100" y1="12" x2="100" y2="188" stroke="var(--dim)" stroke-width=".3" opacity=".2"/>
-          <line x1="12" y1="100" x2="188" y2="100" stroke="var(--dim)" stroke-width=".3" opacity=".2"/>
-          <g style="transform-origin:100px 100px;animation:sweep 4s linear infinite"><line x1="100" y1="100" x2="100" y2="15" stroke="var(--amber)" stroke-width="1" opacity=".7"/></g>
-          <circle cx="72" cy="55" r="3" fill="var(--glow)" style="animation:pulse 2s ease infinite"/>
-          <circle cx="138" cy="78" r="2" fill="var(--glow)" style="animation:pulse 3s ease infinite .5s"/>
-          <circle cx="85" cy="130" r="2.5" fill="var(--glow)" style="animation:pulse 2.5s ease infinite 1s"/>
+          <g opacity=".55" stroke="var(--amber)" stroke-width=".8" fill="none">
+            <line x1="88" y1="28" x2="112" y2="28"/>
+            <line x1="78" y1="36" x2="122" y2="36"/>
+            <line x1="72" y1="46" x2="128" y2="46"/>
+            <line x1="68" y1="56" x2="132" y2="56"/>
+            <line x1="70" y1="66" x2="130" y2="66"/>
+            <line x1="72" y1="76" x2="128" y2="76"/>
+            <line x1="75" y1="86" x2="125" y2="86"/>
+            <line x1="78" y1="96" x2="122" y2="96"/>
+            <line x1="80" y1="106" x2="120" y2="106"/>
+            <line x1="84" y1="113" x2="116" y2="113"/>
+            <line x1="90" y1="120" x2="110" y2="120"/>
+            <line x1="92" y1="128" x2="108" y2="128"/>
+            <line x1="93" y1="136" x2="107" y2="136"/>
+            <line x1="60" y1="150" x2="140" y2="150"/>
+            <line x1="48" y1="158" x2="152" y2="158"/>
+            <line x1="40" y1="168" x2="160" y2="168"/>
+          </g>
+          <path d="M88,28 C78,32 72,42 68,56 C66,66 68,76 72,86 C75,93 78,100 80,106 L84,113 L90,120 L92,128 L93,136 C92,142 78,148 60,150 C52,154 44,160 40,168" fill="none" stroke="var(--amber)" stroke-width=".4" opacity=".25"/>
+          <path d="M112,28 C122,32 128,42 132,56 C134,66 132,76 128,86 C125,93 122,100 120,106 L116,113 L110,120 L108,128 L107,136 C108,142 122,148 140,150 C148,154 156,160 160,168" fill="none" stroke="var(--amber)" stroke-width=".4" opacity=".25"/>
+          <circle cx="82" cy="66" r="2.5" fill="var(--glow)" style="animation:pulse 2s ease infinite"/>
+          <circle cx="118" cy="66" r="2.5" fill="var(--glow)" style="animation:pulse 2s ease infinite .3s"/>
+          <circle cx="100" cy="84" r="2" fill="var(--glow)" style="animation:pulse 2.5s ease infinite .6s"/>
+          <circle cx="100" cy="98" r="2" fill="var(--glow)" style="animation:pulse 3s ease infinite .9s"/>
+          <circle cx="88" cy="46" r="1.5" fill="var(--glow)" style="animation:pulse 2.2s ease infinite 1.2s"/>
+          <circle cx="112" cy="46" r="1.5" fill="var(--glow)" style="animation:pulse 2.8s ease infinite .4s"/>
+          <circle cx="100" cy="113" r="1.5" fill="var(--glow)" style="animation:pulse 2s ease infinite .7s"/>
         </svg>
       </div>
+      <div class="p-data">ID:<b>0x4F2A</b> &nbsp; STATUS:<b>LOCK</b></div>
     </div>
+
+    <!-- HEADING — compass rose -->
     <div class="p">
-      <span class="p-label">Signal</span>
+      <span class="p-label">Heading</span>
       <div class="p-c">
-        <svg viewBox="0 0 300 120" preserveAspectRatio="none" style="width:85%;height:55%">
-          <line x1="0" y1="60" x2="300" y2="60" stroke="var(--dim)" stroke-width=".5" opacity=".2"/>
-          <path d="M0,60 Q15,60 25,35 T50,60 T75,42 T100,60 T125,30 T150,60 T175,45 T200,60 T225,38 T250,60 T275,48 T300,60" fill="none" stroke="var(--amber)" stroke-width="1.5" style="filter:drop-shadow(0 0 4px rgba(200,160,48,.3))"/>
-          <path d="M0,65 Q20,65 40,80 T80,65 T120,82 T160,65 T200,74 T240,65 T280,70 T300,65" fill="none" stroke="var(--dim)" stroke-width="1" opacity=".35"/>
-        </svg>
-      </div>
-    </div>
-    <div class="p">
-      <span class="p-label">Status</span>
-      <div class="rd">
-        <div class="r"><span class="r-l">Temp</span><span class="r-v">042.8</span><span class="r-u">°C</span></div>
-        <div class="r"><span class="r-l">Pressure</span><span class="r-v">1.013</span><span class="r-u">ATM</span></div>
-        <div class="r"><span class="r-l">O₂</span><span class="r-v">21.4</span><span class="r-u">%VOL</span></div>
-        <div class="r"><span class="r-l">Bearing</span><span class="r-v">188.2</span><span class="r-u">DEG</span></div>
-      </div>
-    </div>
-    <div class="p">
-      <span class="p-label">Grid</span>
-      <div class="p-c">
-        <svg viewBox="0 0 200 200" style="width:85%;height:85%">
-          <defs><pattern id="gr" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20,0L0,0L0,20" fill="none" stroke="rgba(200,160,48,.06)" stroke-width=".5"/></pattern></defs>
-          <rect width="200" height="200" fill="url(#gr)"/>
-          <line x1="100" y1="10" x2="100" y2="190" stroke="var(--amber)" stroke-width=".5" opacity=".2"/>
-          <line x1="10" y1="100" x2="190" y2="100" stroke="var(--amber)" stroke-width=".5" opacity=".2"/>
-          <circle cx="100" cy="100" r="38" fill="none" stroke="var(--amber)" stroke-width=".6" opacity=".35"/>
-          <circle cx="100" cy="100" r="16" fill="none" stroke="var(--amber)" stroke-width=".4" opacity=".2"/>
+        <svg viewBox="0 0 200 200" style="width:min(72%,136px)">
+          <circle cx="100" cy="100" r="85" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".3"/>
+          <circle cx="100" cy="100" r="73" fill="none" stroke="var(--dim)" stroke-width=".3" opacity=".15"/>
+          <g stroke="var(--amber)" stroke-width="1" opacity=".55">
+            <line x1="100" y1="15" x2="100" y2="27"/>
+            <line x1="143" y1="26" x2="137" y2="37"/>
+            <line x1="174" y1="57" x2="163" y2="64"/>
+            <line x1="185" y1="100" x2="173" y2="100"/>
+            <line x1="174" y1="143" x2="163" y2="137"/>
+            <line x1="143" y1="174" x2="137" y2="163"/>
+            <line x1="100" y1="185" x2="100" y2="173"/>
+            <line x1="57" y1="174" x2="64" y2="163"/>
+            <line x1="26" y1="143" x2="37" y2="137"/>
+            <line x1="15" y1="100" x2="27" y2="100"/>
+            <line x1="26" y1="57" x2="37" y2="64"/>
+            <line x1="57" y1="26" x2="64" y2="37"/>
+          </g>
+          <g stroke="var(--dim)" stroke-width=".4" opacity=".25">
+            <line x1="114" y1="16" x2="113" y2="24"/>
+            <line x1="128" y1="19" x2="126" y2="27"/>
+            <line x1="86" y1="16" x2="87" y2="24"/>
+            <line x1="72" y1="19" x2="74" y2="27"/>
+            <line x1="183" y1="86" x2="174" y2="87"/>
+            <line x1="183" y1="114" x2="174" y2="113"/>
+            <line x1="17" y1="86" x2="26" y2="87"/>
+            <line x1="17" y1="114" x2="26" y2="113"/>
+          </g>
+          <text x="100" y="44" text-anchor="middle" style="fill:var(--glow);font:8px var(--px);letter-spacing:.1em">N</text>
+          <text x="100" y="165" text-anchor="middle" style="fill:var(--dim);font:7px var(--px);letter-spacing:.1em">S</text>
+          <text x="160" y="104" text-anchor="middle" style="fill:var(--dim);font:7px var(--px);letter-spacing:.1em">E</text>
+          <text x="40" y="104" text-anchor="middle" style="fill:var(--dim);font:7px var(--px);letter-spacing:.1em">W</text>
+          <line x1="100" y1="100" x2="89" y2="174" stroke="var(--amber)" stroke-width="1.5" style="filter:drop-shadow(0 0 4px rgba(200,160,48,.4))"/>
+          <circle cx="100" cy="100" r="4" fill="var(--panel)" stroke="var(--amber)" stroke-width="1"/>
+          <polygon points="100,92 96,106 100,102 104,106" fill="var(--amber)" opacity=".65"/>
+          <text x="100" y="195" text-anchor="middle" style="fill:var(--amber);font:6px var(--px);letter-spacing:.06em">188.2°</text>
         </svg>
       </div>
     </div>
@@ -212,6 +299,9 @@
   });
 
   setInterval(function(){var d=new Date();document.getElementById('clk').textContent=[d.getHours(),d.getMinutes(),d.getSeconds()].map(function(n){return String(n).padStart(2,'0')}).join(':')},1000);
+
+  var bpmEl=document.getElementById('bpm');
+  if(bpmEl)setInterval(function(){bpmEl.textContent=72+Math.floor(Math.random()*7)},1200);
 })();
 </script>
 <script src="design-specs.js"></script>
