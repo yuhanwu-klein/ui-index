@@ -3,245 +3,220 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Green Phosphor Toolbar · Mysterious</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <title>Pixel Toolbar · Playful</title>
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
   <script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
   <style>
     *{box-sizing:border-box;margin:0}
-    :root{
-      --bg:#040a06;--panel:#081208;--green:#30c860;--dim:#1a7838;--glow:#50e880;
-      --bright:#80ffa0;--border:#0a2a12;
-      --px:'Press Start 2P',monospace;--mono:'Share Tech Mono',monospace;
-    }
-    html,body{height:100%;background:#fff;font-family:var(--mono)}
+    html,body{height:100%;background:#fff;font-family:'Silkscreen',monospace}
     body{display:flex;align-items:center;justify-content:center;padding:24px}
 
     .fui{
       width:560px;max-width:85vw;aspect-ratio:4/3;
-      display:grid;grid-template-rows:32px 1fr 22px;grid-template-columns:34px 1fr 34px;
-      gap:1px;background:var(--border);color:var(--green);
-      border-radius:8px;overflow:hidden;position:relative;
+      background:#c0c0c0;border:2px solid #000;
+      border-radius:8px;overflow:hidden;
+      display:grid;grid-template-rows:22px 20px 1fr 30px;
       box-shadow:0 16px 48px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.06);
     }
-    .fui::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 1px,rgba(0,0,0,.3) 1px,rgba(0,0,0,.3) 3px);pointer-events:none;opacity:.1;z-index:100;border-radius:8px}
-    .fui::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.4));pointer-events:none;z-index:101;border-radius:8px}
 
-    .tb{background:var(--panel);display:flex;align-items:center}
-    .tb-top{grid-column:1/-1;gap:0;padding:0 4px;justify-content:space-between}
-    .tb-v{flex-direction:column;padding:3px 0;gap:0}
-    .tb-bot{grid-column:1/-1;gap:6px;padding:0 8px}
-
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:4px;
-      height:22px;min-width:22px;padding:0 7px;
-      background:0;border:1px solid transparent;
-      color:var(--green);font:9px var(--px);cursor:pointer;
-      letter-spacing:.08em;text-transform:uppercase;
-      transition:all .12s;user-select:none;
+    .tb-title{
+      background:#000;
+      background:repeating-linear-gradient(0deg,#000 0px,#000 1px,#fff 1px,#fff 3px);
+      display:flex;align-items:center;padding:0 5px;gap:6px;
+      border-bottom:1px solid #000;
     }
-    .btn:hover{background:rgba(48,200,96,.06);border-color:var(--dim);color:var(--glow);text-shadow:0 0 10px rgba(48,200,96,.5)}
-    .btn:active,.btn.on{background:rgba(48,200,96,.12);border-color:var(--green);color:var(--bright);text-shadow:0 0 16px rgba(48,200,96,.7)}
-    .btn-mono{font:10px var(--mono);letter-spacing:.05em}
-    .tb-v .btn{height:26px;width:26px;padding:0}
-    .btn-z{height:16px;min-width:16px;padding:0 3px;font:10px var(--mono)}
+    .close-box{width:12px;height:12px;background:#fff;border:1px solid #000;flex-shrink:0;cursor:pointer}
+    .tb-name{background:#fff;padding:0 8px;font:bold 10px 'Silkscreen',monospace;letter-spacing:.02em;white-space:nowrap;line-height:18px}
 
-    .sep{background:var(--dim);flex-shrink:0;opacity:.3}
-    .tb-top .sep,.tb-bot .sep{width:1px;height:12px;margin:0 3px}
-    .tb-v .sep{height:1px;width:16px;margin:2px 0}
-    .g{display:flex;align-items:center;gap:0}
-    .tb-v .g{flex-direction:column}
+    .menu-bar{
+      background:#fff;border-bottom:1px solid #000;
+      display:flex;align-items:center;padding:0 2px;
+    }
+    .mi{padding:1px 8px;font:10px 'Silkscreen',monospace;cursor:pointer;line-height:18px}
+    .mi:hover{background:#000;color:#fff}
 
-    svg.i{width:12px;height:12px;fill:currentColor}
+    .main{display:grid;grid-template-columns:54px 1fr;border-bottom:1px solid #000}
 
-    .st{font:5px var(--px);color:var(--dim);letter-spacing:.08em;white-space:nowrap}
-    .st b{color:var(--green);font-weight:400}
-    .blink{animation:bk 1.2s step-end infinite}
-    @keyframes bk{50%{opacity:.2}}
+    .tools{
+      background:#c0c0c0;border-right:1px solid #000;
+      display:grid;grid-template-columns:1fr 1fr;
+      padding:3px 2px;gap:1px;align-content:start;
+    }
+    .tool{
+      width:24px;height:22px;
+      background:#fff;border:1.5px solid #888;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;color:#000;position:relative;
+      transition:color .25s;
+    }
+    .tool.on{background:#c0c0c0;border:1.5px inset #444}
+    .tool svg{
+      width:14px;height:14px;
+      shape-rendering:crispEdges;
+      transition:transform .15s;
+    }
+    .tool:hover{color:var(--h,#000)}
+    .tool:hover svg{animation:var(--a,pop) .35s ease}
 
-    .vp{background:var(--border);display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1px}
-    .p{background:var(--panel);position:relative;overflow:hidden}
-    .p::before,.p::after{content:'';position:absolute;width:7px;height:7px;border-color:var(--dim);border-style:solid;pointer-events:none;z-index:3;opacity:.35}
-    .p::before{top:2px;left:2px;border-width:1px 0 0 1px}
-    .p::after{bottom:2px;right:2px;border-width:0 1px 1px 0}
-    .p-label{position:absolute;top:0;left:0;font:5px var(--px);color:var(--dim);letter-spacing:.12em;text-transform:uppercase;padding:4px 6px;z-index:2}
-    .p-c{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+    .canvas{
+      background:#fff;position:relative;overflow:hidden;
+      background-image:radial-gradient(circle,#ccc .4px,transparent .4px);
+      background-size:6px 6px;
+    }
+    .canvas-art{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
 
-    .bars{display:flex;align-items:flex-end;gap:4px;height:55%;padding:0 10%}
-    .bar{flex:1;background:var(--green);opacity:.7;min-width:6px;position:relative;transition:height .4s}
-    .bar::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--glow);box-shadow:0 0 4px rgba(48,200,96,.4)}
+    .palette{
+      background:#c0c0c0;display:flex;align-items:center;
+      padding:3px 4px;gap:3px;
+    }
+    .fg-bg{
+      width:22px;height:20px;position:relative;flex-shrink:0;
+    }
+    .fg{position:absolute;top:0;left:0;width:14px;height:14px;background:#000;border:1px solid #000;z-index:1}
+    .bg{position:absolute;bottom:0;right:0;width:14px;height:14px;background:#fff;border:1px solid #000}
+    .swatches{
+      display:grid;grid-template-columns:repeat(14,1fr);grid-template-rows:1fr 1fr;
+      flex:1;height:22px;
+    }
+    .sw{border:.5px solid #808080;cursor:pointer;min-width:0;transition:transform .1s}
+    .sw:hover{transform:scale(1.3);z-index:1;border-color:#000}
 
-    .log{padding:16px 8px 6px;font:8px var(--mono);color:var(--dim);line-height:1.6;width:100%;overflow:hidden}
-    .log span{color:var(--green)}
-    .log .hi{color:var(--glow);text-shadow:0 0 3px rgba(48,200,96,.25)}
+    .status-msg{
+      margin-left:auto;font:10px 'Silkscreen',monospace;color:#444;
+      padding-right:4px;white-space:nowrap;
+    }
 
-    .meters{padding:16px 10px 8px;width:100%;display:flex;flex-direction:column;gap:8px}
-    .meter{display:flex;flex-direction:column;gap:2px}
-    .m-label{display:flex;justify-content:space-between;font:5px var(--px);color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
-    .m-label b{color:var(--green);font-weight:400}
-    .m-track{height:5px;background:rgba(48,200,96,.08)}
-    .m-fill{height:100%;background:var(--green);position:relative;transition:width .6s}
-    .m-fill::after{content:'';position:absolute;right:0;top:-1px;bottom:-1px;width:2px;background:var(--glow);box-shadow:0 0 4px rgba(48,200,96,.4)}
+    @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.3)}100%{transform:scale(1)}}
+    @keyframes wiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-12deg)}60%{transform:rotate(10deg)}80%{transform:rotate(-4deg)}}
+    @keyframes bounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+    @keyframes tilt{0%,100%{transform:rotate(0)}50%{transform:rotate(-18deg)}}
+    @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-3px)}40%{transform:translateX(3px)}60%{transform:translateX(-2px)}80%{transform:translateX(1px)}}
+    @keyframes pour{0%,100%{transform:rotate(0) translateY(0)}50%{transform:rotate(-25deg) translateY(-2px)}}
+    @keyframes stamp{0%{transform:scale(1)}30%{transform:scale(1.15)}50%{transform:scale(.9)}100%{transform:scale(1)}}
 
-    @keyframes sweep{to{transform:rotate(360deg)}}
-    @keyframes pulse{0%,100%{opacity:.7}50%{opacity:.15}}
-
-    html.is-preview .fui::before,html.is-preview .fui::after{display:none}
+    html.is-preview .fui{border:none;border-radius:0}
   </style>
 </head>
 <body>
 <div class="fui">
-  <nav class="tb tb-top">
-    <div class="g">
-      <button class="btn" aria-label="Menu"><svg class="i" viewBox="0 0 14 14"><rect x="1" y="2" width="12" height="2"/><rect x="1" y="6" width="8" height="2"/><rect x="1" y="10" width="12" height="2"/></svg></button>
-      <div class="sep"></div>
-      <button class="btn btn-mono"><svg class="i" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="1"/><line x1="7" y1="7" x2="11" y2="3" stroke="currentColor" stroke-width="1.5"/></svg> Scan</button>
-      <button class="btn btn-mono"><svg class="i" viewBox="0 0 14 14"><rect x="1" y="2" width="12" height="10" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="5" width="2" height="1.5"/><rect x="5" y="6.5" width="2" height="1.5"/><rect x="7" y="8" width="4" height="1.5"/></svg> Log</button>
+  <div class="tb-title">
+    <div class="close-box"></div>
+    <span class="tb-name">Pixel Paint</span>
+  </div>
+  <div class="menu-bar">
+    <span class="mi">File</span>
+    <span class="mi">Edit</span>
+    <span class="mi">View</span>
+    <span class="mi">Image</span>
+    <span class="mi">Colors</span>
+    <span class="mi">Help</span>
+  </div>
+  <div class="main">
+    <div class="tools" id="tools">
+      <button class="tool on" data-icon="pointer" style="--h:#4a90d9;--a:pop" data-name="Pointer"></button>
+      <button class="tool" data-icon="select" style="--h:#9b59b6;--a:pop" data-name="Select"></button>
+      <button class="tool" data-icon="pencil" style="--h:#e67e22;--a:tilt" data-name="Pencil"></button>
+      <button class="tool" data-icon="eraser" style="--h:#e74c8c;--a:shake" data-name="Eraser"></button>
+      <button class="tool" data-icon="bucket" style="--h:#f39c12;--a:pour" data-name="Fill"></button>
+      <button class="tool" data-icon="dropper" style="--h:#27ae60;--a:bounce" data-name="Eyedropper"></button>
+      <button class="tool" data-icon="text_a" style="--h:#5b5ea6;--a:stamp" data-name="Text"></button>
+      <button class="tool" data-icon="brush" style="--h:#e74c3c;--a:wiggle" data-name="Brush"></button>
+      <button class="tool" data-icon="line" style="--h:#1abc9c;--a:tilt" data-name="Line"></button>
+      <button class="tool" data-icon="spray" style="--h:#ff6b6b;--a:shake" data-name="Spray"></button>
+      <button class="tool" data-icon="rect" style="--h:#3498db;--a:pop" data-name="Rectangle"></button>
+      <button class="tool" data-icon="oval" style="--h:#e91e63;--a:pop" data-name="Ellipse"></button>
     </div>
-    <div class="g">
-      <button class="btn" data-group="mode">Sys</button>
-      <button class="btn on" data-group="mode">Nav</button>
-      <button class="btn" data-group="mode">Eng</button>
+    <div class="canvas">
+      <svg class="canvas-art" width="120" height="120" viewBox="0 0 16 16" shape-rendering="crispEdges">
+        <rect x="5" y="2" width="6" height="1" fill="#000"/>
+        <rect x="4" y="3" width="1" height="1" fill="#000"/><rect x="11" y="3" width="1" height="1" fill="#000"/>
+        <rect x="3" y="4" width="1" height="1" fill="#000"/><rect x="12" y="4" width="1" height="1" fill="#000"/>
+        <rect x="3" y="5" width="1" height="1" fill="#000"/><rect x="6" y="5" width="1" height="1" fill="#000"/><rect x="9" y="5" width="1" height="1" fill="#000"/><rect x="12" y="5" width="1" height="1" fill="#000"/>
+        <rect x="3" y="6" width="1" height="1" fill="#000"/><rect x="12" y="6" width="1" height="1" fill="#000"/>
+        <rect x="3" y="7" width="1" height="1" fill="#000"/><rect x="12" y="7" width="1" height="1" fill="#000"/>
+        <rect x="3" y="8" width="1" height="1" fill="#000"/><rect x="5" y="8" width="1" height="1" fill="#000"/><rect x="10" y="8" width="1" height="1" fill="#000"/><rect x="12" y="8" width="1" height="1" fill="#000"/>
+        <rect x="3" y="9" width="1" height="1" fill="#000"/><rect x="6" y="9" width="4" height="1" fill="#000"/><rect x="12" y="9" width="1" height="1" fill="#000"/>
+        <rect x="4" y="10" width="1" height="1" fill="#000"/><rect x="11" y="10" width="1" height="1" fill="#000"/>
+        <rect x="5" y="11" width="6" height="1" fill="#000"/>
+      </svg>
     </div>
-    <div class="g">
-      <button class="btn" aria-label="Signal"><svg class="i" viewBox="0 0 14 14"><rect x="2" y="10" width="2" height="2"/><rect x="5" y="7" width="2" height="5"/><rect x="8" y="4" width="2" height="8"/><rect x="11" y="1" width="2" height="11"/></svg></button>
-      <button class="btn" data-toggle aria-label="Lock"><svg class="i" viewBox="0 0 14 14"><rect x="3" y="6" width="8" height="7" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="2" width="4" height="5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="6" y="9" width="2" height="2"/></svg></button>
-    </div>
-  </nav>
-
-  <aside class="tb tb-v">
-    <div class="g">
-      <button class="btn on" data-group="tool" data-tool="Radar" aria-label="Radar"><svg class="i" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="7" y1="7" x2="11" y2="3" stroke="currentColor" stroke-width="1.5"/></svg></button>
-      <button class="btn" data-group="tool" data-tool="Camera" aria-label="Camera"><svg class="i" viewBox="0 0 14 14"><rect x="1" y="4" width="12" height="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="8" r="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="2" width="4" height="2"/></svg></button>
-      <button class="btn" data-group="tool" data-tool="Terminal" aria-label="Terminal"><svg class="i" viewBox="0 0 14 14"><rect x="1" y="2" width="12" height="10" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="5" width="2" height="1.5"/><rect x="5" y="6.5" width="2" height="1.5"/></svg></button>
-    </div>
-    <div class="sep"></div>
-    <div class="g">
-      <button class="btn" data-group="tool" data-tool="Grid" aria-label="Grid"><svg class="i" viewBox="0 0 14 14"><rect x="1" y="1" width="5" height="5"/><rect x="8" y="1" width="5" height="5"/><rect x="1" y="8" width="5" height="5"/><rect x="8" y="8" width="5" height="5"/></svg></button>
-      <button class="btn" data-group="tool" data-tool="Settings" aria-label="Settings"><svg class="i" viewBox="0 0 14 14"><rect x="3" y="6" width="8" height="1.5"/><rect x="5" y="2" width="4" height="1.5"/><rect x="5" y="10" width="4" height="1.5"/><rect x="1" y="6" width="2" height="1.5"/><rect x="11" y="6" width="2" height="1.5"/></svg></button>
-    </div>
-  </aside>
-
-  <main class="vp" id="vp">
-    <div class="p">
-      <span class="p-label">Sonar</span>
-      <div class="p-c">
-        <svg viewBox="0 0 200 200" style="width:min(68%,130px)">
-          <circle cx="100" cy="100" r="85" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".3"/>
-          <circle cx="100" cy="100" r="56" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".25"/>
-          <circle cx="100" cy="100" r="28" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".2"/>
-          <line x1="100" y1="12" x2="100" y2="188" stroke="var(--dim)" stroke-width=".3" opacity=".2"/>
-          <line x1="12" y1="100" x2="188" y2="100" stroke="var(--dim)" stroke-width=".3" opacity=".2"/>
-          <line x1="38" y1="38" x2="162" y2="162" stroke="var(--dim)" stroke-width=".3" opacity=".12"/>
-          <line x1="162" y1="38" x2="38" y2="162" stroke="var(--dim)" stroke-width=".3" opacity=".12"/>
-          <g style="transform-origin:100px 100px;animation:sweep 5s linear infinite"><line x1="100" y1="100" x2="100" y2="15" stroke="var(--green)" stroke-width="1" opacity=".6"/></g>
-          <circle cx="65" cy="62" r="3" fill="var(--glow)" style="animation:pulse 2.2s ease infinite"/>
-          <circle cx="142" cy="88" r="2" fill="var(--glow)" style="animation:pulse 3.4s ease infinite .7s"/>
-          <circle cx="78" cy="135" r="2.5" fill="var(--glow)" style="animation:pulse 2.8s ease infinite 1.2s"/>
-          <circle cx="120" cy="52" r="1.5" fill="var(--glow)" style="animation:pulse 4s ease infinite .3s"/>
-        </svg>
-      </div>
-    </div>
-
-    <div class="p">
-      <span class="p-label">Freq</span>
-      <div class="p-c">
-        <div class="bars" id="bars">
-          <div class="bar" style="height:72%"></div>
-          <div class="bar" style="height:45%"></div>
-          <div class="bar" style="height:88%"></div>
-          <div class="bar" style="height:34%"></div>
-          <div class="bar" style="height:60%"></div>
-          <div class="bar" style="height:92%"></div>
-          <div class="bar" style="height:28%"></div>
-          <div class="bar" style="height:55%"></div>
-          <div class="bar" style="height:78%"></div>
-          <div class="bar" style="height:40%"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="p">
-      <span class="p-label">Log</span>
-      <div class="log" id="log">
-        <div>[<span>14:22:08</span>] SYS.INIT <span class="hi">OK</span></div>
-        <div>[<span>14:22:09</span>] NAV.BEACON LOCK</div>
-        <div>[<span>14:22:11</span>] COMM.FREQ 2447.8</div>
-        <div>[<span>14:22:14</span>] SCAN.RANGE 800M</div>
-        <div>[<span>14:22:15</span>] ENG.THRUST <span class="hi">IDLE</span></div>
-        <div>[<span>14:22:18</span>] LIFE.O2 <span class="hi">NOM</span></div>
-        <div style="color:var(--green)">>&nbsp;<span class="blink">_</span></div>
-      </div>
-    </div>
-
-    <div class="p">
-      <span class="p-label">Vitals</span>
-      <div class="meters">
-        <div class="meter"><div class="m-label"><span>O₂ Supply</span><b>84%</b></div><div class="m-track"><div class="m-fill" style="width:84%"></div></div></div>
-        <div class="meter"><div class="m-label"><span>Fuel Cell</span><b>67%</b></div><div class="m-track"><div class="m-fill" style="width:67%"></div></div></div>
-        <div class="meter"><div class="m-label"><span>Hull Int</span><b>98%</b></div><div class="m-track"><div class="m-fill" style="width:98%"></div></div></div>
-        <div class="meter"><div class="m-label"><span>Comms Pwr</span><b>52%</b></div><div class="m-track"><div class="m-fill" style="width:52%"></div></div></div>
-      </div>
-    </div>
-  </main>
-
-  <aside class="tb tb-v">
-    <div class="g">
-      <button class="btn" data-toggle aria-label="Layers"><svg class="i" viewBox="0 0 14 14"><rect x="2" y="1" width="10" height="3" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="5" width="10" height="3" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="9" width="10" height="3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
-      <button class="btn" data-toggle aria-label="Info"><svg class="i" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="6" y="6" width="2" height="4"/><circle cx="7" cy="4" r="1"/></svg></button>
-      <button class="btn" data-toggle aria-label="Fullscreen"><svg class="i" viewBox="0 0 14 14"><rect x="1" y="1" width="5" height="1.5"/><rect x="1" y="1" width="1.5" height="5"/><rect x="8" y="1" width="5" height="1.5"/><rect x="11.5" y="1" width="1.5" height="5"/><rect x="1" y="11.5" width="5" height="1.5"/><rect x="1" y="8" width="1.5" height="5"/><rect x="8" y="11.5" width="5" height="1.5"/><rect x="11.5" y="8" width="1.5" height="5"/></svg></button>
-    </div>
-  </aside>
-
-  <nav class="tb tb-bot">
-    <span class="st blink" style="color:var(--green)">Rec</span>
-    <div class="sep"></div>
-    <span class="st" id="status">Nav</span>
-    <div class="sep"></div>
-    <span class="st">X:<b id="cx">0000</b> Y:<b id="cy">0000</b></span>
-    <div class="sep"></div>
-    <button class="btn btn-z" id="zoom-out" aria-label="Zoom out">&minus;</button>
-    <span class="st"><b id="zoom">100%</b></span>
-    <button class="btn btn-z" id="zoom-in" aria-label="Zoom in">+</button>
-    <span style="flex:1"></span>
-    <span class="st" id="clk">--:--:--</span>
-  </nav>
+  </div>
+  <div class="palette">
+    <div class="fg-bg"><div class="fg"></div><div class="bg"></div></div>
+    <div class="swatches" id="swatches"></div>
+    <span class="status-msg" id="status">Pointer</span>
+  </div>
 </div>
 
 <script>
 (function(){
-  var cursors={Radar:'crosshair',Camera:'pointer',Terminal:'text',Grid:'cell',Settings:'pointer'};
-  var vp=document.getElementById('vp');
+  var icons={
+    pointer:'X/XX/XXX/XXXX/XXXXX/XXXXXX/XXXXXXX/XXXX/X.XX/..XX/...X',
+    select:'X.X.X.X/......./X.....X/......./X.....X/......./X.X.X.X',
+    pencil:'........X/.......XX/......XX./....XXX../...XX..../..XX...../XX......./X........',
+    eraser:'.....XXX/....XXXX/...XXXX./..XXXX../XXXXX.../XXXX..../XXX.....',
+    bucket:'..X./..XX/.XXXXX/X....X/X....X/X....X/.XXXX.',
+    dropper:'......XX/.....X.X/....X.X/...X.X/..X.X/.XX./XX..',
+    text_a:'..XXX./.X...X/X.....X/X.....X/XXXXXXX/X.....X/X.....X',
+    brush:'......XX/.....X.X/...XX..X/..X..XX./.X..X../XXXX.../X..X.../XXXX...',
+    line:'.......X/......X./.....X./....X./...X../..X../X.....',
+    spray:'X.X.X/.X.X./X.X.X/.X.X./X.X.X/.X.X.',
+    rect:'XXXXXXX/X.....X/X.....X/X.....X/X.....X/X.....X/XXXXXXX',
+    oval:'..XXX./.X...X/X.....X/X.....X/X.....X/.X...X/..XXX.'
+  };
 
-  document.querySelectorAll('.btn[data-group]').forEach(function(btn){
+  var ns='http://www.w3.org/2000/svg';
+  document.querySelectorAll('.tool[data-icon]').forEach(function(el){
+    var data=icons[el.dataset.icon];
+    if(!data)return;
+    var rows=data.split('/');
+    var h=rows.length;
+    var w=Math.max.apply(null,rows.map(function(r){return r.length}));
+    var svg=document.createElementNS(ns,'svg');
+    svg.setAttribute('viewBox','0 0 '+(w+2)+' '+(h+2));
+    svg.setAttribute('shape-rendering','crispEdges');
+    var d='';
+    rows.forEach(function(row,y){
+      var x=0;
+      while(x<row.length){
+        if(row[x]==='X'){
+          var s=x;
+          while(x<row.length&&row[x]==='X')x++;
+          d+='M'+(s+1)+' '+(y+1)+'h'+(x-s)+'v1h-'+(x-s)+'z';
+        }else x++;
+      }
+    });
+    var p=document.createElementNS(ns,'path');
+    p.setAttribute('d',d);
+    p.setAttribute('fill','currentColor');
+    svg.appendChild(p);
+    el.appendChild(svg);
+  });
+
+  // Tool selection
+  document.querySelectorAll('.tool').forEach(function(btn){
     btn.addEventListener('click',function(){
-      var g=btn.dataset.group;
-      document.querySelectorAll('.btn[data-group="'+g+'"]').forEach(function(b){b.classList.remove('on')});
+      document.querySelectorAll('.tool').forEach(function(b){b.classList.remove('on')});
       btn.classList.add('on');
-      var label=btn.dataset.tool||btn.textContent.trim();
-      document.getElementById('status').textContent=label;
-      if(g==='tool'&&cursors[label])vp.style.cursor=cursors[label];
+      document.getElementById('status').textContent=btn.dataset.name||'';
     });
   });
 
-  document.querySelectorAll('.btn[data-toggle]').forEach(function(btn){
-    btn.addEventListener('click',function(){btn.classList.toggle('on')});
+  // Color palette
+  var colors=[
+    '#000','#808080','#800000','#ff0000','#804000','#ff8000','#808000','#ffff00','#008000','#00ff00','#008080','#00ffff','#000080','#0000ff',
+    '#fff','#c0c0c0','#ff8080','#ffb0b0','#ffc080','#ffe0b0','#ffff80','#ffffb0','#80ff80','#b0ffb0','#80ffff','#b0ffff','#8080ff','#ff00ff'
+  ];
+  var sw=document.getElementById('swatches');
+  colors.forEach(function(c){
+    var d=document.createElement('div');
+    d.className='sw';
+    d.style.background=c;
+    d.addEventListener('click',function(){
+      document.querySelector('.fg').style.background=c;
+    });
+    sw.appendChild(d);
   });
-
-  var zl=100,ze=document.getElementById('zoom');
-  document.getElementById('zoom-in').addEventListener('click',function(){zl=Math.min(400,zl+25);ze.textContent=zl+'%'});
-  document.getElementById('zoom-out').addEventListener('click',function(){zl=Math.max(25,zl-25);ze.textContent=zl+'%'});
-
-  vp.addEventListener('mousemove',function(e){
-    var r=vp.getBoundingClientRect();
-    document.getElementById('cx').textContent=String(Math.round((e.clientX-r.left)/r.width*999)).padStart(4,'0');
-    document.getElementById('cy').textContent=String(Math.round((e.clientY-r.top)/r.height*999)).padStart(4,'0');
-  });
-
-  setInterval(function(){
-    document.querySelectorAll('#bars .bar').forEach(function(b){b.style.height=(20+Math.random()*75)+'%'});
-  },900);
-
-  setInterval(function(){var d=new Date();document.getElementById('clk').textContent=[d.getHours(),d.getMinutes(),d.getSeconds()].map(function(n){return String(n).padStart(2,'0')}).join(':')},1000);
 })();
 </script>
 <script src="design-specs.js"></script>
