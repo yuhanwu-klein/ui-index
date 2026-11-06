@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Amber CRT Toolbar · Serene</title>
+  <title>CRT Toolbar · Serene</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
   <style>
     *{box-sizing:border-box;margin:0}
     :root{
-      --bg:#0a0a06;--panel:#111108;--amber:#c8a030;--dim:#8a6e20;--glow:#e8c848;
-      --bright:#ffe070;--border:#2a2510;
+      --bg:#060a14;--panel:#0a1020;--fg:#4a9eff;--dim:#1e4a7a;--glow:#6ac0ff;
+      --bright:#9ad4ff;--border:#12203a;
       --px:'Press Start 2P',monospace;--mono:'Share Tech Mono',monospace;
     }
     html,body{height:100%;background:#fff;font-family:var(--mono)}
@@ -19,12 +19,12 @@
     .fui{
       width:560px;max-width:85vw;aspect-ratio:4/3;
       display:grid;grid-template-rows:34px 1fr 24px;grid-template-columns:36px 1fr 36px;
-      gap:1px;background:var(--border);color:var(--amber);
+      gap:1px;background:var(--border);color:var(--fg);
       border-radius:8px;overflow:hidden;position:relative;
       box-shadow:0 16px 48px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.06);
     }
-    .fui::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.25) 2px,rgba(0,0,0,.25) 4px);pointer-events:none;opacity:.1;z-index:100;border-radius:8px}
-    .fui::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.3));pointer-events:none;z-index:101;border-radius:8px}
+    .fui::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.3) 2px,rgba(0,0,0,.3) 4px);pointer-events:none;opacity:.08;z-index:100;border-radius:8px}
+    .fui::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.35));pointer-events:none;z-index:101;border-radius:8px}
 
     .tb{background:var(--panel);display:flex;align-items:center}
     .tb-top{grid-column:1/-1;gap:2px;padding:0 6px;justify-content:space-between}
@@ -35,13 +35,13 @@
       display:inline-flex;align-items:center;justify-content:center;gap:4px;
       height:24px;min-width:24px;padding:0 8px;
       background:0;border:1px solid transparent;
-      color:var(--amber);font:10px var(--mono);cursor:pointer;
+      color:var(--fg);font:10px var(--mono);cursor:pointer;
       letter-spacing:.05em;text-transform:uppercase;
       transition:background .12s,border-color .12s,color .12s,text-shadow .12s;
       user-select:none;
     }
-    .btn:hover{background:rgba(200,160,48,.08);border-color:var(--dim);color:var(--glow);text-shadow:0 0 8px rgba(200,160,48,.4)}
-    .btn:active,.btn.on{background:rgba(200,160,48,.15);border-color:var(--amber);color:var(--bright);text-shadow:0 0 12px rgba(200,160,48,.6)}
+    .btn:hover{background:rgba(74,158,255,.08);border-color:var(--dim);color:var(--glow);text-shadow:0 0 8px rgba(74,158,255,.4)}
+    .btn:active,.btn.on{background:rgba(74,158,255,.14);border-color:var(--fg);color:var(--bright);text-shadow:0 0 12px rgba(74,158,255,.5)}
     .tb-v .btn{height:28px;width:28px;padding:0}
     .btn-z{height:18px;min-width:18px;padding:0 3px;font:10px var(--mono)}
 
@@ -54,33 +54,54 @@
     svg.i{width:13px;height:13px;fill:currentColor}
 
     .st{font:6px var(--px);color:var(--dim);letter-spacing:.08em;white-space:nowrap}
-    .st b{color:var(--amber);font-weight:400}
+    .st b{color:var(--fg);font-weight:400}
 
-    .vp{background:var(--border);display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1px}
-    .p{background:var(--panel);position:relative;overflow:hidden}
-    .p::before,.p::after{content:'';position:absolute;width:8px;height:8px;border-color:var(--dim);border-style:solid;pointer-events:none;z-index:3;opacity:.35}
-    .p::before{top:3px;left:3px;border-width:1px 0 0 1px}
-    .p::after{bottom:3px;right:3px;border-width:0 1px 1px 0}
-    .p-label{position:absolute;top:0;left:0;font:5px var(--px);color:var(--dim);letter-spacing:.12em;text-transform:uppercase;padding:5px 7px;z-index:2}
-    .p-c{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+    .vp{background:var(--bg);position:relative;overflow:hidden}
 
-    .bpm{position:absolute;top:4px;right:8px;z-index:2;text-align:right}
-    .bpm-v{font:20px var(--mono);color:var(--glow);text-shadow:0 0 8px rgba(200,160,48,.3)}
-    .bpm-u{font:5px var(--px);color:var(--dim);letter-spacing:.08em}
-    .scan-ln{position:absolute;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,var(--amber),transparent);opacity:.4;z-index:2;animation:scanh 3s ease-in-out infinite}
-    @keyframes scanh{0%,100%{left:10%}50%{left:90%}}
-    .ecg-scan{position:absolute;top:0;bottom:0;width:1px;background:var(--glow);opacity:.5;z-index:2;animation:ecgscan 2.5s linear infinite}
-    @keyframes ecgscan{from{left:0}to{left:100%}}
-    .p-data{position:absolute;bottom:4px;left:7px;font:5px var(--px);color:var(--dim);letter-spacing:.06em;z-index:2}
-    .p-data b{color:var(--amber);font-weight:400}
+    .vp-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:url(#crt-face);z-index:0}
+    .vp-glow{position:absolute;inset:-24px;width:calc(100% + 48px);height:calc(100% + 48px);object-fit:cover;filter:grayscale(1) brightness(.12) contrast(1.4) sepia(1) hue-rotate(190deg) saturate(4) blur(16px);opacity:.45;pointer-events:none;z-index:0}
+    .hud{position:absolute;inset:0;z-index:2;pointer-events:none}
+    .hud-panel{position:absolute;padding:6px 8px}
+    .hud-tl{top:0;left:0}
+    .hud-tr{top:0;right:0;text-align:right}
+    .hud-bl{bottom:0;left:0}
+    .hud-br{bottom:0;right:0;text-align:right}
+    .hud-title{font:6px var(--px);color:var(--fg);letter-spacing:.1em}
+    .hud-tag{display:inline-block;font:5px var(--px);color:var(--glow);letter-spacing:.08em;border:1px solid var(--dim);padding:1px 4px;margin-left:4px}
+    .hud-data{font:5px var(--px);color:var(--dim);letter-spacing:.06em;line-height:1.9}
+    .hud-data b{color:var(--fg);font-weight:400}
+    .hud-val{font:18px var(--mono);color:var(--glow);text-shadow:0 0 10px rgba(74,158,255,.35)}
+    .hud-unit{font:5px var(--px);color:var(--dim);letter-spacing:.08em;margin-left:2px}
 
-    @keyframes sweep{to{transform:rotate(360deg)}}
-    @keyframes pulse{0%,100%{opacity:.7}50%{opacity:.25}}
+    .scan-v{position:absolute;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,var(--fg),transparent);opacity:.25;z-index:3;animation:scanh 4s ease-in-out infinite}
+    @keyframes scanh{0%,100%{left:5%}50%{left:95%}}
+    @keyframes pulse{0%,100%{opacity:.8}50%{opacity:.15}}
 
     html.is-preview .fui::before,html.is-preview .fui::after{display:none}
   </style>
 </head>
 <body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="crt-face" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="2.5" result="smooth"/>
+      <feColorMatrix type="saturate" values="0" in="smooth" result="gray"/>
+      <feComponentTransfer in="gray" result="hi">
+        <feFuncR type="linear" slope="4.5" intercept="-1.3"/>
+        <feFuncG type="linear" slope="4.5" intercept="-1.3"/>
+        <feFuncB type="linear" slope="4.5" intercept="-1.3"/>
+      </feComponentTransfer>
+      <feColorMatrix type="matrix" in="hi" values="
+        0.12 0 0 0 0.01
+        0.28 0 0 0 0.02
+        0.7  0 0 0 0.04
+        0    0 0 1 0
+      "/>
+    </filter>
+  </defs>
+</svg>
+
 <div class="fui">
   <nav class="tb tb-top">
     <div class="g">
@@ -91,8 +112,8 @@
     </div>
     <div class="g">
       <button class="btn" data-group="mode">Select</button>
-      <button class="btn on" data-group="mode">Draw</button>
-      <button class="btn" data-group="mode">Erase</button>
+      <button class="btn on" data-group="mode">Scan</button>
+      <button class="btn" data-group="mode">Analyze</button>
     </div>
     <div class="g">
       <button class="btn" aria-label="Search"><svg class="i" viewBox="0 0 16 16"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="11" y="11" width="4" height="2" transform="rotate(-45 11 11)"/></svg></button>
@@ -114,135 +135,94 @@
   </aside>
 
   <main class="vp" id="vp">
-    <!-- TERRAIN — perspective grid with elevation profile -->
-    <div class="p">
-      <span class="p-label">Terrain</span>
-      <div class="p-c">
-        <svg viewBox="0 0 300 200" style="width:92%;height:88%">
-          <line x1="0" y1="75" x2="300" y2="75" stroke="var(--dim)" stroke-width=".3" opacity=".12"/>
-          <line x1="0" y1="95" x2="300" y2="95" stroke="var(--dim)" stroke-width=".3" opacity=".16"/>
-          <line x1="0" y1="120" x2="300" y2="120" stroke="var(--dim)" stroke-width=".3" opacity=".2"/>
-          <line x1="0" y1="150" x2="300" y2="150" stroke="var(--dim)" stroke-width=".3" opacity=".25"/>
-          <line x1="0" y1="185" x2="300" y2="185" stroke="var(--dim)" stroke-width=".3" opacity=".3"/>
-          <line x1="150" y1="50" x2="0" y2="200" stroke="var(--dim)" stroke-width=".3" opacity=".1"/>
-          <line x1="150" y1="50" x2="60" y2="200" stroke="var(--dim)" stroke-width=".3" opacity=".13"/>
-          <line x1="150" y1="50" x2="120" y2="200" stroke="var(--dim)" stroke-width=".3" opacity=".16"/>
-          <line x1="150" y1="50" x2="150" y2="200" stroke="var(--dim)" stroke-width=".3" opacity=".18"/>
-          <line x1="150" y1="50" x2="180" y2="200" stroke="var(--dim)" stroke-width=".3" opacity=".16"/>
-          <line x1="150" y1="50" x2="240" y2="200" stroke="var(--dim)" stroke-width=".3" opacity=".13"/>
-          <line x1="150" y1="50" x2="300" y2="200" stroke="var(--dim)" stroke-width=".3" opacity=".1"/>
-          <path d="M0,145 Q30,140 50,125 T90,118 T120,100 T150,108 T180,92 T210,105 T240,95 T270,110 T300,130 L300,200 L0,200 Z" fill="rgba(200,160,48,.04)"/>
-          <path d="M0,145 Q30,140 50,125 T90,118 T120,100 T150,108 T180,92 T210,105 T240,95 T270,110 T300,130" fill="none" stroke="var(--amber)" stroke-width="1.5" style="filter:drop-shadow(0 0 6px rgba(200,160,48,.35))"/>
-          <polygon points="148,80 150,74 152,80 150,78" fill="var(--glow)" style="filter:drop-shadow(0 0 3px rgba(200,160,48,.5))"/>
-          <text x="4" y="78" style="fill:var(--dim);font:5px var(--px);letter-spacing:.06em">FL340</text>
-          <text x="4" y="98" style="fill:var(--dim);font:5px var(--px);letter-spacing:.06em">FL280</text>
-          <text x="4" y="123" style="fill:var(--dim);font:5px var(--px);letter-spacing:.06em">FL220</text>
-          <text x="4" y="153" style="fill:var(--dim);font:5px var(--px);letter-spacing:.06em">FL160</text>
-          <text x="150" y="198" style="fill:var(--dim);font:5px var(--px);letter-spacing:.04em;text-anchor:middle">0 NM</text>
-          <text x="240" y="198" style="fill:var(--dim);font:4px var(--px);letter-spacing:.04em;text-anchor:middle">40</text>
-          <text x="60" y="198" style="fill:var(--dim);font:4px var(--px);letter-spacing:.04em;text-anchor:middle">-40</text>
-        </svg>
-      </div>
+    <img class="vp-glow" src="face.jpg" alt="" aria-hidden="true">
+    <img class="vp-img" src="face.jpg" alt="Subject scan">
+    <div class="scan-v"></div>
+
+    <div class="hud">
+      <svg viewBox="0 0 400 300" preserveAspectRatio="none" style="width:100%;height:100%">
+        <!-- Face wireframe mesh -->
+        <g stroke="var(--fg)" stroke-width=".35" fill="none" opacity=".18">
+          <path d="M200,78 L158,100 L142,132 L148,162 L162,188 L182,204 L200,210 L218,204 L238,188 L252,162 L258,132 L242,100 Z"/>
+          <line x1="158" y1="100" x2="242" y2="100"/>
+          <line x1="142" y1="132" x2="258" y2="132"/>
+          <line x1="148" y1="162" x2="252" y2="162"/>
+          <line x1="162" y1="188" x2="238" y2="188"/>
+          <line x1="200" y1="78" x2="200" y2="210"/>
+          <line x1="200" y1="78" x2="158" y2="100"/><line x1="200" y1="78" x2="242" y2="100"/>
+          <line x1="158" y1="100" x2="200" y2="132"/><line x1="242" y1="100" x2="200" y2="132"/>
+          <line x1="142" y1="132" x2="200" y2="162"/><line x1="258" y1="132" x2="200" y2="162"/>
+          <line x1="148" y1="162" x2="200" y2="188"/><line x1="252" y1="162" x2="200" y2="188"/>
+          <line x1="162" y1="188" x2="200" y2="210"/><line x1="238" y1="188" x2="200" y2="210"/>
+          <line x1="158" y1="100" x2="142" y2="132"/><line x1="242" y1="100" x2="258" y2="132"/>
+          <line x1="142" y1="132" x2="148" y2="162"/><line x1="258" y1="132" x2="252" y2="162"/>
+          <line x1="148" y1="162" x2="162" y2="188"/><line x1="252" y1="162" x2="238" y2="188"/>
+        </g>
+
+        <!-- Face bounding box -->
+        <rect x="125" y="55" width="150" height="175" fill="none" stroke="var(--fg)" stroke-width=".5" opacity=".2" stroke-dasharray="4 3"/>
+        <path d="M125,70 L125,55 L140,55" fill="none" stroke="var(--fg)" stroke-width="1" opacity=".5"/>
+        <path d="M260,55 L275,55 L275,70" fill="none" stroke="var(--fg)" stroke-width="1" opacity=".5"/>
+        <path d="M125,215 L125,230 L140,230" fill="none" stroke="var(--fg)" stroke-width="1" opacity=".5"/>
+        <path d="M260,230 L275,230 L275,215" fill="none" stroke="var(--fg)" stroke-width="1" opacity=".5"/>
+
+        <!-- Crosshair center -->
+        <line x1="200" y1="135" x2="200" y2="143" stroke="var(--fg)" stroke-width=".4" opacity=".3"/>
+        <line x1="200" y1="157" x2="200" y2="165" stroke="var(--fg)" stroke-width=".4" opacity=".3"/>
+        <line x1="190" y1="150" x2="196" y2="150" stroke="var(--fg)" stroke-width=".4" opacity=".3"/>
+        <line x1="204" y1="150" x2="210" y2="150" stroke="var(--fg)" stroke-width=".4" opacity=".3"/>
+
+        <!-- Tracking points -->
+        <circle cx="178" cy="118" r="2.5" fill="none" stroke="var(--glow)" stroke-width=".7" style="animation:pulse 2s ease infinite"/>
+        <circle cx="222" cy="118" r="2.5" fill="none" stroke="var(--glow)" stroke-width=".7" style="animation:pulse 2s ease infinite .3s"/>
+        <circle cx="200" cy="145" r="2" fill="none" stroke="var(--glow)" stroke-width=".6" style="animation:pulse 2.5s ease infinite .6s"/>
+        <circle cx="200" cy="170" r="2" fill="none" stroke="var(--glow)" stroke-width=".6" style="animation:pulse 3s ease infinite .9s"/>
+        <circle cx="152" cy="130" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.2s ease infinite 1.2s"/>
+        <circle cx="248" cy="130" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.8s ease infinite .4s"/>
+        <circle cx="200" cy="92" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2s ease infinite .7s"/>
+        <circle cx="200" cy="200" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.4s ease infinite 1s"/>
+        <circle cx="165" cy="160" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.6s ease infinite .2s"/>
+        <circle cx="235" cy="160" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.3s ease infinite .8s"/>
+        <circle cx="188" cy="168" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.1s ease infinite 1.1s"/>
+        <circle cx="212" cy="168" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.7s ease infinite .5s"/>
+
+        <!-- Tracking lines -->
+        <line x1="178" y1="118" x2="152" y2="118" stroke="var(--dim)" stroke-width=".25" opacity=".3"/>
+        <line x1="222" y1="118" x2="248" y2="118" stroke="var(--dim)" stroke-width=".25" opacity=".3"/>
+
+        <!-- ECG trace -->
+        <path d="M20,272 L38,272 L40,268 L43,272 L52,272 L53,273 L54,259 L55,280 L56,272 L68,272 L70,268 L75,272 L90,272 L92,268 L95,272 L104,272 L105,273 L106,259 L107,280 L108,272 L120,272 L122,268 L127,272 L138,272" fill="none" stroke="var(--fg)" stroke-width=".8" style="filter:drop-shadow(0 0 3px rgba(74,158,255,.25))"/>
+      </svg>
     </div>
 
-    <!-- HEARTRATE — ECG waveform + BPM -->
-    <div class="p">
-      <span class="p-label">Heartrate</span>
-      <div class="bpm"><span class="bpm-v" id="bpm">75</span><br><span class="bpm-u">BPM</span></div>
-      <div class="ecg-scan"></div>
-      <div class="p-c" style="flex-direction:column;gap:4px">
-        <svg viewBox="0 0 300 100" preserveAspectRatio="none" style="width:88%;height:45%">
-          <line x1="0" y1="50" x2="300" y2="50" stroke="var(--dim)" stroke-width=".3" opacity=".12"/>
-          <line x1="0" y1="25" x2="300" y2="25" stroke="var(--dim)" stroke-width=".2" opacity=".06"/>
-          <line x1="0" y1="75" x2="300" y2="75" stroke="var(--dim)" stroke-width=".2" opacity=".06"/>
-          <path d="M0,50 L18,50 L22,44 L26,50 L36,50 L38,52 L40,12 L42,80 L44,50 L56,50 L62,40 L70,50 L100,50 L118,50 L122,44 L126,50 L136,50 L138,52 L140,12 L142,80 L144,50 L156,50 L162,40 L170,50 L200,50 L218,50 L222,44 L226,50 L236,50 L238,52 L240,12 L242,80 L244,50 L256,50 L262,40 L270,50 L300,50" fill="none" stroke="var(--amber)" stroke-width="2" style="filter:drop-shadow(0 0 6px rgba(200,160,48,.4))"/>
-        </svg>
-        <div style="display:flex;gap:8px;padding:0 12px">
-          <span style="font:5px var(--px);color:var(--dim);letter-spacing:.08em">MODE:<b style="color:var(--amber);font-weight:400"> ECG</b></span>
-          <span style="font:5px var(--px);color:var(--dim);letter-spacing:.08em">LEAD:<b style="color:var(--amber);font-weight:400"> II</b></span>
-          <span style="font:5px var(--px);color:var(--dim);letter-spacing:.08em">GAIN:<b style="color:var(--amber);font-weight:400"> 1X</b></span>
-        </div>
+    <!-- Data panels -->
+    <div class="hud-panel hud-tl">
+      <div class="hud-title">BIO_PROFILE<span class="hud-tag">ACTIVE</span></div>
+      <div class="hud-data" style="margin-top:3px">
+        FILE:<b> #0003/0222</b><br>
+        CLASS:<b> HOMO SAPIENS</b><br>
+        SCAN:<b> DEEP TISSUE</b>
       </div>
     </div>
-
-    <!-- BIOMETRIC — wireframe head scan -->
-    <div class="p">
-      <span class="p-label">Biometric</span>
-      <div class="scan-ln"></div>
-      <div class="p-c">
-        <svg viewBox="0 0 200 200" style="width:min(70%,140px)">
-          <g opacity=".55" stroke="var(--amber)" stroke-width=".8" fill="none">
-            <line x1="88" y1="28" x2="112" y2="28"/>
-            <line x1="78" y1="36" x2="122" y2="36"/>
-            <line x1="72" y1="46" x2="128" y2="46"/>
-            <line x1="68" y1="56" x2="132" y2="56"/>
-            <line x1="70" y1="66" x2="130" y2="66"/>
-            <line x1="72" y1="76" x2="128" y2="76"/>
-            <line x1="75" y1="86" x2="125" y2="86"/>
-            <line x1="78" y1="96" x2="122" y2="96"/>
-            <line x1="80" y1="106" x2="120" y2="106"/>
-            <line x1="84" y1="113" x2="116" y2="113"/>
-            <line x1="90" y1="120" x2="110" y2="120"/>
-            <line x1="92" y1="128" x2="108" y2="128"/>
-            <line x1="93" y1="136" x2="107" y2="136"/>
-            <line x1="60" y1="150" x2="140" y2="150"/>
-            <line x1="48" y1="158" x2="152" y2="158"/>
-            <line x1="40" y1="168" x2="160" y2="168"/>
-          </g>
-          <path d="M88,28 C78,32 72,42 68,56 C66,66 68,76 72,86 C75,93 78,100 80,106 L84,113 L90,120 L92,128 L93,136 C92,142 78,148 60,150 C52,154 44,160 40,168" fill="none" stroke="var(--amber)" stroke-width=".4" opacity=".25"/>
-          <path d="M112,28 C122,32 128,42 132,56 C134,66 132,76 128,86 C125,93 122,100 120,106 L116,113 L110,120 L108,128 L107,136 C108,142 122,148 140,150 C148,154 156,160 160,168" fill="none" stroke="var(--amber)" stroke-width=".4" opacity=".25"/>
-          <circle cx="82" cy="66" r="2.5" fill="var(--glow)" style="animation:pulse 2s ease infinite"/>
-          <circle cx="118" cy="66" r="2.5" fill="var(--glow)" style="animation:pulse 2s ease infinite .3s"/>
-          <circle cx="100" cy="84" r="2" fill="var(--glow)" style="animation:pulse 2.5s ease infinite .6s"/>
-          <circle cx="100" cy="98" r="2" fill="var(--glow)" style="animation:pulse 3s ease infinite .9s"/>
-          <circle cx="88" cy="46" r="1.5" fill="var(--glow)" style="animation:pulse 2.2s ease infinite 1.2s"/>
-          <circle cx="112" cy="46" r="1.5" fill="var(--glow)" style="animation:pulse 2.8s ease infinite .4s"/>
-          <circle cx="100" cy="113" r="1.5" fill="var(--glow)" style="animation:pulse 2s ease infinite .7s"/>
-        </svg>
+    <div class="hud-panel hud-tr">
+      <div style="display:flex;align-items:baseline;gap:3px;justify-content:flex-end">
+        <span class="hud-val" id="bpm">75</span>
+        <span class="hud-unit">BPM</span>
       </div>
-      <div class="p-data">ID:<b>0x4F2A</b> &nbsp; STATUS:<b>LOCK</b></div>
+      <div class="hud-data" style="margin-top:2px">
+        MODE:<b> ECG</b> &nbsp; LEAD:<b> II</b>
+      </div>
     </div>
-
-    <!-- HEADING — compass rose -->
-    <div class="p">
-      <span class="p-label">Heading</span>
-      <div class="p-c">
-        <svg viewBox="0 0 200 200" style="width:min(72%,136px)">
-          <circle cx="100" cy="100" r="85" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".3"/>
-          <circle cx="100" cy="100" r="73" fill="none" stroke="var(--dim)" stroke-width=".3" opacity=".15"/>
-          <g stroke="var(--amber)" stroke-width="1" opacity=".55">
-            <line x1="100" y1="15" x2="100" y2="27"/>
-            <line x1="143" y1="26" x2="137" y2="37"/>
-            <line x1="174" y1="57" x2="163" y2="64"/>
-            <line x1="185" y1="100" x2="173" y2="100"/>
-            <line x1="174" y1="143" x2="163" y2="137"/>
-            <line x1="143" y1="174" x2="137" y2="163"/>
-            <line x1="100" y1="185" x2="100" y2="173"/>
-            <line x1="57" y1="174" x2="64" y2="163"/>
-            <line x1="26" y1="143" x2="37" y2="137"/>
-            <line x1="15" y1="100" x2="27" y2="100"/>
-            <line x1="26" y1="57" x2="37" y2="64"/>
-            <line x1="57" y1="26" x2="64" y2="37"/>
-          </g>
-          <g stroke="var(--dim)" stroke-width=".4" opacity=".25">
-            <line x1="114" y1="16" x2="113" y2="24"/>
-            <line x1="128" y1="19" x2="126" y2="27"/>
-            <line x1="86" y1="16" x2="87" y2="24"/>
-            <line x1="72" y1="19" x2="74" y2="27"/>
-            <line x1="183" y1="86" x2="174" y2="87"/>
-            <line x1="183" y1="114" x2="174" y2="113"/>
-            <line x1="17" y1="86" x2="26" y2="87"/>
-            <line x1="17" y1="114" x2="26" y2="113"/>
-          </g>
-          <text x="100" y="44" text-anchor="middle" style="fill:var(--glow);font:8px var(--px);letter-spacing:.1em">N</text>
-          <text x="100" y="165" text-anchor="middle" style="fill:var(--dim);font:7px var(--px);letter-spacing:.1em">S</text>
-          <text x="160" y="104" text-anchor="middle" style="fill:var(--dim);font:7px var(--px);letter-spacing:.1em">E</text>
-          <text x="40" y="104" text-anchor="middle" style="fill:var(--dim);font:7px var(--px);letter-spacing:.1em">W</text>
-          <line x1="100" y1="100" x2="89" y2="174" stroke="var(--amber)" stroke-width="1.5" style="filter:drop-shadow(0 0 4px rgba(200,160,48,.4))"/>
-          <circle cx="100" cy="100" r="4" fill="var(--panel)" stroke="var(--amber)" stroke-width="1"/>
-          <polygon points="100,92 96,106 100,102 104,106" fill="var(--amber)" opacity=".65"/>
-          <text x="100" y="195" text-anchor="middle" style="fill:var(--amber);font:6px var(--px);letter-spacing:.06em">188.2°</text>
-        </svg>
+    <div class="hud-panel hud-bl">
+      <div class="hud-data">
+        SECTOR:<b> 0/45787</b><br>
+        TEMP:<b> 97.2°F</b>
+      </div>
+    </div>
+    <div class="hud-panel hud-br">
+      <div class="hud-data">
+        MATCH:<b> 98.7%</b><br>
+        STATUS:<b> N.ACTION</b>
       </div>
     </div>
   </main>
@@ -256,7 +236,7 @@
   </aside>
 
   <nav class="tb tb-bot">
-    <span class="st" id="status">Ready</span>
+    <span class="st" id="status">Scan</span>
     <div class="sep"></div>
     <span class="st">X:<b id="cx">0000</b> Y:<b id="cy">0000</b></span>
     <div class="sep"></div>
