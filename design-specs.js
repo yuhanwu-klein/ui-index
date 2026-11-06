@@ -188,6 +188,28 @@
         States: [['Hover', '1.08× thumb + shadow'], ['Pressed', '.9× thumb'], ['Drag', 'Repeating ripple + direct tracking'], ['Focus', '1.5 px ink outline']],
         Motion: [['Range', '0–100% / 1% increments'], ['Handle tracking', '80 ms linear'], ['Ripple cycle', '760 ms'], ['Morph', '260 ms spring']]
       }
+    },
+    'toolbar-amber-crt.html': {
+      title: 'Amber CRT Toolbar', tone: 'Serene · Quiet phosphor glow, industrial calm, Alien Romulus-inspired retro-futuristic', week: 'Week 7', back: 'week7.html',
+      sections: {
+        Typography: [['Body font', 'Share Tech Mono'], ['Pixel font', 'Press Start 2P'], ['Body size', '12 px'], ['Line height', '16 px'], ['Letter spacing', '0.05 em'], ['Transform', 'Uppercase']],
+        Spacing: [['Button height', '32 px'], ['Button padding', '6 × 12 px'], ['Button gap', '2 px'], ['Toolbar min-height', '44 px'], ['Toolbar padding', '6 × 8 px'], ['Separator', '1 × 20 px']],
+        Component: [['Icon size', '16 × 16 px'], ['Border', '1 px solid'], ['Roundness', '0 px'], ['Page max-width', '800 px'], ['Scanline pattern', '2 px / 4 px repeat · 15% opacity']],
+        Colors: [['Background', '#0A0A06'], ['Panel', '#111108'], ['Amber', '#C8A030'], ['Amber dim', '#8A6E20'], ['Amber glow', '#E8C848'], ['Amber bright', '#FFE070'], ['Border', '#2A2510']],
+        States: [['Default', 'Transparent bg · amber text'], ['Hover', 'rgba(200,160,48,.08) fill · dim border · 8 px glow'], ['Pressed', 'rgba(200,160,48,.15) fill · amber border · 12 px glow']],
+        Motion: [['State transitions', '150 ms'], ['Easing', 'Linear (CSS transition)']]
+      }
+    },
+    'toolbar-green-crt.html': {
+      title: 'Green Phosphor Toolbar', tone: 'Mysterious · Mining ship terminal, Commodore 64 pixel grid, low-res monochrome display', week: 'Week 7', back: 'week7.html',
+      sections: {
+        Typography: [['Font', 'Press Start 2P'], ['Size', '11 px'], ['Line height', '16 px'], ['Letter spacing', '0.08 em'], ['Transform', 'Uppercase']],
+        Spacing: [['Button height', '32 px'], ['Button padding', '4 × 14 px'], ['Button gap', '0 px'], ['Toolbar min-height', '40 px'], ['Toolbar padding', '4 px'], ['Separator', '1 × 18 px']],
+        Component: [['Icon size', '14 × 14 px'], ['Border', '1 px solid'], ['Roundness', '0 px'], ['Page max-width', '800 px'], ['Scanline pattern', '1 px / 3 px repeat · 12% opacity'], ['Vignette', 'Radial gradient · 50% transparent center']],
+        Colors: [['Background', '#040A06'], ['Panel', '#081208'], ['Green', '#30C860'], ['Green dim', '#1A7838'], ['Green glow', '#50E880'], ['Green bright', '#80FFA0'], ['Border', '#0A2A12']],
+        States: [['Default', 'Transparent bg · green text'], ['Hover', 'rgba(48,200,96,.06) fill · dim border · 10 px glow'], ['Pressed', 'rgba(48,200,96,.12) fill · green border · 16 px glow']],
+        Motion: [['State transitions', '120 ms'], ['Easing', 'Linear (CSS transition)']]
+      }
     }
   };
 

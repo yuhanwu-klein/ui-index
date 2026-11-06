@@ -20,11 +20,6 @@
     .tone-badge{display:inline-block;font:9px/1 var(--font-pixel);color:var(--bg);background:var(--green-dim);padding:4px 10px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:32px}
     h1{font:20px/1.2 var(--font-pixel);color:var(--green-glow);margin-bottom:8px;text-shadow:0 0 14px rgba(48,200,96,.35)}
 
-    .spec-block{margin:48px 0 24px;padding:16px 20px;border:1px solid var(--border);background:rgba(48,200,96,.02)}
-    .spec-block h3{font:10px/1 var(--font-pixel);color:var(--green);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px}
-    .spec-row{display:flex;gap:32px;flex-wrap:wrap;font-size:13px;color:var(--green-dim);line-height:1.8}
-    .spec-row b{color:var(--green);font-weight:400}
-
     .toolbar-wrap{margin:20px 0 40px;position:relative}
     .toolbar-wrap::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 1px,var(--scanline) 1px,var(--scanline) 3px);pointer-events:none;opacity:.12;z-index:10}
     .toolbar-wrap::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.5));pointer-events:none;z-index:11}
@@ -79,42 +74,6 @@
     <span class="tone-badge">Tone: Mysterious</span>
     <h1>Green Phosphor<br>Toolbar</h1>
     <p style="color:var(--green-dim);font-size:14px;line-height:1.6;margin-bottom:8px;font-family:var(--font-mono)">Mining ship terminal. Commodore 64 pixel grid. Low-resolution monochrome display.</p>
-
-    <!-- SPEC -->
-    <div class="spec-block">
-      <h3>Design spec</h3>
-      <div class="spec-row">
-        <span>Font: <b>Press Start 2P</b></span>
-        <span>Size: <b>11px</b></span>
-        <span>Line height: <b>16px</b></span>
-        <span>Letter spacing: <b>0.08em</b></span>
-      </div>
-      <div class="spec-row" style="margin-top:6px">
-        <span>Button height: <b>32px</b></span>
-        <span>Padding: <b>4px 14px</b></span>
-        <span>Gap: <b>0px</b></span>
-        <span>Border: <b>1px solid</b></span>
-      </div>
-      <div class="spec-row" style="margin-top:6px">
-        <span>Toolbar height: <b>40px</b></span>
-        <span>Toolbar padding: <b>4px</b></span>
-        <span>Roundness: <b>0px</b></span>
-        <span>Icon: <b>14×14px</b></span>
-      </div>
-      <div class="spec-row" style="margin-top:6px">
-        <span>BG: <b>#040a06</b></span>
-        <span>Panel: <b>#081208</b></span>
-        <span>Green: <b>#30c860</b></span>
-        <span>Glow: <b>#50e880</b></span>
-        <span>Dim: <b>#1a7838</b></span>
-      </div>
-      <div class="spec-row" style="margin-top:6px">
-        <span>Scanline: <b>1px / 3px repeat</b></span>
-        <span>Vignette: <b>radial 50%</b></span>
-        <span>Hover glow: <b>10px blur</b></span>
-        <span>Pressed glow: <b>16px blur</b></span>
-      </div>
-    </div>
 
     <!-- 1. LEFT ALIGNED — TEXT BUTTONS (pixel font) -->
     <div class="demo-area">
@@ -300,5 +259,6 @@
       btn.addEventListener('mouseleave', () => btn.classList.remove('pressed'));
     });
   </script>
+  <script src="design-specs.js"></script>
 </body>
 </html>
