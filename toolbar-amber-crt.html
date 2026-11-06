@@ -58,6 +58,7 @@
 
     .vp{background:var(--bg);position:relative;overflow:hidden}
 
+    .vp-wrap{position:absolute;inset:0;transition:transform .35s cubic-bezier(.22,1,.36,1);transform-origin:center}
     .vp-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:url(#crt-face);z-index:0}
     .vp-glow{position:absolute;inset:-24px;width:calc(100% + 48px);height:calc(100% + 48px);object-fit:cover;filter:grayscale(1) brightness(.12) contrast(1.4) sepia(1) hue-rotate(190deg) saturate(4) blur(16px);opacity:.45;pointer-events:none;z-index:0}
     .hud{position:absolute;inset:0;z-index:2;pointer-events:none}
@@ -76,6 +77,10 @@
     .scan-v{position:absolute;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,var(--fg),transparent);opacity:.25;z-index:3;animation:scanh 4s ease-in-out infinite}
     @keyframes scanh{0%,100%{left:5%}50%{left:95%}}
     @keyframes pulse{0%,100%{opacity:.8}50%{opacity:.15}}
+
+    .grid-ov{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;transition:opacity .3s}
+    .grid-ov.on{opacity:1}
+    .grid-ov line{stroke:var(--fg);stroke-width:.3;opacity:.12}
 
     html.is-preview .fui::before,html.is-preview .fui::after{display:none}
   </style>
@@ -135,96 +140,110 @@
   </aside>
 
   <main class="vp" id="vp">
-    <img class="vp-glow" src="face.jpg" alt="" aria-hidden="true">
-    <img class="vp-img" src="face.jpg" alt="Subject scan">
-    <div class="scan-v"></div>
+    <div class="vp-wrap" id="vp-wrap">
+      <img class="vp-glow" src="face.jpg" alt="" aria-hidden="true">
+      <img class="vp-img" src="face.jpg" alt="Subject scan">
+      <div class="scan-v"></div>
 
-    <div class="hud">
-      <svg viewBox="0 0 400 300" preserveAspectRatio="none" style="width:100%;height:100%">
-        <!-- Face wireframe mesh -->
-        <g stroke="var(--fg)" stroke-width=".35" fill="none" opacity=".18">
-          <path d="M200,78 L158,100 L142,132 L148,162 L162,188 L182,204 L200,210 L218,204 L238,188 L252,162 L258,132 L242,100 Z"/>
-          <line x1="158" y1="100" x2="242" y2="100"/>
-          <line x1="142" y1="132" x2="258" y2="132"/>
-          <line x1="148" y1="162" x2="252" y2="162"/>
-          <line x1="162" y1="188" x2="238" y2="188"/>
-          <line x1="200" y1="78" x2="200" y2="210"/>
-          <line x1="200" y1="78" x2="158" y2="100"/><line x1="200" y1="78" x2="242" y2="100"/>
-          <line x1="158" y1="100" x2="200" y2="132"/><line x1="242" y1="100" x2="200" y2="132"/>
-          <line x1="142" y1="132" x2="200" y2="162"/><line x1="258" y1="132" x2="200" y2="162"/>
-          <line x1="148" y1="162" x2="200" y2="188"/><line x1="252" y1="162" x2="200" y2="188"/>
-          <line x1="162" y1="188" x2="200" y2="210"/><line x1="238" y1="188" x2="200" y2="210"/>
-          <line x1="158" y1="100" x2="142" y2="132"/><line x1="242" y1="100" x2="258" y2="132"/>
-          <line x1="142" y1="132" x2="148" y2="162"/><line x1="258" y1="132" x2="252" y2="162"/>
-          <line x1="148" y1="162" x2="162" y2="188"/><line x1="252" y1="162" x2="238" y2="188"/>
-        </g>
+      <div class="hud">
+        <svg viewBox="0 0 400 300" preserveAspectRatio="none" style="width:100%;height:100%">
+          <!-- Face wireframe mesh -->
+          <g stroke="var(--fg)" stroke-width=".35" fill="none" opacity=".18">
+            <path d="M200,78 L158,100 L142,132 L148,162 L162,188 L182,204 L200,210 L218,204 L238,188 L252,162 L258,132 L242,100 Z"/>
+            <line x1="158" y1="100" x2="242" y2="100"/>
+            <line x1="142" y1="132" x2="258" y2="132"/>
+            <line x1="148" y1="162" x2="252" y2="162"/>
+            <line x1="162" y1="188" x2="238" y2="188"/>
+            <line x1="200" y1="78" x2="200" y2="210"/>
+            <line x1="200" y1="78" x2="158" y2="100"/><line x1="200" y1="78" x2="242" y2="100"/>
+            <line x1="158" y1="100" x2="200" y2="132"/><line x1="242" y1="100" x2="200" y2="132"/>
+            <line x1="142" y1="132" x2="200" y2="162"/><line x1="258" y1="132" x2="200" y2="162"/>
+            <line x1="148" y1="162" x2="200" y2="188"/><line x1="252" y1="162" x2="200" y2="188"/>
+            <line x1="162" y1="188" x2="200" y2="210"/><line x1="238" y1="188" x2="200" y2="210"/>
+            <line x1="158" y1="100" x2="142" y2="132"/><line x1="242" y1="100" x2="258" y2="132"/>
+            <line x1="142" y1="132" x2="148" y2="162"/><line x1="258" y1="132" x2="252" y2="162"/>
+            <line x1="148" y1="162" x2="162" y2="188"/><line x1="252" y1="162" x2="238" y2="188"/>
+          </g>
 
-        <!-- Face bounding box -->
-        <rect x="125" y="55" width="150" height="175" fill="none" stroke="var(--fg)" stroke-width=".5" opacity=".2" stroke-dasharray="4 3"/>
-        <path d="M125,70 L125,55 L140,55" fill="none" stroke="var(--fg)" stroke-width="1" opacity=".5"/>
-        <path d="M260,55 L275,55 L275,70" fill="none" stroke="var(--fg)" stroke-width="1" opacity=".5"/>
-        <path d="M125,215 L125,230 L140,230" fill="none" stroke="var(--fg)" stroke-width="1" opacity=".5"/>
-        <path d="M260,230 L275,230 L275,215" fill="none" stroke="var(--fg)" stroke-width="1" opacity=".5"/>
+          <!-- Face bounding box -->
+          <rect x="125" y="55" width="150" height="175" fill="none" stroke="var(--fg)" stroke-width=".5" opacity=".2" stroke-dasharray="4 3"/>
+          <path d="M125,70 L125,55 L140,55" fill="none" stroke="var(--fg)" stroke-width="1" opacity=".5"/>
+          <path d="M260,55 L275,55 L275,70" fill="none" stroke="var(--fg)" stroke-width="1" opacity=".5"/>
+          <path d="M125,215 L125,230 L140,230" fill="none" stroke="var(--fg)" stroke-width="1" opacity=".5"/>
+          <path d="M260,230 L275,230 L275,215" fill="none" stroke="var(--fg)" stroke-width="1" opacity=".5"/>
 
-        <!-- Crosshair center -->
-        <line x1="200" y1="135" x2="200" y2="143" stroke="var(--fg)" stroke-width=".4" opacity=".3"/>
-        <line x1="200" y1="157" x2="200" y2="165" stroke="var(--fg)" stroke-width=".4" opacity=".3"/>
-        <line x1="190" y1="150" x2="196" y2="150" stroke="var(--fg)" stroke-width=".4" opacity=".3"/>
-        <line x1="204" y1="150" x2="210" y2="150" stroke="var(--fg)" stroke-width=".4" opacity=".3"/>
+          <!-- Crosshair center -->
+          <line x1="200" y1="135" x2="200" y2="143" stroke="var(--fg)" stroke-width=".4" opacity=".3"/>
+          <line x1="200" y1="157" x2="200" y2="165" stroke="var(--fg)" stroke-width=".4" opacity=".3"/>
+          <line x1="190" y1="150" x2="196" y2="150" stroke="var(--fg)" stroke-width=".4" opacity=".3"/>
+          <line x1="204" y1="150" x2="210" y2="150" stroke="var(--fg)" stroke-width=".4" opacity=".3"/>
 
-        <!-- Tracking points -->
-        <circle cx="178" cy="118" r="2.5" fill="none" stroke="var(--glow)" stroke-width=".7" style="animation:pulse 2s ease infinite"/>
-        <circle cx="222" cy="118" r="2.5" fill="none" stroke="var(--glow)" stroke-width=".7" style="animation:pulse 2s ease infinite .3s"/>
-        <circle cx="200" cy="145" r="2" fill="none" stroke="var(--glow)" stroke-width=".6" style="animation:pulse 2.5s ease infinite .6s"/>
-        <circle cx="200" cy="170" r="2" fill="none" stroke="var(--glow)" stroke-width=".6" style="animation:pulse 3s ease infinite .9s"/>
-        <circle cx="152" cy="130" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.2s ease infinite 1.2s"/>
-        <circle cx="248" cy="130" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.8s ease infinite .4s"/>
-        <circle cx="200" cy="92" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2s ease infinite .7s"/>
-        <circle cx="200" cy="200" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.4s ease infinite 1s"/>
-        <circle cx="165" cy="160" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.6s ease infinite .2s"/>
-        <circle cx="235" cy="160" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.3s ease infinite .8s"/>
-        <circle cx="188" cy="168" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.1s ease infinite 1.1s"/>
-        <circle cx="212" cy="168" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.7s ease infinite .5s"/>
+          <!-- Tracking points -->
+          <circle cx="178" cy="118" r="2.5" fill="none" stroke="var(--glow)" stroke-width=".7" style="animation:pulse 2s ease infinite"/>
+          <circle cx="222" cy="118" r="2.5" fill="none" stroke="var(--glow)" stroke-width=".7" style="animation:pulse 2s ease infinite .3s"/>
+          <circle cx="200" cy="145" r="2" fill="none" stroke="var(--glow)" stroke-width=".6" style="animation:pulse 2.5s ease infinite .6s"/>
+          <circle cx="200" cy="170" r="2" fill="none" stroke="var(--glow)" stroke-width=".6" style="animation:pulse 3s ease infinite .9s"/>
+          <circle cx="152" cy="130" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.2s ease infinite 1.2s"/>
+          <circle cx="248" cy="130" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.8s ease infinite .4s"/>
+          <circle cx="200" cy="92" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2s ease infinite .7s"/>
+          <circle cx="200" cy="200" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.4s ease infinite 1s"/>
+          <circle cx="165" cy="160" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.6s ease infinite .2s"/>
+          <circle cx="235" cy="160" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.3s ease infinite .8s"/>
+          <circle cx="188" cy="168" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.1s ease infinite 1.1s"/>
+          <circle cx="212" cy="168" r="1.5" fill="none" stroke="var(--glow)" stroke-width=".5" style="animation:pulse 2.7s ease infinite .5s"/>
 
-        <!-- Tracking lines -->
-        <line x1="178" y1="118" x2="152" y2="118" stroke="var(--dim)" stroke-width=".25" opacity=".3"/>
-        <line x1="222" y1="118" x2="248" y2="118" stroke="var(--dim)" stroke-width=".25" opacity=".3"/>
+          <!-- Tracking lines -->
+          <line x1="178" y1="118" x2="152" y2="118" stroke="var(--dim)" stroke-width=".25" opacity=".3"/>
+          <line x1="222" y1="118" x2="248" y2="118" stroke="var(--dim)" stroke-width=".25" opacity=".3"/>
 
-        <!-- ECG trace -->
-        <path d="M20,272 L38,272 L40,268 L43,272 L52,272 L53,273 L54,259 L55,280 L56,272 L68,272 L70,268 L75,272 L90,272 L92,268 L95,272 L104,272 L105,273 L106,259 L107,280 L108,272 L120,272 L122,268 L127,272 L138,272" fill="none" stroke="var(--fg)" stroke-width=".8" style="filter:drop-shadow(0 0 3px rgba(74,158,255,.25))"/>
-      </svg>
-    </div>
+          <!-- ECG trace -->
+          <path d="M20,272 L38,272 L40,268 L43,272 L52,272 L53,273 L54,259 L55,280 L56,272 L68,272 L70,268 L75,272 L90,272 L92,268 L95,272 L104,272 L105,273 L106,259 L107,280 L108,272 L120,272 L122,268 L127,272 L138,272" fill="none" stroke="var(--fg)" stroke-width=".8" style="filter:drop-shadow(0 0 3px rgba(74,158,255,.25))"/>
+        </svg>
+      </div>
 
-    <!-- Data panels -->
-    <div class="hud-panel hud-tl">
-      <div class="hud-title">BIO_PROFILE<span class="hud-tag">ACTIVE</span></div>
-      <div class="hud-data" style="margin-top:3px">
-        FILE:<b> #0003/0222</b><br>
-        CLASS:<b> HOMO SAPIENS</b><br>
-        SCAN:<b> DEEP TISSUE</b>
+      <!-- Data panels -->
+      <div class="hud-panel hud-tl">
+        <div class="hud-title">BIO_PROFILE<span class="hud-tag">ACTIVE</span></div>
+        <div class="hud-data" style="margin-top:3px">
+          FILE:<b> #0003/0222</b><br>
+          CLASS:<b> HOMO SAPIENS</b><br>
+          SCAN:<b> DEEP TISSUE</b>
+        </div>
+      </div>
+      <div class="hud-panel hud-tr">
+        <div style="display:flex;align-items:baseline;gap:3px;justify-content:flex-end">
+          <span class="hud-val" id="bpm">75</span>
+          <span class="hud-unit">BPM</span>
+        </div>
+        <div class="hud-data" style="margin-top:2px">
+          MODE:<b> ECG</b> &nbsp; LEAD:<b> II</b>
+        </div>
+      </div>
+      <div class="hud-panel hud-bl">
+        <div class="hud-data">
+          SECTOR:<b> 0/45787</b><br>
+          TEMP:<b> 97.2°F</b>
+        </div>
+      </div>
+      <div class="hud-panel hud-br">
+        <div class="hud-data">
+          MATCH:<b> 98.7%</b><br>
+          STATUS:<b> N.ACTION</b>
+        </div>
       </div>
     </div>
-    <div class="hud-panel hud-tr">
-      <div style="display:flex;align-items:baseline;gap:3px;justify-content:flex-end">
-        <span class="hud-val" id="bpm">75</span>
-        <span class="hud-unit">BPM</span>
-      </div>
-      <div class="hud-data" style="margin-top:2px">
-        MODE:<b> ECG</b> &nbsp; LEAD:<b> II</b>
-      </div>
-    </div>
-    <div class="hud-panel hud-bl">
-      <div class="hud-data">
-        SECTOR:<b> 0/45787</b><br>
-        TEMP:<b> 97.2°F</b>
-      </div>
-    </div>
-    <div class="hud-panel hud-br">
-      <div class="hud-data">
-        MATCH:<b> 98.7%</b><br>
-        STATUS:<b> N.ACTION</b>
-      </div>
-    </div>
+
+    <!-- Grid overlay (outside transform wrapper so it stays fixed) -->
+    <svg class="grid-ov" id="grid-ov" viewBox="0 0 400 300" preserveAspectRatio="none">
+      <line x1="50" y1="0" x2="50" y2="300"/><line x1="100" y1="0" x2="100" y2="300"/>
+      <line x1="150" y1="0" x2="150" y2="300"/><line x1="200" y1="0" x2="200" y2="300"/>
+      <line x1="250" y1="0" x2="250" y2="300"/><line x1="300" y1="0" x2="300" y2="300"/>
+      <line x1="350" y1="0" x2="350" y2="300"/>
+      <line x1="0" y1="37.5" x2="400" y2="37.5"/><line x1="0" y1="75" x2="400" y2="75"/>
+      <line x1="0" y1="112.5" x2="400" y2="112.5"/><line x1="0" y1="150" x2="400" y2="150"/>
+      <line x1="0" y1="187.5" x2="400" y2="187.5"/><line x1="0" y1="225" x2="400" y2="225"/>
+      <line x1="0" y1="262.5" x2="400" y2="262.5"/>
+    </svg>
   </main>
 
   <aside class="tb tb-v">
@@ -240,6 +259,10 @@
     <div class="sep"></div>
     <span class="st">X:<b id="cx">0000</b> Y:<b id="cy">0000</b></span>
     <div class="sep"></div>
+    <button class="btn btn-z" id="rot-l" aria-label="Rotate left">↺</button>
+    <span class="st"><b id="rot-val">0°</b></span>
+    <button class="btn btn-z" id="rot-r" aria-label="Rotate right">↻</button>
+    <div class="sep"></div>
     <button class="btn btn-z" id="zoom-out" aria-label="Zoom out">&minus;</button>
     <span class="st"><b id="zoom">100%</b></span>
     <button class="btn btn-z" id="zoom-in" aria-label="Zoom in">+</button>
@@ -250,36 +273,79 @@
 
 <script>
 (function(){
-  var cursors={Cursor:'default',Crosshair:'crosshair',Pen:'crosshair',Grid:'cell',Layers:'pointer'};
+  var wrap=document.getElementById('vp-wrap');
   var vp=document.getElementById('vp');
+  var gridOv=document.getElementById('grid-ov');
+  var zl=100, rot=0;
 
-  document.querySelectorAll('.btn[data-group]').forEach(function(btn){
+  function updateTransform(){
+    wrap.style.transform='scale('+(zl/100)+') rotate('+rot+'deg)';
+  }
+
+  // Zoom
+  var ze=document.getElementById('zoom');
+  document.getElementById('zoom-in').addEventListener('click',function(){
+    zl=Math.min(300,zl+25); ze.textContent=zl+'%'; updateTransform();
+  });
+  document.getElementById('zoom-out').addEventListener('click',function(){
+    zl=Math.max(50,zl-25); ze.textContent=zl+'%'; updateTransform();
+  });
+
+  // Rotate
+  var re=document.getElementById('rot-val');
+  document.getElementById('rot-l').addEventListener('click',function(){
+    rot=(rot-15)%360; if(rot<0)rot+=360; re.textContent=rot+'°'; updateTransform();
+  });
+  document.getElementById('rot-r').addEventListener('click',function(){
+    rot=(rot+15)%360; re.textContent=rot+'°'; updateTransform();
+  });
+
+  // Tool buttons — radio groups + functional toggles
+  var cursors={Cursor:'default',Crosshair:'crosshair',Pen:'crosshair',Grid:'cell',Layers:'pointer'};
+
+  document.querySelectorAll('.btn[data-group="tool"]').forEach(function(btn){
     btn.addEventListener('click',function(){
-      var g=btn.dataset.group;
-      document.querySelectorAll('.btn[data-group="'+g+'"]').forEach(function(b){b.classList.remove('on')});
+      document.querySelectorAll('.btn[data-group="tool"]').forEach(function(b){b.classList.remove('on')});
       btn.classList.add('on');
-      var label=btn.dataset.tool||btn.textContent.trim();
-      document.getElementById('status').textContent=label;
-      if(g==='tool'&&cursors[label])vp.style.cursor=cursors[label];
+      var tool=btn.dataset.tool;
+      document.getElementById('status').textContent=tool;
+      vp.style.cursor=cursors[tool]||'default';
+
+      // Grid tool toggles grid overlay
+      if(tool==='Grid') gridOv.classList.add('on');
+      else gridOv.classList.remove('on');
     });
   });
 
+  // Mode buttons
+  document.querySelectorAll('.btn[data-group="mode"]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.btn[data-group="mode"]').forEach(function(b){b.classList.remove('on')});
+      btn.classList.add('on');
+      var mode=btn.textContent.trim();
+      document.getElementById('status').textContent=mode;
+    });
+  });
+
+  // Toggle buttons
   document.querySelectorAll('.btn[data-toggle]').forEach(function(btn){
     btn.addEventListener('click',function(){btn.classList.toggle('on')});
   });
 
-  var zl=100,ze=document.getElementById('zoom');
-  document.getElementById('zoom-in').addEventListener('click',function(){zl=Math.min(400,zl+25);ze.textContent=zl+'%'});
-  document.getElementById('zoom-out').addEventListener('click',function(){zl=Math.max(25,zl-25);ze.textContent=zl+'%'});
-
+  // Coordinates
   vp.addEventListener('mousemove',function(e){
     var r=vp.getBoundingClientRect();
     document.getElementById('cx').textContent=String(Math.round((e.clientX-r.left)/r.width*999)).padStart(4,'0');
     document.getElementById('cy').textContent=String(Math.round((e.clientY-r.top)/r.height*999)).padStart(4,'0');
   });
 
-  setInterval(function(){var d=new Date();document.getElementById('clk').textContent=[d.getHours(),d.getMinutes(),d.getSeconds()].map(function(n){return String(n).padStart(2,'0')}).join(':')},1000);
+  // Clock
+  setInterval(function(){
+    var d=new Date();
+    document.getElementById('clk').textContent=[d.getHours(),d.getMinutes(),d.getSeconds()].map(function(n){return String(n).padStart(2,'0')}).join(':');
+  },1000);
 
+  // BPM
   var bpmEl=document.getElementById('bpm');
   if(bpmEl)setInterval(function(){bpmEl.textContent=72+Math.floor(Math.random()*7)},1200);
 })();
