@@ -13,54 +13,62 @@
       --bright:#ffe070;--border:#2a2510;
       --px:'Press Start 2P',monospace;--mono:'Share Tech Mono',monospace;
     }
-    html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--amber);font-family:var(--mono)}
+    html,body{height:100%;background:#fff;font-family:var(--mono)}
+    body{display:flex;align-items:center;justify-content:center;padding:24px}
 
-    .fui{display:grid;grid-template-rows:44px 1fr 32px;grid-template-columns:48px 1fr 48px;height:100vh;gap:1px;background:var(--border);position:relative}
-    .fui::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.3) 2px,rgba(0,0,0,.3) 4px);pointer-events:none;opacity:.15;z-index:100}
-    .fui::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.45));pointer-events:none;z-index:101}
+    .fui{
+      width:560px;max-width:85vw;aspect-ratio:4/3;
+      display:grid;grid-template-rows:34px 1fr 24px;grid-template-columns:36px 1fr 36px;
+      gap:1px;background:var(--border);color:var(--amber);
+      border-radius:8px;overflow:hidden;position:relative;
+      box-shadow:0 16px 48px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.06);
+    }
+    .fui::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.25) 2px,rgba(0,0,0,.25) 4px);pointer-events:none;opacity:.1;z-index:100;border-radius:8px}
+    .fui::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.3));pointer-events:none;z-index:101;border-radius:8px}
 
     .tb{background:var(--panel);display:flex;align-items:center}
-    .tb-h{grid-column:1/-1;gap:2px;padding:0 8px}
-    .tb-h.spread{justify-content:space-between}
-    .tb-v{flex-direction:column;padding:6px 0;gap:2px}
-    .tb-bar{grid-column:1/-1;gap:12px;padding:0 12px}
+    .tb-top{grid-column:1/-1;gap:2px;padding:0 6px;justify-content:space-between}
+    .tb-v{flex-direction:column;padding:4px 0;gap:1px}
+    .tb-bot{grid-column:1/-1;gap:6px;padding:0 8px}
 
     .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:6px;
-      height:32px;min-width:32px;padding:0 12px;
+      display:inline-flex;align-items:center;justify-content:center;gap:4px;
+      height:24px;min-width:24px;padding:0 8px;
       background:0;border:1px solid transparent;
-      color:var(--amber);font:12px var(--mono);cursor:pointer;
+      color:var(--amber);font:10px var(--mono);cursor:pointer;
       letter-spacing:.05em;text-transform:uppercase;
       transition:background .12s,border-color .12s,color .12s,text-shadow .12s;
+      user-select:none;
     }
     .btn:hover{background:rgba(200,160,48,.08);border-color:var(--dim);color:var(--glow);text-shadow:0 0 8px rgba(200,160,48,.4)}
     .btn:active,.btn.on{background:rgba(200,160,48,.15);border-color:var(--amber);color:var(--bright);text-shadow:0 0 12px rgba(200,160,48,.6)}
-    .tb-v .btn{height:36px;width:36px;padding:0}
+    .tb-v .btn{height:28px;width:28px;padding:0}
+    .btn-z{height:18px;min-width:18px;padding:0 3px;font:10px var(--mono)}
 
     .sep{background:var(--border);flex-shrink:0}
-    .tb-h .sep,.tb-bar .sep{width:1px;height:20px;margin:0 4px}
-    .tb-v .sep{height:1px;width:24px;margin:4px 0}
-    .g{display:flex;align-items:center;gap:2px}
+    .tb-top .sep,.tb-bot .sep{width:1px;height:14px;margin:0 2px}
+    .tb-v .sep{height:1px;width:18px;margin:2px 0}
+    .g{display:flex;align-items:center;gap:1px}
     .tb-v .g{flex-direction:column}
 
-    svg.i{width:16px;height:16px;fill:currentColor}
+    svg.i{width:13px;height:13px;fill:currentColor}
 
-    .st{font:8px var(--px);color:var(--dim);letter-spacing:.1em;white-space:nowrap}
+    .st{font:6px var(--px);color:var(--dim);letter-spacing:.08em;white-space:nowrap}
     .st b{color:var(--amber);font-weight:400}
 
     .vp{background:var(--border);display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1px}
     .p{background:var(--panel);position:relative;overflow:hidden}
-    .p::before,.p::after{content:'';position:absolute;width:12px;height:12px;border-color:var(--dim);border-style:solid;pointer-events:none;z-index:3;opacity:.5}
-    .p::before{top:4px;left:4px;border-width:1px 0 0 1px}
-    .p::after{bottom:4px;right:4px;border-width:0 1px 1px 0}
-    .p-label{position:absolute;top:0;left:0;font:7px var(--px);color:var(--dim);letter-spacing:.15em;text-transform:uppercase;padding:8px 10px;z-index:2}
+    .p::before,.p::after{content:'';position:absolute;width:8px;height:8px;border-color:var(--dim);border-style:solid;pointer-events:none;z-index:3;opacity:.35}
+    .p::before{top:3px;left:3px;border-width:1px 0 0 1px}
+    .p::after{bottom:3px;right:3px;border-width:0 1px 1px 0}
+    .p-label{position:absolute;top:0;left:0;font:5px var(--px);color:var(--dim);letter-spacing:.12em;text-transform:uppercase;padding:5px 7px;z-index:2}
     .p-c{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
 
-    .rd{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:28px 14px 14px;width:100%;position:relative}
-    .r{display:flex;flex-direction:column;gap:3px}
-    .r-l{font:7px var(--px);color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
-    .r-v{font:20px var(--mono);color:var(--glow);text-shadow:0 0 6px rgba(200,160,48,.3);letter-spacing:.04em}
-    .r-u{font:7px var(--px);color:var(--dim);letter-spacing:.08em}
+    .rd{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:18px 8px 8px;width:100%}
+    .r{display:flex;flex-direction:column;gap:1px}
+    .r-l{font:5px var(--px);color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
+    .r-v{font:14px var(--mono);color:var(--glow);text-shadow:0 0 4px rgba(200,160,48,.2);letter-spacing:.03em}
+    .r-u{font:5px var(--px);color:var(--dim)}
 
     @keyframes sweep{to{transform:rotate(360deg)}}
     @keyframes pulse{0%,100%{opacity:.7}50%{opacity:.25}}
@@ -70,8 +78,7 @@
 </head>
 <body>
 <div class="fui">
-  <!-- TOP TOOLBAR: spread — icon+text left, text center, icon right -->
-  <nav class="tb tb-h spread">
+  <nav class="tb tb-top">
     <div class="g">
       <button class="btn" aria-label="Menu"><svg class="i" viewBox="0 0 16 16"><rect x="1" y="2" width="14" height="2"/><rect x="1" y="7" width="10" height="2"/><rect x="1" y="12" width="14" height="2"/></svg></button>
       <div class="sep"></div>
@@ -79,67 +86,56 @@
       <button class="btn"><svg class="i" viewBox="0 0 16 16"><rect x="3" y="1" width="10" height="2"/><rect x="3" y="1" width="2" height="6"/><rect x="3" y="5" width="4" height="2"/><rect x="5" y="7" width="2" height="2"/><rect x="7" y="7" width="2" height="8"/><rect x="3" y="13" width="10" height="2"/><rect x="11" y="7" width="2" height="8"/></svg> Save</button>
     </div>
     <div class="g">
-      <button class="btn">Select</button>
-      <button class="btn on">Draw</button>
-      <button class="btn">Erase</button>
+      <button class="btn" data-group="mode">Select</button>
+      <button class="btn on" data-group="mode">Draw</button>
+      <button class="btn" data-group="mode">Erase</button>
     </div>
     <div class="g">
-      <button class="btn" aria-label="Scan"><svg class="i" viewBox="0 0 16 16"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="11" y="11" width="4" height="2" transform="rotate(-45 11 11)"/></svg></button>
-      <button class="btn" aria-label="Settings"><svg class="i" viewBox="0 0 16 16"><rect x="5" y="5" width="6" height="6"/><rect x="7" y="1" width="2" height="4"/><rect x="7" y="11" width="2" height="4"/><rect x="1" y="7" width="4" height="2"/><rect x="11" y="7" width="4" height="2"/></svg></button>
+      <button class="btn" aria-label="Search"><svg class="i" viewBox="0 0 16 16"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="11" y="11" width="4" height="2" transform="rotate(-45 11 11)"/></svg></button>
+      <button class="btn" data-toggle aria-label="Settings"><svg class="i" viewBox="0 0 16 16"><rect x="5" y="5" width="6" height="6"/><rect x="7" y="1" width="2" height="4"/><rect x="7" y="11" width="2" height="4"/><rect x="1" y="7" width="4" height="2"/><rect x="11" y="7" width="4" height="2"/></svg></button>
     </div>
   </nav>
 
-  <!-- LEFT TOOLBAR: vertical icons -->
   <aside class="tb tb-v">
     <div class="g">
-      <button class="btn on" aria-label="Cursor"><svg class="i" viewBox="0 0 16 16"><polygon points="3,1 3,12 6,9 10,14 12,13 8,8 12,8"/></svg></button>
-      <button class="btn" aria-label="Crosshair"><svg class="i" viewBox="0 0 16 16"><rect x="7" y="1" width="2" height="14"/><rect x="1" y="7" width="14" height="2"/><circle cx="8" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
-      <button class="btn" aria-label="Pen"><svg class="i" viewBox="0 0 16 16"><rect x="9" y="1" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5" transform="rotate(45 12 4)"/><rect x="3" y="11" width="5" height="3"/></svg></button>
+      <button class="btn on" data-group="tool" data-tool="Cursor" aria-label="Cursor"><svg class="i" viewBox="0 0 16 16"><polygon points="3,1 3,12 6,9 10,14 12,13 8,8 12,8"/></svg></button>
+      <button class="btn" data-group="tool" data-tool="Crosshair" aria-label="Crosshair"><svg class="i" viewBox="0 0 16 16"><rect x="7" y="1" width="2" height="14"/><rect x="1" y="7" width="14" height="2"/><circle cx="8" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+      <button class="btn" data-group="tool" data-tool="Pen" aria-label="Pen"><svg class="i" viewBox="0 0 16 16"><rect x="9" y="1" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5" transform="rotate(45 12 4)"/><rect x="3" y="11" width="5" height="3"/></svg></button>
     </div>
     <div class="sep"></div>
     <div class="g">
-      <button class="btn" aria-label="Grid"><svg class="i" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6"/><rect x="9" y="1" width="6" height="6"/><rect x="1" y="9" width="6" height="6"/><rect x="9" y="9" width="6" height="6"/></svg></button>
-      <button class="btn" aria-label="Zoom"><svg class="i" viewBox="0 0 16 16"><rect x="7" y="3" width="2" height="10"/><rect x="3" y="7" width="10" height="2"/></svg></button>
+      <button class="btn" data-group="tool" data-tool="Grid" aria-label="Grid"><svg class="i" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6"/><rect x="9" y="1" width="6" height="6"/><rect x="1" y="9" width="6" height="6"/><rect x="9" y="9" width="6" height="6"/></svg></button>
+      <button class="btn" data-group="tool" data-tool="Layers" aria-label="Layers"><svg class="i" viewBox="0 0 16 16"><rect x="3" y="1" width="10" height="3" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="6" width="10" height="3" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="10" height="3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
     </div>
   </aside>
 
-  <!-- VIEWPORT: 2×2 dashboard -->
-  <main class="vp">
-    <!-- SCANNER -->
+  <main class="vp" id="vp">
     <div class="p">
       <span class="p-label">Scanner</span>
       <div class="p-c">
-        <svg viewBox="0 0 200 200" style="width:min(75%,180px)">
-          <circle cx="100" cy="100" r="88" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".4"/>
-          <circle cx="100" cy="100" r="58" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".3"/>
-          <circle cx="100" cy="100" r="28" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".2"/>
-          <line x1="100" y1="10" x2="100" y2="190" stroke="var(--dim)" stroke-width=".3" opacity=".25"/>
-          <line x1="10" y1="100" x2="190" y2="100" stroke="var(--dim)" stroke-width=".3" opacity=".25"/>
-          <g style="transform-origin:100px 100px;animation:sweep 4s linear infinite">
-            <line x1="100" y1="100" x2="100" y2="12" stroke="var(--amber)" stroke-width="1" opacity=".7"/>
-          </g>
+        <svg viewBox="0 0 200 200" style="width:min(70%,140px)">
+          <circle cx="100" cy="100" r="85" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".4"/>
+          <circle cx="100" cy="100" r="55" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".3"/>
+          <circle cx="100" cy="100" r="25" fill="none" stroke="var(--dim)" stroke-width=".5" opacity=".2"/>
+          <line x1="100" y1="12" x2="100" y2="188" stroke="var(--dim)" stroke-width=".3" opacity=".2"/>
+          <line x1="12" y1="100" x2="188" y2="100" stroke="var(--dim)" stroke-width=".3" opacity=".2"/>
+          <g style="transform-origin:100px 100px;animation:sweep 4s linear infinite"><line x1="100" y1="100" x2="100" y2="15" stroke="var(--amber)" stroke-width="1" opacity=".7"/></g>
           <circle cx="72" cy="55" r="3" fill="var(--glow)" style="animation:pulse 2s ease infinite"/>
           <circle cx="138" cy="78" r="2" fill="var(--glow)" style="animation:pulse 3s ease infinite .5s"/>
           <circle cx="85" cy="130" r="2.5" fill="var(--glow)" style="animation:pulse 2.5s ease infinite 1s"/>
         </svg>
       </div>
     </div>
-
-    <!-- SIGNAL -->
     <div class="p">
       <span class="p-label">Signal</span>
       <div class="p-c">
-        <svg viewBox="0 0 300 120" preserveAspectRatio="none" style="width:88%;height:60%">
-          <line x1="0" y1="60" x2="300" y2="60" stroke="var(--dim)" stroke-width=".5" opacity=".25"/>
-          <line x1="0" y1="30" x2="300" y2="30" stroke="var(--dim)" stroke-width=".3" opacity=".12"/>
-          <line x1="0" y1="90" x2="300" y2="90" stroke="var(--dim)" stroke-width=".3" opacity=".12"/>
-          <path d="M0,60 Q15,60 25,35 T50,60 T75,42 T100,60 T125,30 T150,60 T175,45 T200,60 T225,38 T250,60 T275,48 T300,60" fill="none" stroke="var(--amber)" stroke-width="1.5" style="filter:drop-shadow(0 0 4px rgba(200,160,48,.4))"/>
-          <path d="M0,65 Q20,65 40,80 T80,65 T120,82 T160,65 T200,74 T240,65 T280,70 T300,65" fill="none" stroke="var(--dim)" stroke-width="1" opacity=".4"/>
+        <svg viewBox="0 0 300 120" preserveAspectRatio="none" style="width:85%;height:55%">
+          <line x1="0" y1="60" x2="300" y2="60" stroke="var(--dim)" stroke-width=".5" opacity=".2"/>
+          <path d="M0,60 Q15,60 25,35 T50,60 T75,42 T100,60 T125,30 T150,60 T175,45 T200,60 T225,38 T250,60 T275,48 T300,60" fill="none" stroke="var(--amber)" stroke-width="1.5" style="filter:drop-shadow(0 0 4px rgba(200,160,48,.3))"/>
+          <path d="M0,65 Q20,65 40,80 T80,65 T120,82 T160,65 T200,74 T240,65 T280,70 T300,65" fill="none" stroke="var(--dim)" stroke-width="1" opacity=".35"/>
         </svg>
       </div>
     </div>
-
-    <!-- STATUS -->
     <div class="p">
       <span class="p-label">Status</span>
       <div class="rd">
@@ -149,49 +145,74 @@
         <div class="r"><span class="r-l">Bearing</span><span class="r-v">188.2</span><span class="r-u">DEG</span></div>
       </div>
     </div>
-
-    <!-- GRID -->
     <div class="p">
       <span class="p-label">Grid</span>
       <div class="p-c">
-        <svg viewBox="0 0 200 200" style="width:88%;height:88%">
+        <svg viewBox="0 0 200 200" style="width:85%;height:85%">
           <defs><pattern id="gr" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20,0L0,0L0,20" fill="none" stroke="rgba(200,160,48,.06)" stroke-width=".5"/></pattern></defs>
           <rect width="200" height="200" fill="url(#gr)"/>
-          <line x1="100" y1="10" x2="100" y2="190" stroke="var(--amber)" stroke-width=".5" opacity=".25"/>
-          <line x1="10" y1="100" x2="190" y2="100" stroke="var(--amber)" stroke-width=".5" opacity=".25"/>
-          <circle cx="100" cy="100" r="40" fill="none" stroke="var(--amber)" stroke-width=".7" opacity=".4"/>
-          <circle cx="100" cy="100" r="18" fill="none" stroke="var(--amber)" stroke-width=".5" opacity=".25"/>
-          <text x="106" y="96" style="fill:var(--dim);font:7px var(--px);letter-spacing:.08em">X:0042</text>
-          <text x="106" y="108" style="fill:var(--dim);font:7px var(--px);letter-spacing:.08em">Y:0188</text>
+          <line x1="100" y1="10" x2="100" y2="190" stroke="var(--amber)" stroke-width=".5" opacity=".2"/>
+          <line x1="10" y1="100" x2="190" y2="100" stroke="var(--amber)" stroke-width=".5" opacity=".2"/>
+          <circle cx="100" cy="100" r="38" fill="none" stroke="var(--amber)" stroke-width=".6" opacity=".35"/>
+          <circle cx="100" cy="100" r="16" fill="none" stroke="var(--amber)" stroke-width=".4" opacity=".2"/>
         </svg>
       </div>
     </div>
   </main>
 
-  <!-- RIGHT TOOLBAR: vertical icons -->
   <aside class="tb tb-v">
     <div class="g">
-      <button class="btn" aria-label="Layers"><svg class="i" viewBox="0 0 16 16"><rect x="3" y="1" width="10" height="3" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="6" width="10" height="3" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="10" height="3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
-      <button class="btn" aria-label="Info"><svg class="i" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="7" y="7" width="2" height="4"/><circle cx="8" cy="5" r="1"/></svg></button>
-      <button class="btn" aria-label="Lock"><svg class="i" viewBox="0 0 16 16"><rect x="3" y="7" width="10" height="8"/><rect x="5" y="3" width="6" height="6" fill="none" stroke="currentColor" stroke-width="2"/><rect x="7" y="10" width="2" height="3"/></svg></button>
+      <button class="btn" data-toggle aria-label="Info"><svg class="i" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="7" y="7" width="2" height="4"/><circle cx="8" cy="5" r="1"/></svg></button>
+      <button class="btn" data-toggle aria-label="Lock"><svg class="i" viewBox="0 0 16 16"><rect x="3" y="7" width="10" height="8"/><rect x="5" y="3" width="6" height="6" fill="none" stroke="currentColor" stroke-width="2"/><rect x="7" y="10" width="2" height="3"/></svg></button>
+      <button class="btn" data-toggle aria-label="Fullscreen"><svg class="i" viewBox="0 0 16 16"><rect x="1" y="1" width="5" height="1.5"/><rect x="1" y="1" width="1.5" height="5"/><rect x="10" y="1" width="5" height="1.5"/><rect x="13.5" y="1" width="1.5" height="5"/><rect x="1" y="13.5" width="5" height="1.5"/><rect x="1" y="10" width="1.5" height="5"/><rect x="10" y="13.5" width="5" height="1.5"/><rect x="13.5" y="10" width="1.5" height="5"/></svg></button>
     </div>
   </aside>
 
-  <!-- BOTTOM TOOLBAR: status bar -->
-  <nav class="tb tb-h tb-bar">
-    <span class="st">Ready</span>
+  <nav class="tb tb-bot">
+    <span class="st" id="status">Ready</span>
     <div class="sep"></div>
-    <span class="st">X:<b>0042</b> Y:<b>0188</b></span>
+    <span class="st">X:<b id="cx">0000</b> Y:<b id="cy">0000</b></span>
     <div class="sep"></div>
-    <span class="st">Zoom:<b>100%</b></span>
+    <button class="btn btn-z" id="zoom-out" aria-label="Zoom out">&minus;</button>
+    <span class="st"><b id="zoom">100%</b></span>
+    <button class="btn btn-z" id="zoom-in" aria-label="Zoom in">+</button>
     <span style="flex:1"></span>
     <span class="st" id="clk">--:--:--</span>
   </nav>
 </div>
 
 <script>
-  var c=document.getElementById('clk');
-  if(c)setInterval(function(){var d=new Date();c.textContent=[d.getHours(),d.getMinutes(),d.getSeconds()].map(function(n){return String(n).padStart(2,'0')}).join(':')},1000);
+(function(){
+  var cursors={Cursor:'default',Crosshair:'crosshair',Pen:'crosshair',Grid:'cell',Layers:'pointer'};
+  var vp=document.getElementById('vp');
+
+  document.querySelectorAll('.btn[data-group]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var g=btn.dataset.group;
+      document.querySelectorAll('.btn[data-group="'+g+'"]').forEach(function(b){b.classList.remove('on')});
+      btn.classList.add('on');
+      var label=btn.dataset.tool||btn.textContent.trim();
+      document.getElementById('status').textContent=label;
+      if(g==='tool'&&cursors[label])vp.style.cursor=cursors[label];
+    });
+  });
+
+  document.querySelectorAll('.btn[data-toggle]').forEach(function(btn){
+    btn.addEventListener('click',function(){btn.classList.toggle('on')});
+  });
+
+  var zl=100,ze=document.getElementById('zoom');
+  document.getElementById('zoom-in').addEventListener('click',function(){zl=Math.min(400,zl+25);ze.textContent=zl+'%'});
+  document.getElementById('zoom-out').addEventListener('click',function(){zl=Math.max(25,zl-25);ze.textContent=zl+'%'});
+
+  vp.addEventListener('mousemove',function(e){
+    var r=vp.getBoundingClientRect();
+    document.getElementById('cx').textContent=String(Math.round((e.clientX-r.left)/r.width*999)).padStart(4,'0');
+    document.getElementById('cy').textContent=String(Math.round((e.clientY-r.top)/r.height*999)).padStart(4,'0');
+  });
+
+  setInterval(function(){var d=new Date();document.getElementById('clk').textContent=[d.getHours(),d.getMinutes(),d.getSeconds()].map(function(n){return String(n).padStart(2,'0')}).join(':')},1000);
+})();
 </script>
 <script src="design-specs.js"></script>
 </body>
