@@ -17,23 +17,23 @@
     }
 
     .bar{
-      display:flex;align-items:center;gap:4px;
+      display:flex;align-items:center;gap:6px;
       background:#fff;
-      border-radius:22px;
-      padding:8px 12px;
+      border-radius:24px;
+      padding:8px 14px;
       box-shadow:0 2px 16px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04);
     }
 
     .tool{
-      width:56px;height:56px;
+      width:60px;height:60px;
       border:none;background:transparent;
-      border-radius:14px;
+      border-radius:16px;
       display:flex;align-items:center;justify-content:center;
       cursor:pointer;position:relative;
       transition:background .2s,transform .12s;
     }
     .tool svg{
-      width:28px;height:28px;
+      width:32px;height:32px;
       shape-rendering:crispEdges;
     }
     .tool rect{
@@ -68,7 +68,7 @@
   <div class="bar">
     <button class="tool on" data-icon="pencil" style="--a:tilt" data-name="Pencil"></button>
     <button class="tool" data-icon="eraser" style="--a:shake" data-name="Eraser"></button>
-    <button class="tool" data-icon="oval" style="--a:pop" data-name="Lasso"></button>
+    <button class="tool" data-icon="lasso" style="--a:pop" data-name="Lasso"></button>
     <button class="tool" data-icon="bucket" style="--a:pour" data-name="Fill"></button>
     <button class="tool" data-icon="text_a" style="--a:bounce" data-name="Text"></button>
     <button class="tool" data-icon="brush" style="--a:wiggle" data-name="Brush"></button>
@@ -78,12 +78,12 @@
 <script>
 (function(){
   var icons={
-    pencil:'........X/.......XX/......XX./....XXX../...XX..../..XX...../XX......./X........',
-    eraser:'.....XXX/....XXXX/...XXXX./..XXXX../XXXXX.../XXXX..../XXX.....',
-    oval:'..XXX./.X...X/X.....X/X.....X/X.....X/.X...X/..XXX.',
-    bucket:'..X./..XX/.XXXXX/X....X/X....X/X....X/.XXXX.',
-    text_a:'..XXX./.X...X/X.....X/X.....X/XXXXXXX/X.....X/X.....X',
-    brush:'......XX/.....X.X/...XX..X/..X..XX./.X..X../XXXX.../X..X.../XXXX...'
+    pencil:'....X..../...X.X.../...XXX.../..XXXXX../.X.....X./.X.X.X.X./.X.....X./.X..X..X./.X.....X./.XXXXXXX./.XXXXXXX./..XXXXX.../...XXX...',
+    eraser:'.XXXXXXX./.X.....X./.X.X.X.X./.X.....X./.X..X..X./.X.....X./.XXXXXXX./..XXXXX..',
+    lasso:'...XXX.../..X...X../.X.....X./X..X.X..X/X.......X/X...X...X/.X.....X./..X...X../...XXX...',
+    bucket:'..X....../..XX...../.XXXXXXX./.X.....X./.X.X.X.X./.X.....X./.X..X..X./.X.....X./..XXXXX.../...XXX...',
+    text_a:'...XXX.../..X...X../.X.....X./.X.X.X.X./.XXXXXXX./.X.....X./.X..X..X./.X.....X./.X.....X.',
+    brush:'....X..../...XXX.../..XXXXX../.X.....X./.X.X.X.X./.X.....X./.X..X..X./.XXXXXXX./....X..../....X..../....X..../....X..../...XXX...'
   };
 
   var ns='http://www.w3.org/2000/svg';
