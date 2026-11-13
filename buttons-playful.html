@@ -10,138 +10,110 @@
     html,body{height:100%;background:#e0e5ec;font-family:-apple-system,"SF Pro Display",system-ui,sans-serif}
     body{display:flex;align-items:center;justify-content:center;padding:24px}
 
-    .panel{
-      width:400px;max-width:92vw;
-      border-radius:28px;padding:6px;
+    .player{
+      width:520px;max-width:92vw;
+      border-radius:28px;padding:28px;
       background:#e0e5ec;
       border:1px solid rgba(255,255,255,.55);
       box-shadow:10px 10px 20px #b0b6bf,-10px -10px 20px #ffffff;
-      display:flex;flex-direction:column;gap:2px;
+      display:flex;flex-direction:column;gap:0;
     }
 
-    .section-head{
-      width:100%;display:flex;align-items:center;gap:12px;
-      padding:10px 14px;border-radius:22px;
-      background:#e0e5ec;border:none;
-      font:600 12px/1 inherit;letter-spacing:.01em;color:#4a5568;
-      cursor:pointer;transition:all .3s ease;
-    }
-    .section-head:hover{background:#dbe0e8}
-    .section-head:focus-visible{outline:2px solid #7ea8e8;outline-offset:-2px}
-    .section.open .section-head{
-      background:#d8dde5;
-      box-shadow:inset 3px 3px 6px #b8bec7,inset -3px -3px 6px #f0f4f8;
-    }
-
-    .badge{
-      width:36px;height:36px;border-radius:50%;flex-shrink:0;
+    /* --- Top: album + info + mood sidebar --- */
+    .top{display:flex;gap:16px;align-items:flex-start}
+    .album{
+      width:88px;height:88px;border-radius:18px;flex-shrink:0;
       background:#e0e5ec;
-      box-shadow:3px 3px 6px #b8bec7,-3px -3px 6px #ffffff;
+      box-shadow:inset 3px 3px 6px #b8bec7,inset -3px -3px 6px #ffffff;
       display:flex;align-items:center;justify-content:center;
-      transition:box-shadow .3s ease;
     }
-    .badge svg.led{width:16px;height:16px}
-    .section.open .badge{
-      box-shadow:inset 2px 2px 4px #b8bec7,inset -2px -2px 4px #ffffff;
+    .album svg.led{width:52px;height:52px}
+    .info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;padding-top:6px}
+    .track{font:700 15px/1.2 inherit;letter-spacing:-.02em;color:#3a4558}
+    .artist{font:500 11px/1 inherit;color:#8a9bb0}
+
+    /* mood group — vertical right sidebar */
+    .mood-group{
+      display:flex;flex-direction:column;gap:5px;flex-shrink:0;padding-top:2px;
+    }
+    .mood{
+      display:flex;align-items:center;gap:4px;
+      border:none;border-radius:10px;cursor:pointer;
+      font:600 8px/1 inherit;letter-spacing:.02em;
+      padding:5px 10px;min-height:26px;
+      background:#e0e5ec;color:#8a9bb0;
+      box-shadow:2px 2px 5px #b8bec7,-2px -2px 5px #ffffff;
+      transition:box-shadow .2s ease,color .2s ease;
+    }
+    .mood svg.led{width:10px;height:10px;flex-shrink:0}
+    .mood:hover{box-shadow:3px 3px 7px #b8bec7,-3px -3px 7px #ffffff;color:#5a6a7e}
+    .mood.active{
+      box-shadow:inset 2px 2px 5px #b8bec7,inset -2px -2px 5px #ffffff;
+      color:#4a5568;
     }
 
-    .section-head .title{flex:1;text-align:left}
-    .section-head .tag{
-      font:700 7px/1 inherit;letter-spacing:.12em;text-transform:uppercase;
-      color:#8a9bb0;padding:3px 7px;border-radius:6px;background:rgba(0,0,0,.04);
-    }
+    /* --- Progress bar --- */
+    .progress-row{display:flex;align-items:center;gap:8px;margin-top:16px}
+    .time{font:600 8px/1 "SF Mono",monospace;color:#8a9bb0;letter-spacing:.04em;flex-shrink:0}
+    .track-bar{flex:1;height:5px;border-radius:3px;background:#d0d5dc;box-shadow:inset 1px 1px 2px #b8bec7,inset -1px -1px 2px #f0f4f8;position:relative;cursor:pointer}
+    .fill{width:38%;height:100%;border-radius:3px;background:linear-gradient(90deg,#42a5f5,#66bb6a);position:relative;transition:width .1s ease;pointer-events:none}
+    .fill::after{content:'';position:absolute;right:-6px;top:50%;width:12px;height:12px;border-radius:50%;background:#e0e5ec;box-shadow:2px 2px 4px #b8bec7,-2px -2px 4px #fff;transform:translateY(-50%)}
 
-    .chev-wrap{
-      width:28px;height:28px;border-radius:50%;flex-shrink:0;
-      background:#e0e5ec;
-      box-shadow:2px 2px 4px #b8bec7,-2px -2px 4px #ffffff;
-      display:flex;align-items:center;justify-content:center;
-      transition:box-shadow .3s ease;
-    }
-    .section.open .chev-wrap{
-      box-shadow:inset 2px 2px 3px #b8bec7,inset -2px -2px 3px #ffffff;
-    }
-    .chev{
-      width:6px;height:6px;
-      border-right:1.5px solid #8a9bb0;border-bottom:1.5px solid #8a9bb0;
-      transform:rotate(45deg) translate(-1px,-1px);
-      transition:transform .3s ease;
-    }
-    .section.open .chev{transform:rotate(-135deg) translate(-1px,-1px)}
+    /* --- Transport: primary (BIG) --- */
+    .transport{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:20px}
 
-    .section-body{
-      display:grid;grid-template-rows:0fr;
-      transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1);
-    }
-    .section.open .section-body{grid-template-rows:1fr}
-    .section-body>.inner{overflow:hidden}
+    /* --- Actions rows --- */
+    .actions{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px}
 
-    .content{
-      margin:4px 6px 6px;padding:14px;
-      border-radius:20px;
-      background:rgba(208,213,220,.25);
-      box-shadow:inset 2px 2px 5px rgba(184,190,199,.35),inset -2px -2px 5px rgba(255,255,255,.65);
-      display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;
-      opacity:0;transform:translateY(-6px);
-      transition:opacity .35s ease .08s,transform .35s ease .08s;
-    }
-    .section.open .content{opacity:1;transform:translateY(0)}
-
+    /* --- Base button --- */
     .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      display:inline-flex;align-items:center;justify-content:center;gap:5px;
       border:none;border-radius:14px;cursor:pointer;
-      font:500 11px/1 inherit;letter-spacing:.01em;
-      padding:10px 16px;min-height:44px;
+      font-family:inherit;letter-spacing:.01em;
       background:#e0e5ec;color:#5a6a7e;
-      position:relative;transition:box-shadow .2s ease,transform .1s ease;
+      position:relative;transition:box-shadow .2s ease,transform .12s ease;
     }
     .btn:focus-visible{outline:2px solid #7ea8e8;outline-offset:3px}
-    .btn svg.led{width:22px;height:22px;flex-shrink:0}
-    .btn.icon-only{padding:10px;min-width:44px}
+    .btn:active:not(:disabled){transform:scale(.95)}
 
+    /* PRIMARY — large, prominent */
     .btn.primary{
-      box-shadow:5px 5px 10px #b8bec7,-5px -5px 10px #ffffff;
-      font-weight:600;color:#4a5568;
+      box-shadow:6px 6px 12px #b8bec7,-6px -6px 12px #ffffff;
+      font-weight:700;font-size:13px;color:#4a5568;
+      padding:12px 24px;min-height:48px;border-radius:16px;
     }
-    .btn.primary:hover{box-shadow:7px 7px 14px #b8bec7,-7px -7px 14px #ffffff}
-    .btn.primary:active:not(:disabled){box-shadow:inset 3px 3px 6px #b8bec7,inset -3px -3px 6px #ffffff;transform:scale(.97)}
-    .btn.primary:disabled{box-shadow:2px 2px 4px #c8cdd5,-2px -2px 4px #f0f4f8;color:#a0adb8;cursor:default}
+    .btn.primary svg.led{width:22px;height:22px}
+    .btn.primary.icon-only{padding:12px;min-width:48px}
+    .btn.primary:hover{box-shadow:8px 8px 16px #b8bec7,-8px -8px 16px #ffffff}
+    .btn.primary:active:not(:disabled){box-shadow:inset 4px 4px 8px #b8bec7,inset -4px -4px 8px #ffffff}
 
-    .btn.secondary{box-shadow:3px 3px 7px #b8bec7,-3px -3px 7px #ffffff}
-    .btn.secondary:hover{box-shadow:5px 5px 10px #b8bec7,-5px -5px 10px #ffffff}
-    .btn.secondary:active:not(:disabled){box-shadow:inset 2px 2px 5px #b8bec7,inset -2px -2px 5px #ffffff;transform:scale(.97)}
-    .btn.secondary:disabled{box-shadow:1px 1px 3px #c8cdd5,-1px -1px 3px #f0f4f8;color:#a0adb8;cursor:default}
-
-    .btn.tertiary{box-shadow:inset 2px 2px 5px #b8bec7,inset -2px -2px 5px #ffffff}
-    .btn.tertiary:hover{box-shadow:inset 3px 3px 7px #b0b6bf,inset -3px -3px 7px #ffffff}
-    .btn.tertiary:active:not(:disabled){box-shadow:inset 4px 4px 9px #aeb4bd,inset -4px -4px 9px #ffffff;transform:scale(.97)}
-    .btn.tertiary:disabled{box-shadow:inset 1px 1px 3px #c8cdd5,inset -1px -1px 3px #f0f4f8;color:#a0adb8;cursor:default}
-
-    .btn-group{
-      display:inline-flex;border-radius:16px;overflow:hidden;
-      box-shadow:4px 4px 8px #b8bec7,-4px -4px 8px #ffffff;
+    /* SECONDARY — small, subtle */
+    .btn.secondary{
+      box-shadow:2px 2px 5px #b8bec7,-2px -2px 5px #ffffff;
+      font-weight:500;font-size:9px;color:#7a8a9e;
+      padding:5px 12px;min-height:28px;border-radius:10px;
     }
-    .btn-group .btn{
-      box-shadow:none;border-radius:0;
-      flex-direction:column;gap:3px;padding:8px 18px;min-height:56px;
-    }
-    .btn-group .btn:first-child{border-radius:16px 0 0 16px}
-    .btn-group .btn:last-child{border-radius:0 16px 16px 0}
-    .btn-group .btn+.btn{box-shadow:inset 1px 0 0 #d0d5dc}
-    .btn-group .btn:hover{background:#d8dde5}
-    .btn-group .btn.active{
-      background:#d6dbe3;
-      box-shadow:inset 3px 3px 6px #b8bec7,inset -3px -3px 6px #f0f4f8;
-    }
-    .btn-group .btn svg.led{width:18px;height:18px}
+    .btn.secondary svg.led{width:12px;height:12px}
+    .btn.secondary.icon-only{padding:5px;min-width:28px}
+    .btn.secondary:hover{box-shadow:3px 3px 7px #b8bec7,-3px -3px 7px #ffffff}
+    .btn.secondary:active:not(:disabled){box-shadow:inset 2px 2px 4px #b8bec7,inset -2px -2px 4px #ffffff}
 
-    .states{display:flex;gap:12px;align-items:flex-start;justify-content:center}
-    .state-col{display:flex;flex-direction:column;align-items:center;gap:5px}
-    .state-label{font:500 7px/1 inherit;color:#8a9bb0;letter-spacing:.08em;text-transform:uppercase}
+    /* TERTIARY — tiny, recessed */
+    .btn.tertiary{
+      box-shadow:inset 1px 1px 3px #b8bec7,inset -1px -1px 3px #ffffff;
+      font-weight:500;font-size:8px;color:#8a9bb0;
+      padding:4px 10px;min-height:24px;border-radius:8px;
+    }
+    .btn.tertiary svg.led{width:10px;height:10px}
+    .btn.tertiary.icon-only{padding:4px;min-width:24px}
+    .btn.tertiary:hover{box-shadow:inset 2px 2px 5px #b0b6bf,inset -2px -2px 5px #ffffff;color:#5a6a7e}
+    .btn.tertiary:active:not(:disabled){box-shadow:inset 3px 3px 7px #aeb4bd,inset -3px -3px 7px #ffffff}
+
+    .btn:disabled{opacity:.45;cursor:default;transform:none}
 
     .led circle{transition:fill .3s ease}
 
-    html.is-preview .panel{width:100%;max-width:400px}
+    html.is-preview .player{width:100%;max-width:520px}
   </style>
 </head>
 <body>
@@ -154,221 +126,91 @@
   </defs>
 </svg>
 
-<div class="panel">
+<div class="player">
 
-  <div class="section open">
-    <button class="section-head">
-      <span class="badge" data-char="speaker" data-led="#66bb6a"></span>
-      <span class="title">Now Playing</span>
-      <span class="tag">Primary</span>
-      <span class="chev-wrap"><span class="chev"></span></span>
-    </button>
-    <div class="section-body"><div class="inner"><div class="content">
-      <button class="btn primary" data-char="speaker" data-led="#66bb6a">Now Playing</button>
-      <button class="btn primary">Lyrics</button>
-      <button class="btn primary icon-only" data-char="play" data-led="#42a5f5" aria-label="Play"></button>
-    </div></div></div>
+  <!-- Top: album art + track info + mood group on right -->
+  <div class="top">
+    <div class="album" data-char="heart" data-led="#ec407a"></div>
+    <div class="info">
+      <div class="track">Pixel Dreams</div>
+      <div class="artist">Chiptune Orchestra</div>
+    </div>
+    <div class="mood-group">
+      <button class="mood active" data-char="face_happy" data-led="#66bb6a">Happy</button>
+      <button class="mood" data-char="face_meh" data-led="#ffa726">Chill</button>
+      <button class="mood" data-char="face_mad" data-led="#ef5350">Intense</button>
+    </div>
   </div>
 
-  <div class="section">
-    <button class="section-head">
-      <span class="badge" data-char="heart" data-led="#ec407a"></span>
-      <span class="title">Library</span>
-      <span class="tag">Secondary</span>
-      <span class="chev-wrap"><span class="chev"></span></span>
-    </button>
-    <div class="section-body"><div class="inner"><div class="content">
-      <button class="btn secondary" data-char="heart" data-led="#ec407a">Favorites</button>
-      <button class="btn secondary">Playlists</button>
-      <button class="btn secondary icon-only" data-char="crown" data-led="#ffd54f" aria-label="Top Charts"></button>
-    </div></div></div>
+  <!-- Progress bar -->
+  <div class="progress-row">
+    <span class="time" id="cur">2:34</span>
+    <div class="track-bar" id="bar">
+      <div class="fill" id="fill"></div>
+    </div>
+    <span class="time" id="dur">4:12</span>
   </div>
 
-  <div class="section">
-    <button class="section-head">
-      <span class="badge" data-char="gear" data-led="#78909c"></span>
-      <span class="title">Settings</span>
-      <span class="tag">Tertiary</span>
-      <span class="chev-wrap"><span class="chev"></span></span>
-    </button>
-    <div class="section-body"><div class="inner"><div class="content">
-      <button class="btn tertiary" data-char="help" data-led="#42a5f5">About</button>
-      <button class="btn tertiary">Sign Out</button>
-      <button class="btn tertiary icon-only" data-char="gear" data-led="#78909c" aria-label="Settings"></button>
-    </div></div></div>
+  <!-- Transport — PRIMARY (big) -->
+  <div class="transport">
+    <button class="btn primary icon-only" id="prev-btn" data-char="prev" data-led="#78909c" aria-label="Previous"></button>
+    <button class="btn primary" id="play-btn" data-char="play" data-led="#42a5f5"><span id="play-label">Play</span></button>
+    <button class="btn primary" id="next-btn" data-char="next" data-led="#78909c">Skip</button>
   </div>
 
-  <div class="section">
-    <button class="section-head">
-      <span class="badge" data-char="face_happy" data-led="#66bb6a"></span>
-      <span class="title">Mood</span>
-      <span class="tag">Group</span>
-      <span class="chev-wrap"><span class="chev"></span></span>
-    </button>
-    <div class="section-body"><div class="inner"><div class="content">
-      <div class="btn-group">
-        <button class="btn active" data-char="face_happy" data-led="#66bb6a">Happy</button>
-        <button class="btn" data-char="face_meh" data-led="#ffa726">Chill</button>
-        <button class="btn" data-char="face_mad" data-led="#ef5350">Intense</button>
-      </div>
-    </div></div></div>
+  <!-- SECONDARY (small) -->
+  <div class="actions">
+    <button class="btn secondary" id="fav-btn" data-char="heart" data-led="#ec407a">Favorites</button>
+    <button class="btn secondary" id="list-btn">Playlists</button>
+    <button class="btn secondary icon-only" id="vol-btn" data-char="speaker" data-led="#66bb6a" aria-label="Volume"></button>
   </div>
 
-  <div class="section">
-    <button class="section-head">
-      <span class="badge" data-char="play" data-led="#ffa726"></span>
-      <span class="title">States</span>
-      <span class="tag">Demo</span>
-      <span class="chev-wrap"><span class="chev"></span></span>
-    </button>
-    <div class="section-body"><div class="inner"><div class="content">
-      <div class="states">
-        <div class="state-col"><button class="btn primary icon-only" data-char="play" data-led="#ffa726" aria-label="Play"></button><span class="state-label">Enabled</span></div>
-        <div class="state-col"><button class="btn primary icon-only" data-char="play" data-led="#ffca28" style="box-shadow:7px 7px 14px #b8bec7,-7px -7px 14px #ffffff" aria-label="Play"></button><span class="state-label">Hover</span></div>
-        <div class="state-col"><button class="btn primary icon-only" data-char="play" data-led="#ff7043" style="box-shadow:inset 3px 3px 6px #b8bec7,inset -3px -3px 6px #ffffff" aria-label="Play"></button><span class="state-label">Pressed</span></div>
-        <div class="state-col"><button class="btn primary icon-only" data-char="play" data-led="#90a4ae" disabled aria-label="Play"></button><span class="state-label">Disabled</span></div>
-      </div>
-    </div></div></div>
+  <!-- TERTIARY (tiny) -->
+  <div class="actions">
+    <button class="btn tertiary" data-char="help" data-led="#42a5f5">About</button>
+    <button class="btn tertiary">Lyrics</button>
+    <button class="btn tertiary icon-only" data-char="gear" data-led="#78909c" aria-label="Settings"></button>
   </div>
 
 </div>
 
 <script>
 (function(){
+  var TOTAL=252;
+  var pos=154;
+  var playing=false;
+  var timer=null;
+
   var px={
-    sword:
-      '....X....'+
-      '/....X....'+
-      '/...XXX...'+
-      '/...XXX...'+
-      '/...XXX...'+
-      '/..XXXXX..'+
-      '/.X.XXX.X.'+
-      '/....X....'+
-      '/...XXX...',
-    play:
-      '.X.......'+
-      '/.XX......'+
-      '/.XXX.....'+
-      '/.XXXX....'+
-      '/.XXXXX...'+
-      '/.XXXX....'+
-      '/.XXX.....'+
-      '/.XX......'+
-      '/.X.......',
-    heart:
-      '.XX...XX.'+
-      '/XXXX.XXXX'+
-      '/XXXXXXXXX'+
-      '/XXXXXXXXX'+
-      '/.XXXXXXX.'+
-      '/..XXXXX..'+
-      '/...XXX...'+
-      '/....X....',
-    bag:
-      '...XXX...'+
-      '/..X...X..'+
-      '/..X...X..'+
-      '/.XXXXXXX.'+
-      '/X.......X'+
-      '/X.......X'+
-      '/X.......X'+
-      '/X.......X'+
-      '/.XXXXXXX.',
-    crown:
-      'X...X...X'+
-      '/XX..X..XX'+
-      '/.XX.X.XX.'+
-      '/..XXXXX..'+
-      '/..XXXXX..'+
-      '/..XXXXX..'+
-      '/..XXXXX..'+
-      '/.XXXXXXX.',
-    speaker:
-      '..X......'+
-      '/..XX.....'+
-      '/XXXXX.X..'+
-      '/XXXXX.X.X'+
-      '/XXXXX.X..'+
-      '/..XX.....'+
-      '/..X......',
-    help:
-      '/..XXXXX..'+
-      '/.XX...XX.'+
-      '/.XX...XX.'+
-      '/......XX.'+
-      '/....XXX..'+
-      '/...XX....'+
-      '/.........'+
-      '/...XX....'+
-      '/...XX....',
-    power:
-      '....X....'+
-      '/....X....'+
-      '/..X...X..'+
-      '/.X..X..X.'+
-      '/X...X...X'+
-      '/X.......X'+
-      '/.X.....X.'+
-      '/..X...X..'+
-      '/...XXX...',
-    gear:
-      '/.X.XXX.X.'+
-      '/XX.....XX'+
-      '/X.......X'+
-      '/XXX...XXX'+
-      '/X.......X'+
-      '/XX.....XX'+
-      '/.X.XXX.X.',
-    face_happy:
-      '..XXXXX..'+
-      '/.X.....X.'+
-      '/X..X.X..X'+
-      '/X.......X'+
-      '/X.X...X.X'+
-      '/X..XXX..X'+
-      '/.X.....X.'+
-      '/..XXXXX..',
-    face_meh:
-      '..XXXXX..'+
-      '/.X.....X.'+
-      '/X..X.X..X'+
-      '/X.......X'+
-      '/X.......X'+
-      '/X.XXXXX.X'+
-      '/.X.....X.'+
-      '/..XXXXX..',
-    face_mad:
-      '..XXXXX..'+
-      '/.X.....X.'+
-      '/X.X...X.X'+
-      '/X..X.X..X'+
-      '/X.......X'+
-      '/X..XXX..X'+
-      '/X.X...X.X'+
-      '/.X.....X.'+
-      '/..XXXXX..'
+    play:'.X......./.XX....../.XXX...../.XXXX..../.XXXXX.../.XXXX..../.XXX...../.XX....../.X.......',
+    pause:'.XX..XX./.XX..XX./.XX..XX./.XX..XX./.XX..XX./.XX..XX./.XX..XX.',
+    prev:'X.....X./X....XX./X...XXX./X..XXXX./X.XXXXX./X..XXXX./X...XXX./X....XX./X.....X.',
+    next:'.X.....X/.XX....X/.XXX...X/.XXXX..X/.XXXXX.X/.XXXX..X/.XXX...X/.XX....X/.X.....X',
+    heart:'.XX...XX./XXXX.XXXX/XXXXXXXXX/XXXXXXXXX/.XXXXXXX./..XXXXX./...XXX./....X....',
+    speaker:'..X....../..XX...../XXXXX.X../XXXXX.X.X/XXXXX.X../..XX...../..X......',
+    help:'..XXXXX../.XX...XX./.XX...XX./......XX./....XXX.../...XX..../.........../...XX..../...XX....',
+    gear:'.X.XXX.X./XX.....XX/X.......X/XXX...XXX/X.......X/XX.....XX/.X.XXX.X.',
+    face_happy:'..XXXXX../.X.....X./X..X.X..X/X.......X/X.X...X.X/X..XXX..X/.X.....X./..XXXXX..',
+    face_meh:'..XXXXX../.X.....X./X..X.X..X/X.......X/X.......X/X.XXXXX.X/.X.....X./..XXXXX..',
+    face_mad:'..XXXXX../.X.....X./X.X...X.X/X..X.X..X/X.......X/X..XXX..X/X.X...X.X/.X.....X./..XXXXX..'
   };
 
   var ns='http://www.w3.org/2000/svg';
 
-  document.querySelectorAll('[data-char]').forEach(function(el){
-    var data=px[el.dataset.char];
+  function buildSVG(el,charName){
+    var data=px[charName];
     if(!data)return;
     var color=el.dataset.led||'#ffa726';
     var rows=data.split('/');
     var h=rows.length;
     var w=Math.max.apply(null,rows.map(function(r){return r.length}));
-
     var svg=document.createElementNS(ns,'svg');
     svg.setAttribute('viewBox','0 0 '+w+' '+h);
     svg.setAttribute('class','led');
-
     var dim=document.createElementNS(ns,'g');
     var lit=document.createElementNS(ns,'g');
     lit.setAttribute('filter','url(#glow)');
     svg.appendChild(dim);svg.appendChild(lit);
-
     var dots=[];
     rows.forEach(function(row,y){
       for(var x=0;x<w;x++){
@@ -376,73 +218,103 @@
         var c=document.createElementNS(ns,'circle');
         c.setAttribute('cx',x+.5);c.setAttribute('cy',y+.5);
         c.setAttribute('r',on?.34:.18);
-        if(on){
-          c.setAttribute('fill',color);
-          c._d=x+y;lit.appendChild(c);dots.push(c);
-        }else{
-          c.setAttribute('fill','rgba(120,130,145,0.13)');
-          dim.appendChild(c);
-        }
+        if(on){c.setAttribute('fill',color);c._d=x+y;lit.appendChild(c);dots.push(c)}
+        else{c.setAttribute('fill','rgba(120,130,145,0.13)');dim.appendChild(c)}
       }
     });
-
     el._dots=dots;el._color=color;
     el._maxD=Math.max.apply(null,dots.map(function(c){return c._d}))||1;
-    if(el.classList.contains('badge')){
-      el.appendChild(svg);
-    }else{
-      el.insertBefore(svg,el.firstChild);
-    }
+    return svg;
+  }
+
+  document.querySelectorAll('[data-char]').forEach(function(el){
+    var svg=buildSVG(el,el.dataset.char);
+    if(!svg)return;
+    if(el.classList.contains('album')){el.appendChild(svg)}
+    else{el.insertBefore(svg,el.firstChild)}
   });
 
   function rainbow(el){
     if(!el._dots)return;var m=el._maxD;
     el._dots.forEach(function(c){
-      var t=c._d/m;var hue=Math.round(t*320);
-      c.style.fill='hsl('+hue+',78%,62%)';
+      var t=c._d/m;c.style.fill='hsl('+Math.round(t*320)+',78%,62%)';
       c.style.transitionDelay=(c._d*15)+'ms';
     });
   }
   function restore(el){
     if(!el._dots)return;
     el._dots.forEach(function(c){
-      c.style.fill=el._color;
-      c.style.transitionDelay=(c._d*10)+'ms';
+      c.style.fill=el._color;c.style.transitionDelay=(c._d*10)+'ms';
     });
   }
 
-  document.querySelectorAll('.btn[data-char]').forEach(function(btn){
-    if(btn.closest('.states'))return;
+  document.querySelectorAll('.btn[data-char],.mood[data-char]').forEach(function(btn){
     btn.addEventListener('mouseenter',function(){if(!btn.disabled)rainbow(btn)});
     btn.addEventListener('mouseleave',function(){if(!btn.disabled)restore(btn)});
   });
 
-  document.querySelectorAll('.btn-group .btn').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      btn.closest('.btn-group').querySelectorAll('.btn').forEach(function(b){b.classList.remove('active')});
-      btn.classList.add('active');
-    });
+  var album=document.querySelector('.album[data-char]');
+  if(album){rainbow(album);setTimeout(function(){restore(album)},800)}
+
+  function fmt(s){var m=Math.floor(s/60);return m+':'+(s%60<10?'0':'')+Math.floor(s%60)}
+
+  function updateBar(){
+    var pct=Math.min(100,Math.max(0,(pos/TOTAL)*100));
+    document.getElementById('fill').style.width=pct+'%';
+    document.getElementById('cur').textContent=fmt(pos);
+  }
+
+  var bar=document.getElementById('bar');
+  bar.addEventListener('click',function(e){
+    var r=bar.getBoundingClientRect();
+    pos=Math.round(((e.clientX-r.left)/r.width)*TOTAL);
+    updateBar();
   });
 
-  document.querySelectorAll('.section-head').forEach(function(head){
-    head.addEventListener('click',function(){
-      var section=head.closest('.section');
-      var wasOpen=section.classList.contains('open');
-      document.querySelectorAll('.section.open').forEach(function(s){s.classList.remove('open')});
-      if(!wasOpen){
-        section.classList.add('open');
-        var btns=section.querySelectorAll('.content [data-char]');
-        btns.forEach(function(b,i){
-          setTimeout(function(){
-            rainbow(b);
-            setTimeout(function(){restore(b)},500);
-          },i*100);
-        });
-      }
+  var playBtn=document.getElementById('play-btn');
+  function setPlayState(isPlaying){
+    playing=isPlaying;
+    var label=document.getElementById('play-label');
+    var oldSvg=playBtn.querySelector('svg.led');
+    if(oldSvg)oldSvg.remove();
+    playBtn.dataset.char=playing?'pause':'play';
+    var svg=buildSVG(playBtn,playBtn.dataset.char);
+    if(svg)playBtn.insertBefore(svg,playBtn.firstChild);
+    label.textContent=playing?'Pause':'Play';
+    if(playing){
+      timer=setInterval(function(){
+        if(pos<TOTAL){pos++;updateBar()}
+        else{setPlayState(false)}
+      },1000);
+    }else{clearInterval(timer)}
+  }
+  playBtn.addEventListener('click',function(){setPlayState(!playing)});
+
+  document.getElementById('prev-btn').addEventListener('click',function(){pos=0;updateBar()});
+  document.getElementById('next-btn').addEventListener('click',function(){
+    pos=TOTAL;updateBar();if(playing)setPlayState(false);
+  });
+
+  var fav=document.getElementById('fav-btn');var favOn=false;
+  fav.addEventListener('click',function(){
+    favOn=!favOn;fav._color=favOn?'#ec407a':'#90a4ae';
+    fav.dataset.led=fav._color;restore(fav);
+  });
+
+  var vol=document.getElementById('vol-btn');var muted=false;
+  vol.addEventListener('click',function(){
+    muted=!muted;vol._color=muted?'#90a4ae':'#66bb6a';
+    vol.dataset.led=vol._color;restore(vol);vol.style.opacity=muted?'.5':'1';
+  });
+
+  document.querySelectorAll('.mood').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.mood').forEach(function(b){b.classList.remove('active')});
+      btn.classList.add('active');
     });
   });
 })();
 </script>
-<script src="design-specs.js?v=13"></script>
+<script src="design-specs.js?v=15"></script>
 </body>
 </html>
