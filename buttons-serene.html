@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Buttons · Serene</title>
+  <script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
+  <style>
+    *{box-sizing:border-box;margin:0}
+    html,body{height:100%;background:#fff;font-family:-apple-system,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+    body{display:flex;align-items:center;justify-content:center;padding:24px}
+
+    .frame{
+      width:560px;max-width:85vw;aspect-ratio:4/3;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+      padding:32px;
+    }
+
+    .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+    .row-label{
+      width:100%;text-align:center;
+      font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+      color:#a0b0be;margin-bottom:-12px;
+    }
+
+    /* base button */
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:7px;
+      border:none;border-radius:12px;cursor:pointer;
+      font-family:inherit;font-size:13px;font-weight:500;letter-spacing:-.01em;
+      padding:10px 20px;min-height:40px;
+      transition:all .25s cubic-bezier(.22,1,.36,1);
+      position:relative;overflow:hidden;
+    }
+    .btn:focus-visible{outline:2px solid #7baac4;outline-offset:2px}
+    .btn svg{width:16px;height:16px;flex-shrink:0}
+    .btn.icon-only{padding:10px;min-width:40px}
+    .btn:active:not(:disabled){transform:scale(.96)}
+
+    /* primary — soft blue fill */
+    .btn.primary{
+      background:#d4e5ef;color:#3a6b8a;
+      box-shadow:0 1px 3px rgba(58,107,138,.08);
+    }
+    .btn.primary:hover{background:#c2dae8;box-shadow:0 2px 8px rgba(58,107,138,.12)}
+    .btn.primary:active{background:#b4d0e0}
+    .btn.primary:disabled{background:#edf2f5;color:#b0c4d0;cursor:default;box-shadow:none}
+    .btn.primary svg{fill:#3a6b8a}
+    .btn.primary:disabled svg{fill:#b0c4d0}
+
+    /* secondary — muted tone */
+    .btn.secondary{
+      background:#f0f3f5;color:#6a8595;
+    }
+    .btn.secondary:hover{background:#e5eaee}
+    .btn.secondary:active{background:#dae1e7}
+    .btn.secondary:disabled{background:#f5f7f8;color:#c0ccd3;cursor:default}
+    .btn.secondary svg{fill:#6a8595}
+    .btn.secondary:disabled svg{fill:#c0ccd3}
+
+    /* tertiary — transparent + border */
+    .btn.tertiary{
+      background:transparent;color:#6a8595;
+      box-shadow:inset 0 0 0 1px #d4dde3;
+    }
+    .btn.tertiary:hover{background:#f5f8fa;box-shadow:inset 0 0 0 1px #b8c8d2}
+    .btn.tertiary:active{background:#edf2f5}
+    .btn.tertiary:disabled{color:#c0ccd3;box-shadow:inset 0 0 0 1px #e8edf0;cursor:default}
+    .btn.tertiary svg{fill:#6a8595}
+    .btn.tertiary:disabled svg{fill:#c0ccd3}
+
+    /* button group */
+    .btn-group{display:inline-flex;gap:0}
+    .btn-group .btn{border-radius:0;box-shadow:inset 0 0 0 .5px #d4dde3;background:#f8fafb;color:#6a8595}
+    .btn-group .btn:first-child{border-radius:12px 0 0 12px}
+    .btn-group .btn:last-child{border-radius:0 12px 12px 0}
+    .btn-group .btn:hover{background:#edf2f5}
+    .btn-group .btn.active{background:#d4e5ef;color:#3a6b8a}
+
+    /* states row */
+    .states{display:flex;gap:8px;align-items:center;justify-content:center}
+    .state-label{
+      font-size:8px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+      color:#b0bec5;min-width:52px;text-align:center;
+    }
+    .btn.is-hover{background:#c2dae8;box-shadow:0 2px 8px rgba(58,107,138,.12)}
+    .btn.is-pressed{background:#b4d0e0;transform:scale(.96)}
+
+    html.is-preview .frame{aspect-ratio:auto;width:100%;height:100%}
+  </style>
+</head>
+<body>
+<div class="frame">
+
+  <!-- Primary row -->
+  <div class="row">
+    <span class="row-label">Primary</span>
+    <button class="btn primary">
+      <svg viewBox="0 0 16 16"><path d="M8 1a1 1 0 011 1v5h5a1 1 0 110 2H9v5a1 1 0 11-2 0V9H2a1 1 0 010-2h5V2a1 1 0 011-1z"/></svg>
+      Create
+    </button>
+    <button class="btn primary">Save Changes</button>
+    <button class="btn primary icon-only" aria-label="Search">
+      <svg viewBox="0 0 16 16"><path d="M11.7 10.3a6 6 0 10-1.4 1.4l3.5 3.5a1 1 0 001.4-1.4l-3.5-3.5zM7 11a4 4 0 110-8 4 4 0 010 8z"/></svg>
+    </button>
+  </div>
+
+  <!-- Secondary row -->
+  <div class="row">
+    <span class="row-label">Secondary</span>
+    <button class="btn secondary">
+      <svg viewBox="0 0 16 16"><path d="M13.3 2.7a1 1 0 00-1.4 0L3 11.6V13h1.4l8.9-8.9a1 1 0 000-1.4zM2 14a1 1 0 01-1-1v-2a1 1 0 01.3-.7l10-10a2 2 0 012.8 2.8l-10 10A1 1 0 013 14H2z"/></svg>
+      Edit
+    </button>
+    <button class="btn secondary">Duplicate</button>
+    <button class="btn secondary icon-only" aria-label="Settings">
+      <svg viewBox="0 0 16 16"><path d="M8 10a2 2 0 100-4 2 2 0 000 4zm6.3-2.8l-1-.6a5.5 5.5 0 000-1.2l1-.6a.5.5 0 00.2-.6l-.8-1.4a.5.5 0 00-.6-.2l-1 .6a5 5 0 00-1-.6V1.5a.5.5 0 00-.5-.5H9a.5.5 0 00-.5.5v1.1a5 5 0 00-1 .6l-1-.6a.5.5 0 00-.6.2l-.8 1.4a.5.5 0 00.2.6l1 .6a5.5 5.5 0 000 1.2l-1 .6a.5.5 0 00-.2.6l.8 1.4a.5.5 0 00.6.2l1-.6a5 5 0 001 .6v1.1a.5.5 0 00.5.5h1.6a.5.5 0 00.5-.5v-1.1a5 5 0 001-.6l1 .6a.5.5 0 00.6-.2l.8-1.4a.5.5 0 00-.2-.6z"/></svg>
+    </button>
+  </div>
+
+  <!-- Tertiary row -->
+  <div class="row">
+    <span class="row-label">Tertiary</span>
+    <button class="btn tertiary">
+      <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 12.5a5.5 5.5 0 110-11 5.5 5.5 0 010 11zM8 4a.75.75 0 00-.75.75v3.5a.75.75 0 001.5 0v-3.5A.75.75 0 008 4zm0 6.5a.75.75 0 100 1.5.75.75 0 000-1.5z"/></svg>
+      Details
+    </button>
+    <button class="btn tertiary">Cancel</button>
+    <button class="btn tertiary icon-only" aria-label="Close">
+      <svg viewBox="0 0 16 16"><path d="M4.3 3.7a.75.75 0 00-1.06 1.06L6.94 8l-3.7 3.24a.75.75 0 101.06 1.06L8 8.56l3.24 3.74a.75.75 0 101.06-1.06L8.56 8l3.74-3.24a.75.75 0 10-1.06-1.06L8 7.44 4.3 3.7z"/></svg>
+    </button>
+  </div>
+
+  <!-- Button group -->
+  <div class="row">
+    <span class="row-label">Button Group</span>
+    <div class="btn-group">
+      <button class="btn active">Day</button>
+      <button class="btn">Week</button>
+      <button class="btn">Month</button>
+    </div>
+  </div>
+
+  <!-- States -->
+  <div class="row">
+    <span class="row-label">States</span>
+    <div class="states">
+      <div style="text-align:center"><button class="btn primary">Enabled</button><div class="state-label">Enabled</div></div>
+      <div style="text-align:center"><button class="btn primary is-hover">Hover</button><div class="state-label">Hover</div></div>
+      <div style="text-align:center"><button class="btn primary is-pressed">Pressed</button><div class="state-label">Pressed</div></div>
+      <div style="text-align:center"><button class="btn primary" disabled>Disabled</button><div class="state-label">Disabled</div></div>
+    </div>
+  </div>
+
+</div>
+<script src="design-specs.js"></script>
+</body>
+</html>
