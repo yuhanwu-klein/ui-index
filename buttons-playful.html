@@ -96,42 +96,42 @@
 <div class="frame">
 
   <div class="row">
-    <span class="row-label">Heroes</span>
-    <button class="btn primary" data-char="knight" data-led="#ffa726">New Game</button>
-    <button class="btn primary" data-char="sword" data-led="#42a5f5">Continue</button>
-    <button class="btn primary icon-only" data-char="cat" data-led="#ec407a" aria-label="Lives"></button>
+    <span class="row-label">Actions</span>
+    <button class="btn primary" data-char="sword" data-led="#ffa726">New Game</button>
+    <button class="btn primary" data-char="play" data-led="#42a5f5">Continue</button>
+    <button class="btn primary icon-only" data-char="heart" data-led="#ec407a" aria-label="Lives"></button>
   </div>
 
   <div class="row">
-    <span class="row-label">Items</span>
-    <button class="btn secondary" data-char="chest" data-led="#ffd54f">Inventory</button>
-    <button class="btn secondary" data-char="trophy" data-led="#ffb300">Scores</button>
-    <button class="btn secondary icon-only" data-char="robot" data-led="#66bb6a" aria-label="Sound"></button>
+    <span class="row-label">Utilities</span>
+    <button class="btn secondary" data-char="bag" data-led="#8d6e63">Inventory</button>
+    <button class="btn secondary" data-char="crown" data-led="#ffd54f">Scores</button>
+    <button class="btn secondary icon-only" data-char="speaker" data-led="#66bb6a" aria-label="Sound"></button>
   </div>
 
   <div class="row">
-    <span class="row-label">Misc</span>
-    <button class="btn tertiary" data-char="mushroom" data-led="#ef5350">Rules</button>
-    <button class="btn tertiary" data-char="door" data-led="#ab47bc">Quit</button>
-    <button class="btn tertiary icon-only" data-char="ghost" data-led="#7e57c2" aria-label="Exit"></button>
+    <span class="row-label">Options</span>
+    <button class="btn tertiary" data-char="help" data-led="#42a5f5">Rules</button>
+    <button class="btn tertiary" data-char="power" data-led="#ef5350">Quit</button>
+    <button class="btn tertiary icon-only" data-char="gear" data-led="#78909c" aria-label="Settings"></button>
   </div>
 
   <div class="row">
     <span class="row-label">Difficulty</span>
     <div class="btn-group">
-      <button class="btn active" data-char="slime" data-led="#9ccc65">Easy</button>
-      <button class="btn" data-char="skull" data-led="#ff7043">Normal</button>
-      <button class="btn" data-char="dragon" data-led="#f44336">Hard</button>
+      <button class="btn active" data-char="face_happy" data-led="#66bb6a">Easy</button>
+      <button class="btn" data-char="face_meh" data-led="#ffa726">Normal</button>
+      <button class="btn" data-char="face_mad" data-led="#ef5350">Hard</button>
     </div>
   </div>
 
   <div class="row">
     <span class="row-label">States</span>
     <div class="states">
-      <div><button class="btn primary" data-char="knight_happy" data-led="#ffa726">Play</button><div class="state-label">Enabled</div></div>
-      <div><button class="btn primary" data-char="knight_excited" data-led="#ffca28" style="box-shadow:7px 7px 14px #b8bec7,-7px -7px 14px #ffffff">Play</button><div class="state-label">Hover</div></div>
-      <div><button class="btn primary" data-char="knight_ouch" data-led="#ff7043" style="box-shadow:inset 3px 3px 6px #b8bec7,inset -3px -3px 6px #ffffff">Play</button><div class="state-label">Pressed</div></div>
-      <div><button class="btn primary" data-char="knight_sleep" data-led="#90a4ae" disabled>Play</button><div class="state-label">Disabled</div></div>
+      <div><button class="btn primary" data-char="play" data-led="#ffa726">Play</button><div class="state-label">Enabled</div></div>
+      <div><button class="btn primary" data-char="play" data-led="#ffca28" style="box-shadow:7px 7px 14px #b8bec7,-7px -7px 14px #ffffff">Play</button><div class="state-label">Hover</div></div>
+      <div><button class="btn primary" data-char="play" data-led="#ff7043" style="box-shadow:inset 3px 3px 6px #b8bec7,inset -3px -3px 6px #ffffff">Play</button><div class="state-label">Pressed</div></div>
+      <div><button class="btn primary" data-char="play" data-led="#90a4ae" disabled>Play</button><div class="state-label">Disabled</div></div>
     </div>
   </div>
 
@@ -140,173 +140,118 @@
 <script>
 (function(){
   var px={
-    knight:
-      '....X....'+
-      '/...XXX...'+
-      '/..XXXXX..'+
-      '/.X.....X.'+
-      '/X..X.X..X'+
-      '/X.......X'+
-      '/X...X...X'+
-      '/.X.....X.'+
-      '/..XXXXX..'+
-      '/..X...X..'+
-      '/.X.....X.',
     sword:
       '....X....'+
-      '/...X.X...'+
-      '/...X.X...'+
-      '/...X.X...'+
-      '/...X.X...'+
-      '/...X.X...'+
-      '/..X.X.X..'+
-      '/.X.X.X.X.'+
-      '/...X.X...'+
-      '/...X.X...'+
-      '/..XX.XX..',
-    cat:
-      '.X.....X.'+
-      '/X.X...X.X'+
-      '/X..XXX..X'+
-      '/X.......X'+
-      '/X..X.X..X'+
-      '/X.......X'+
-      '/X.X...X.X'+
+      '/....X....'+
+      '/...XXX...'+
+      '/...XXX...'+
+      '/...XXX...'+
+      '/..XXXXX..'+
       '/.X.XXX.X.'+
-      '/..X...X..',
-    chest:
-      '.XXXXXXX.'+
-      '/X.......X'+
-      '/X..X.X..X'+
-      '/X.......X'+
+      '/....X....'+
+      '/...XXX...',
+    play:
+      '.X.......'+
+      '/.XX......'+
+      '/.XXX.....'+
+      '/.XXXX....'+
+      '/.XXXXX...'+
+      '/.XXXX....'+
+      '/.XXX.....'+
+      '/.XX......'+
+      '/.X.......',
+    heart:
+      '.XX...XX.'+
+      '/XXXX.XXXX'+
       '/XXXXXXXXX'+
-      '/X...X...X'+
-      '/X..X.X..X'+
-      '/XXXXXXXXX',
-    trophy:
-      '.XXXXXXX.'+
+      '/XXXXXXXXX'+
+      '/.XXXXXXX.'+
+      '/..XXXXX..'+
+      '/...XXX...'+
+      '/....X....',
+    bag:
+      '...XXX...'+
+      '/..X...X..'+
+      '/..X...X..'+
+      '/.XXXXXXX.'+
       '/X.......X'+
-      '/XX.....XX'+
-      '/.X.....X.'+
+      '/X.......X'+
+      '/X.......X'+
+      '/X.......X'+
+      '/.XXXXXXX.',
+    crown:
+      'X...X...X'+
+      '/XX..X..XX'+
+      '/.XX.X.XX.'+
+      '/..XXXXX..'+
+      '/..XXXXX..'+
+      '/..XXXXX..'+
+      '/..XXXXX..'+
+      '/.XXXXXXX.',
+    speaker:
+      '..X......'+
+      '/..XX.....'+
+      '/XXXXX.X..'+
+      '/XXXXX.X.X'+
+      '/XXXXX.X..'+
+      '/..XX.....'+
+      '/..X......',
+    help:
+      '/..XXXXX..'+
       '/.XX...XX.'+
-      '/..X...X..'+
-      '/..XXXXX..'+
-      '/...X.X...'+
-      '/..XXXXX..',
-    robot:
+      '/.XX...XX.'+
+      '/......XX.'+
+      '/....XXX..'+
+      '/...XX....'+
+      '/.........'+
+      '/...XX....'+
+      '/...XX....',
+    power:
       '....X....'+
-      '/...XXX...'+
-      '/..XXXXX..'+
-      '/.X.....X.'+
-      '/X..X.X..X'+
-      '/X.......X'+
-      '/X..XXX..X'+
-      '/.XXXXXXX.'+
-      '/...X.X...',
-    mushroom:
-      '...XXX...'+
-      '/..XXXXX..'+
-      '/.XXXXXXX.'+
-      '/X..X.X..X'+
-      '/X.......X'+
-      '/X...X...X'+
-      '/.XXXXXXX.'+
-      '/...X.X...'+
-      '/..XXXXX..',
-    door:
-      '.XXXXXXX.'+
-      '/X.......X'+
-      '/X.......X'+
-      '/X.......X'+
-      '/X....X..X'+
-      '/X.......X'+
-      '/X.......X'+
-      '/X.......X'+
-      '/XXXXXXXXX',
-    ghost:
-      '..XXXXX..'+
-      '/.X.....X.'+
-      '/X.......X'+
-      '/X..X.X..X'+
-      '/X.......X'+
-      '/X...X...X'+
-      '/.X.....X.'+
-      '/.X.X.X.X.'+
-      '/..X...X..',
-    slime:
-      '...XXX...'+
+      '/....X....'+
       '/..X...X..'+
-      '/.X.....X.'+
-      '/X..X.X..X'+
+      '/.X..X..X.'+
+      '/X...X...X'+
       '/X.......X'+
-      '/X..XXX..X'+
       '/.X.....X.'+
-      '/..XXXXX..',
-    skull:
-      '..XXXXX..'+
-      '/.X.....X.'+
-      '/X..X.X..X'+
-      '/X.......X'+
-      '/.X.X.X.X.'+
-      '/..XXXXX..'+
-      '/...X.X...',
-    dragon:
-      'X.......X'+
+      '/..X...X..'+
+      '/...XXX...',
+    gear:
+      '/.X.XXX.X.'+
       '/XX.....XX'+
-      '/.XXXXXXX.'+
+      '/X.......X'+
+      '/XXX...XXX'+
+      '/X.......X'+
+      '/XX.....XX'+
+      '/.X.XXX.X.',
+    face_happy:
+      '..XXXXX..'+
+      '/.X.....X.'+
       '/X..X.X..X'+
       '/X.......X'+
+      '/X.X...X.X'+
       '/X..XXX..X'+
       '/.X.....X.'+
       '/..XXXXX..',
-    knight_happy:
-      '....X....'+
-      '/...XXX...'+
-      '/..XXXXX..'+
+    face_meh:
+      '..XXXXX..'+
       '/.X.....X.'+
+      '/X..X.X..X'+
+      '/X.......X'+
+      '/X.......X'+
+      '/X.XXXXX.X'+
+      '/.X.....X.'+
+      '/..XXXXX..',
+    face_mad:
+      '..XXXXX..'+
+      '/.X.....X.'+
+      '/X.X...X.X'+
       '/X..X.X..X'+
       '/X.......X'+
       '/X..XXX..X'+
+      '/X.X...X.X'+
       '/.X.....X.'+
-      '/..XXXXX..'+
-      '/..X...X..'+
-      '/.X.....X.',
-    knight_excited:
-      '....X....'+
-      '/...XXX...'+
-      '/..XXXXX..'+
-      '/.X.....X.'+
-      '/X.XX.XX.X'+
-      '/X.......X'+
-      '/X..XXX..X'+
-      '/.X.....X.'+
-      '/..XXXXX..'+
-      '/..X...X..'+
-      '/.X.....X.',
-    knight_ouch:
-      '....X....'+
-      '/...XXX...'+
-      '/..XXXXX..'+
-      '/.X.....X.'+
-      '/X..X.X..X'+
-      '/X.......X'+
-      '/X..X.X..X'+
-      '/.X.....X.'+
-      '/..XXXXX..'+
-      '/..X...X..'+
-      '/.X.....X.',
-    knight_sleep:
-      '....X....'+
-      '/...XXX...'+
-      '/..XXXXX..'+
-      '/.X.....X.'+
-      '/X.XX.XX.X'+
-      '/X.......X'+
-      '/X.......X'+
-      '/.X.....X.'+
-      '/..XXXXX..'+
-      '/..X...X..'+
-      '/.X.....X.'
+      '/..XXXXX..'
   };
 
   var ns='http://www.w3.org/2000/svg';
@@ -382,6 +327,6 @@
   });
 })();
 </script>
-<script src="design-specs.js?v=10"></script>
+<script src="design-specs.js?v=11"></script>
 </body>
 </html>
