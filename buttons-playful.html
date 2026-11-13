@@ -10,18 +10,55 @@
     html,body{height:100%;background:#e0e5ec;font-family:-apple-system,"SF Pro Display",system-ui,sans-serif}
     body{display:flex;align-items:center;justify-content:center;padding:24px}
 
-    .frame{
-      width:580px;max-width:88vw;aspect-ratio:4/3;
-      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
-      padding:28px;
+    .panel{
+      width:380px;max-width:92vw;
+      border-radius:22px;
+      background:#e0e5ec;
+      box-shadow:8px 8px 16px #b8bec7,-8px -8px 16px #ffffff;
+      overflow:hidden;
     }
 
-    .row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center}
-    .row-label{
-      width:100%;text-align:center;
-      font:600 9px/1 inherit;letter-spacing:.12em;text-transform:uppercase;
-      color:#8a9bb0;margin-bottom:-4px;
+    .section+.section{border-top:1px solid rgba(0,0,0,.04)}
+
+    .section-head{
+      width:100%;display:flex;align-items:center;gap:10px;
+      padding:15px 20px;
+      background:#e0e5ec;border:none;
+      font:600 12px/1 inherit;letter-spacing:.01em;color:#4a5568;
+      cursor:pointer;transition:all .25s ease;
     }
+    .section-head:hover{background:#d8dde6}
+    .section-head:focus-visible{outline:2px solid #7ea8e8;outline-offset:-2px}
+    .section.open .section-head{
+      background:#d6dbe3;
+      box-shadow:inset 2px 2px 5px #b8bec7,inset -2px -2px 5px #f0f4f8;
+    }
+    .section-head svg.led{width:18px;height:18px;flex-shrink:0}
+    .section-head .title{flex:1}
+    .section-head .tag{
+      font:700 7px/1 inherit;letter-spacing:.12em;text-transform:uppercase;
+      color:#8a9bb0;padding:3px 7px;border-radius:4px;background:rgba(0,0,0,.04);
+    }
+    .section-head .chev{
+      width:7px;height:7px;flex-shrink:0;
+      border-right:1.5px solid #8a9bb0;border-bottom:1.5px solid #8a9bb0;
+      transform:rotate(45deg);transition:transform .3s ease;
+    }
+    .section.open .section-head .chev{transform:rotate(-135deg)}
+
+    .section-body{
+      display:grid;grid-template-rows:0fr;
+      transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1);
+    }
+    .section.open .section-body{grid-template-rows:1fr}
+    .section-body>.inner{overflow:hidden}
+    .section-body .content{
+      padding:10px 18px 18px;
+      display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;
+      opacity:0;transform:translateY(-6px);
+      transition:opacity .35s ease .05s,transform .35s ease .05s;
+    }
+    .section.open .section-body .content{opacity:1;transform:translateY(0)}
 
     .btn{
       display:inline-flex;align-items:center;justify-content:center;gap:8px;
@@ -75,12 +112,13 @@
     }
     .btn-group .btn svg.led{width:18px;height:18px}
 
-    .states{display:flex;gap:10px;align-items:center;justify-content:center}
-    .state-label{font:500 8px/1 inherit;color:#8a9bb0;text-align:center;margin-top:4px;letter-spacing:.06em;text-transform:uppercase}
+    .states{display:flex;gap:10px;align-items:flex-start;justify-content:center}
+    .state-col{display:flex;flex-direction:column;align-items:center;gap:4px}
+    .state-label{font:500 7px/1 inherit;color:#8a9bb0;letter-spacing:.08em;text-transform:uppercase}
 
     .led circle{transition:fill .3s ease}
 
-    html.is-preview .frame{aspect-ratio:auto;width:100%;height:100%}
+    html.is-preview .panel{width:100%;max-width:380px}
   </style>
 </head>
 <body>
@@ -93,46 +131,76 @@
   </defs>
 </svg>
 
-<div class="frame">
+<div class="panel">
 
-  <div class="row">
-    <span class="row-label">Actions</span>
-    <button class="btn primary" data-char="sword" data-led="#ffa726">New Game</button>
-    <button class="btn primary" data-char="play" data-led="#42a5f5">Continue</button>
-    <button class="btn primary icon-only" data-char="heart" data-led="#ec407a" aria-label="Lives"></button>
+  <div class="section open">
+    <button class="section-head" data-char="sword" data-led="#ffa726">
+      <span class="title">Actions</span>
+      <span class="tag">Primary</span>
+      <span class="chev"></span>
+    </button>
+    <div class="section-body"><div class="inner"><div class="content">
+      <button class="btn primary" data-char="sword" data-led="#ffa726">New Game</button>
+      <button class="btn primary" data-char="play" data-led="#42a5f5">Continue</button>
+      <button class="btn primary icon-only" data-char="heart" data-led="#ec407a" aria-label="Lives"></button>
+    </div></div></div>
   </div>
 
-  <div class="row">
-    <span class="row-label">Utilities</span>
-    <button class="btn secondary" data-char="bag" data-led="#8d6e63">Inventory</button>
-    <button class="btn secondary" data-char="crown" data-led="#ffd54f">Scores</button>
-    <button class="btn secondary icon-only" data-char="speaker" data-led="#66bb6a" aria-label="Sound"></button>
+  <div class="section">
+    <button class="section-head" data-char="crown" data-led="#ffd54f">
+      <span class="title">Utilities</span>
+      <span class="tag">Secondary</span>
+      <span class="chev"></span>
+    </button>
+    <div class="section-body"><div class="inner"><div class="content">
+      <button class="btn secondary" data-char="bag" data-led="#8d6e63">Inventory</button>
+      <button class="btn secondary" data-char="crown" data-led="#ffd54f">Scores</button>
+      <button class="btn secondary icon-only" data-char="speaker" data-led="#66bb6a" aria-label="Sound"></button>
+    </div></div></div>
   </div>
 
-  <div class="row">
-    <span class="row-label">Options</span>
-    <button class="btn tertiary" data-char="help" data-led="#42a5f5">Rules</button>
-    <button class="btn tertiary" data-char="power" data-led="#ef5350">Quit</button>
-    <button class="btn tertiary icon-only" data-char="gear" data-led="#78909c" aria-label="Settings"></button>
+  <div class="section">
+    <button class="section-head" data-char="gear" data-led="#78909c">
+      <span class="title">Options</span>
+      <span class="tag">Tertiary</span>
+      <span class="chev"></span>
+    </button>
+    <div class="section-body"><div class="inner"><div class="content">
+      <button class="btn tertiary" data-char="help" data-led="#42a5f5">Rules</button>
+      <button class="btn tertiary" data-char="power" data-led="#ef5350">Quit</button>
+      <button class="btn tertiary icon-only" data-char="gear" data-led="#78909c" aria-label="Settings"></button>
+    </div></div></div>
   </div>
 
-  <div class="row">
-    <span class="row-label">Difficulty</span>
-    <div class="btn-group">
-      <button class="btn active" data-char="face_happy" data-led="#66bb6a">Easy</button>
-      <button class="btn" data-char="face_meh" data-led="#ffa726">Normal</button>
-      <button class="btn" data-char="face_mad" data-led="#ef5350">Hard</button>
-    </div>
+  <div class="section">
+    <button class="section-head" data-char="face_happy" data-led="#66bb6a">
+      <span class="title">Difficulty</span>
+      <span class="tag">Group</span>
+      <span class="chev"></span>
+    </button>
+    <div class="section-body"><div class="inner"><div class="content">
+      <div class="btn-group">
+        <button class="btn active" data-char="face_happy" data-led="#66bb6a">Easy</button>
+        <button class="btn" data-char="face_meh" data-led="#ffa726">Normal</button>
+        <button class="btn" data-char="face_mad" data-led="#ef5350">Hard</button>
+      </div>
+    </div></div></div>
   </div>
 
-  <div class="row">
-    <span class="row-label">States</span>
-    <div class="states">
-      <div><button class="btn primary" data-char="play" data-led="#ffa726">Play</button><div class="state-label">Enabled</div></div>
-      <div><button class="btn primary" data-char="play" data-led="#ffca28" style="box-shadow:7px 7px 14px #b8bec7,-7px -7px 14px #ffffff">Play</button><div class="state-label">Hover</div></div>
-      <div><button class="btn primary" data-char="play" data-led="#ff7043" style="box-shadow:inset 3px 3px 6px #b8bec7,inset -3px -3px 6px #ffffff">Play</button><div class="state-label">Pressed</div></div>
-      <div><button class="btn primary" data-char="play" data-led="#90a4ae" disabled>Play</button><div class="state-label">Disabled</div></div>
-    </div>
+  <div class="section">
+    <button class="section-head" data-char="play" data-led="#ffa726">
+      <span class="title">States</span>
+      <span class="tag">Demo</span>
+      <span class="chev"></span>
+    </button>
+    <div class="section-body"><div class="inner"><div class="content">
+      <div class="states">
+        <div class="state-col"><button class="btn primary icon-only" data-char="play" data-led="#ffa726" aria-label="Play"></button><span class="state-label">Enabled</span></div>
+        <div class="state-col"><button class="btn primary icon-only" data-char="play" data-led="#ffca28" style="box-shadow:7px 7px 14px #b8bec7,-7px -7px 14px #ffffff" aria-label="Play"></button><span class="state-label">Hover</span></div>
+        <div class="state-col"><button class="btn primary icon-only" data-char="play" data-led="#ff7043" style="box-shadow:inset 3px 3px 6px #b8bec7,inset -3px -3px 6px #ffffff" aria-label="Play"></button><span class="state-label">Pressed</span></div>
+        <div class="state-col"><button class="btn primary icon-only" data-char="play" data-led="#90a4ae" disabled aria-label="Play"></button><span class="state-label">Disabled</span></div>
+      </div>
+    </div></div></div>
   </div>
 
 </div>
@@ -319,14 +387,30 @@
 
   document.querySelectorAll('.btn-group .btn').forEach(function(btn){
     btn.addEventListener('click',function(){
-      btn.closest('.btn-group').querySelectorAll('.btn').forEach(function(b){
-        b.classList.remove('active');
-      });
+      btn.closest('.btn-group').querySelectorAll('.btn').forEach(function(b){b.classList.remove('active')});
       btn.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.section-head').forEach(function(head){
+    head.addEventListener('click',function(){
+      var section=head.closest('.section');
+      var wasOpen=section.classList.contains('open');
+      document.querySelectorAll('.section.open').forEach(function(s){s.classList.remove('open')});
+      if(!wasOpen){
+        section.classList.add('open');
+        var btns=section.querySelectorAll('.section-body [data-char]:not(.section-head [data-char])');
+        btns.forEach(function(b,i){
+          setTimeout(function(){
+            rainbow(b);
+            setTimeout(function(){restore(b)},500);
+          },i*100);
+        });
+      }
     });
   });
 })();
 </script>
-<script src="design-specs.js?v=11"></script>
+<script src="design-specs.js?v=12"></script>
 </body>
 </html>

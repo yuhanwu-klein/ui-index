@@ -200,13 +200,13 @@
       }
     },
     'buttons-playful.html': {
-      title: 'Arcade · LED Icon System', tone: 'Playful · Neumorphic soft panels with a systematic LED pixel icon set — each icon is a distinct, meaningful symbol', week: 'Week 8', back: 'week8.html',
+      title: 'Arcade · LED Panel System', tone: 'Playful · Neumorphic accordion panel with cascading LED icon reveals — two-level hierarchy, one section open at a time', week: 'Week 8', back: 'week8.html',
       sections: {
-        Arrangement: [['Frame', '580 px · 4 : 3 · centered'], ['Row rhythm', '16 px gap'], ['Rows', 'Actions / Utilities / Options / Difficulty / States'], ['Difficulty group', 'Column · face icon above label · shared container'], ['Hierarchy flow', 'Primary → Secondary → Tertiary → Group → States']],
+        Panel: [['Container', '380 px · 22 px radius · raised neumorphic card'], ['Sections', 'Actions / Utilities / Options / Difficulty / States'], ['Behavior', 'Accordion — click header to expand, previous collapses'], ['Section header', 'LED icon + label + emphasis tag + chevron'], ['Section body', 'CSS Grid 0fr→1fr transition · 0.45s ease']],
         'Icon System': [['Sword', '9×9 · amber #FFA726 · New Game'], ['Play ▶', '9×9 · blue #42A5F5 · Continue'], ['Heart', '9×8 · pink #EC407A · Lives'], ['Bag', '9×9 · brown #8D6E63 · Inventory'], ['Crown', '9×8 · gold #FFD54F · Scores'], ['Speaker', '9×7 · green #66BB6A · Sound'], ['? mark', '9×9 · blue #42A5F5 · Rules'], ['Power ⏻', '9×9 · red #EF5350 · Quit'], ['Gear', '9×7 · gray #78909C · Settings'], ['Faces ☺ 😐 😠', 'Green / Amber / Red · Easy / Normal / Hard']],
-        Surface: [['Base', '#E0E5EC — unified neumorphic gray'], ['Primary', 'Raised — 5 px dual shadow (dark #B8BEC7 + light #FFF)'], ['Secondary', 'Soft raise — 3 px dual shadow'], ['Tertiary', 'Inset well — inset 2 px dual shadow'], ['Roundness', '14 px — soft, pillow corners'], ['Touch target', '44 px minimum']],
+        Surface: [['Base', '#E0E5EC — unified neumorphic gray'], ['Primary', 'Raised — 5 px dual shadow (dark #B8BEC7 + light #FFF)'], ['Secondary', 'Soft raise — 3 px dual shadow'], ['Tertiary', 'Inset well — inset 2 px dual shadow'], ['Header active', 'Inset 2 px dual shadow + darker bg'], ['Roundness', '14 px buttons · 22 px panel']],
         'LED Rendering': [['Lit pixel', 'SVG circle r=0.34 · icon color · Gaussian glow filter'], ['Dim pixel', 'SVG circle r=0.18 · rgba(120,130,145,0.13) — unlit LED dot'], ['Glow filter', 'feGaussianBlur σ=0.35 + feMerge (blur behind sharp)'], ['Grid', 'Full bounding-box matrix · all positions rendered'], ['Rainbow cascade', 'HSL 0→320° by diagonal · 15 ms stagger per pixel']],
-        Interaction: [['Hover', 'Shadow lifts · LED pixels cascade to rainbow with glow'], ['Press', 'Shadow inverts to inset · scale(.97)'], ['Disabled', 'Flat shadow · muted LED color (#90A4AE)'], ['States row', 'Same Play icon · LED color varies per state'], ['Transition', '.2s ease shadows · .3s ease LED fill']]
+        Interaction: [['Section open', 'Header insets · body expands · buttons fade+slide in · LEDs rainbow cascade'], ['Hover', 'Shadow lifts · LED pixels cascade to rainbow'], ['Press', 'Shadow inverts to inset · scale(.97)'], ['Disabled', 'Flat shadow · muted LED color (#90A4AE)'], ['Transition', 'Grid rows .45s · opacity .35s · LED fill .3s']]
       }
     },
     'toolbar-amber-crt.html': {
