@@ -190,27 +190,23 @@
       }
     },
     'buttons-serene.html': {
-      title: 'Serene Buttons', tone: 'Serene · Soft utility, quiet confidence, gentle transitions', week: 'Week 8', back: 'week8.html',
+      title: 'Calm · Meditation App', tone: 'Serene · Soft utility, quiet confidence, slow breathing rhythm', week: 'Week 8', back: 'week8.html',
       sections: {
-        Layout: [['Page', 'White bg · centered frame'], ['Frame', '560 px · 4 : 3'], ['Row gap', '28 px'], ['Row alignment', 'Center · flex-wrap']],
-        Typography: [['Family', 'SF Pro Display / system-ui'], ['Button text', '13 px · 500'], ['Label', '9 px · 600 · 0.12 em uppercase'], ['State label', '8 px · 500 · 0.08 em uppercase']],
-        Spacing: [['Button height', '40 px'], ['Button padding', '10 px 20 px'], ['Icon-text gap', '7 px'], ['Icon-only padding', '10 px'], ['Button group gap', '0 px'], ['Row button gap', '10 px']],
-        Component: [['Border radius', '12 px'], ['Icon size', '16 × 16 px'], ['Group first/last radius', '12 px'], ['Focus ring', '2 px #7BAAC4 · 2 px offset']],
-        Colors: [['Primary fill', '#D4E5EF'], ['Primary text', '#3A6B8A'], ['Secondary fill', '#F0F3F5'], ['Secondary text', '#6A8595'], ['Tertiary border', '1 px #D4DDE3'], ['Disabled fill', '#EDF2F5'], ['Disabled text', '#B0C4D0']],
-        States: [['Default', 'Resting fill · 1 px shadow'], ['Hover', 'Darker fill · 8 px shadow lift'], ['Pressed', 'Darkest fill · scale(.96)'], ['Disabled', 'Faded fill · no shadow · default cursor']],
-        Motion: [['All transitions', '.25s cubic-bezier(.22,1,.36,1)'], ['Active press', 'scale(.96)'], ['Easing', 'ease-out spring feel']]
+        Arrangement: [['Frame', '560 px · 4 : 3 · centered'], ['Row rhythm', '28 px vertical breathing gap'], ['Button spacing', '10 px — loose, unhurried'], ['Duration group', 'Flush segments · 12 px end caps'], ['Hierarchy flow', 'Primary → Secondary → Tertiary → Group → States']],
+        Surface: [['Primary material', 'Frosted glass — #D4E5EF fill · 1 px diffuse shadow'], ['Secondary material', 'Matte fog — #F0F3F5 flat fill · no shadow'], ['Tertiary material', 'Transparent pane — 1 px #D4DDE3 inset border'], ['Roundness', '12 px — soft, pillowed corners'], ['Touch target', '40 px minimum height']],
+        Typography: [['Family', 'SF Pro Display / system-ui'], ['Button label', '13 px · weight 500 · −0.01 em'], ['Section label', '9 px · weight 600 · 0.12 em uppercase'], ['State caption', '8 px · weight 500 · muted']],
+        Palette: [['Action blue', '#3A6B8A text · #D4E5EF ground'], ['Quiet gray', '#6A8595 text · #F0F3F5 ground'], ['Border mist', '#D4DDE3 · #B8C8D2 hover'], ['Disabled wash', '#EDF2F5 ground · #B0C4D0 text'], ['Focus ring', '#7BAAC4 · 2 px · 2 px offset']],
+        Interaction: [['Hover', 'Fill deepens one stop · shadow lifts to 8 px'], ['Press', 'Fill deepens two stops · scale(.96)'], ['Disabled', 'Faded fill · no shadow · cursor default'], ['Duration select', 'Tinted fill swap on active segment'], ['Transition', '.25s cubic-bezier(.22,1,.36,1) — slow exhale easing']]
       }
     },
     'buttons-playful.html': {
-      title: 'Playful Buttons', tone: 'Playful · Pixel art, 8-bit game UI, bouncy and fun', week: 'Week 8', back: 'week8.html',
+      title: 'Arcade · Pixel Game', tone: 'Playful · 8-bit arcade cabinet, chunky pixels, coin-op energy', week: 'Week 8', back: 'week8.html',
       sections: {
-        Layout: [['Page', 'White bg · centered frame'], ['Frame', '560 px · 4 : 3'], ['Row gap', '22 px'], ['Row alignment', 'Center · flex-wrap']],
-        Typography: [['Family', 'Silkscreen'], ['Button text', '11 px · 400'], ['Label', '9 px · 700 Silkscreen'], ['State label', '8 px · 400 Silkscreen']],
-        Spacing: [['Button height', '36 px'], ['Button padding', '8 px 16 px'], ['Icon-text gap', '6 px'], ['Icon-only padding', '8 px'], ['Button group gap', '0 px (shared border)'], ['Row button gap', '10 px']],
-        Component: [['Border', '2 px solid #2A2A2A'], ['Border radius', '0 px (pixel sharp)'], ['Icon size', '14 × 14 px (pixel SVG)'], ['Pixel shadow', '3 px / 0 blur'], ['Focus ring', '2 px #FF6B9D · 2 px offset']],
-        Colors: [['Primary fill', '#2A2A2A'], ['Primary text', '#FFFFFF'], ['Secondary fill', '#FFFFFF'], ['Secondary text', '#2A2A2A'], ['Tertiary border', '2 px dashed #2A2A2A'], ['Hover pink', '#FF6B9D'], ['Hover yellow', '#FFEAA7'], ['Hover cyan', '#E8F8FF / #55C6F0'], ['Disabled', '#D0D0D0']],
-        States: [['Default', 'Solid fill · 3 px hard shadow'], ['Hover', 'Color shift · rainbow cycle (primary)'], ['Pressed', 'Shadow collapse · translate(2px,2px)'], ['Disabled', 'Gray fill · gray shadow · default cursor']],
-        Motion: [['Press', 'translate(2px,2px) · .1s'], ['Rainbow cycle', '.8s linear infinite (primary hover)'], ['Active group', 'Instant fill swap']]
+        Arrangement: [['Frame', '560 px · 4 : 3 · centered'], ['Row rhythm', '22 px — tight, arcade-dense'], ['Button spacing', '10 px between buttons'], ['Difficulty group', 'Shared-border segments · 0 px gap'], ['Hierarchy flow', 'Primary → Secondary → Tertiary → Group → States']],
+        Texture: [['Primary material', 'Solid block — #2A2A2A fill · 3 px hard shadow · 0 blur'], ['Secondary material', 'Hollow cartridge — white fill · 2 px solid stroke · 3 px hard shadow'], ['Tertiary material', 'Dashed outline — 2 px dashed #2A2A2A · transparent fill'], ['Edge treatment', '0 px radius — pixel-sharp corners everywhere'], ['Border weight', '2 px solid — thick, CRT-era stroke']],
+        Typography: [['Family', 'Silkscreen — bitmap pixel font'], ['Button label', '11 px · weight 400 · monospace grid'], ['Section label', '9 px · weight 700 · 0.08 em uppercase'], ['State caption', '8 px · weight 400']],
+        Palette: [['Ink black', '#2A2A2A — primary fill + all borders'], ['Paper white', '#FFFFFF — secondary fill + primary text'], ['Power-up pink', '#FF6B9D — hover accent · #D44A7A shadow'], ['Coin gold', '#FFEAA7 — secondary hover fill'], ['Ice cyan', '#55C6F0 border · #E8F8FF fill — tertiary hover'], ['Disabled gray', '#D0D0D0 fill + border + shadow']],
+        Interaction: [['Hover (primary)', 'Rainbow HSL cycle · .8s loop · shadow color follows'], ['Hover (secondary)', 'Gold coin fill swap'], ['Hover (tertiary)', 'Dashed → solid · cyan border · ice fill'], ['Press', 'Shadow collapses to 0 · translate(2px,2px) — pixel "click" feel'], ['Difficulty select', 'Black fill swap on active · instant toggle']]
       }
     },
     'toolbar-amber-crt.html': {
