@@ -47,23 +47,43 @@
     }
     .d-name{font-size:20px;font-weight:700;letter-spacing:-.02em}
     .d-role{font-size:13px;color:#717171;font-weight:500}
-    .d-link{
-      font-size:12px;color:#999;text-decoration:none;
-      letter-spacing:.01em;margin-top:2px;
-    }
-    .d-link:hover{color:#222;text-decoration:underline}
-
-    .view-btn{
+    .cta{
+      position:relative;
       display:inline-flex;align-items:center;justify-content:center;
-      padding:11px 32px;margin-top:8px;
+      padding:11px 32px;margin-top:6px;
       border:none;border-radius:999px;
-      background:#222;color:#fff;
-      font:600 13px/1 inherit;letter-spacing:.01em;
+      background:transparent;
+      font:500 12px/1 inherit;letter-spacing:.01em;
       text-decoration:none;cursor:pointer;
-      transition:background .2s ease,transform .15s ease;
+      color:#999;
     }
-    .view-btn:hover{background:#444}
-    .view-btn:active{transform:scale(.96)}
+    .cta-link{transition:opacity .2s .12s,transform .2s .12s cubic-bezier(.22,1,.36,1)}
+    .cta-label{
+      position:absolute;
+      font:600 13px/1 inherit;letter-spacing:.01em;
+      color:#fff;opacity:0;transform:translateY(5px);
+      transition:opacity .15s,transform .2s;
+    }
+    .cta-ring{
+      position:absolute;inset:0;border-radius:999px;
+      box-shadow:inset 0 0 0 0 #222;
+      transition:box-shadow .25s cubic-bezier(.22,1,.36,1);
+    }
+    .cta-fill{
+      position:absolute;inset:0;border-radius:999px;
+      background:#222;transform:scale(.92);opacity:0;
+      transition:transform .2s cubic-bezier(.22,1,.36,1),opacity .15s;
+    }
+    .cta:hover .cta-ring{box-shadow:inset 0 0 0 2px #222;transition:box-shadow .35s cubic-bezier(.22,1,.36,1)}
+    .cta:hover .cta-fill{transform:scale(1);opacity:1;transition:transform .35s .1s cubic-bezier(.22,1,.36,1),opacity .25s .1s}
+    .cta:hover .cta-link{opacity:0;transform:translateY(-5px);transition:opacity .15s,transform .2s}
+    .cta:hover .cta-label{opacity:1;transform:translateY(0);transition:opacity .2s .2s,transform .3s .2s cubic-bezier(.22,1,.36,1)}
+    @keyframes cta-press{
+      0%{transform:scale(1)}
+      40%{transform:scale(.91)}
+      100%{transform:scale(1)}
+    }
+    .cta:active{animation:cta-press .3s cubic-bezier(.22,1,.36,1)}
 
     .nav{
       display:flex;align-items:center;gap:14px;margin-top:18px;
@@ -103,8 +123,12 @@
   <div class="info">
     <div class="d-name" id="d-name"></div>
     <div class="d-role" id="d-role"></div>
-    <a class="d-link" id="d-link" href="#" target="_blank" rel="noopener"></a>
-    <a class="view-btn" id="d-btn" href="#" target="_blank" rel="noopener">View Web</a>
+    <a class="cta" id="d-cta" href="#" target="_blank" rel="noopener">
+      <span class="cta-ring"></span>
+      <span class="cta-fill"></span>
+      <span class="cta-link" id="d-link-text"></span>
+      <span class="cta-label">View Web</span>
+    </a>
   </div>
 
   <div class="nav">
@@ -182,9 +206,9 @@
     var d=designers[active];
     document.getElementById('d-name').textContent=d.name;
     document.getElementById('d-role').textContent=d.role;
-    var linkEl=document.getElementById('d-link');
-    linkEl.href=d.url;linkEl.textContent=d.url.replace('https://','');
-    document.getElementById('d-btn').href=d.url;
+    var ctaEl=document.getElementById('d-cta');
+    ctaEl.href=d.url;
+    document.getElementById('d-link-text').textContent=d.url.replace('https://','');
 
     dotsEl.querySelectorAll('.dot').forEach(function(dot,i){
       dot.classList.toggle('active',i===active);
