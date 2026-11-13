@@ -189,6 +189,30 @@
         Motion: [['Range', '0–100% / 1% increments'], ['Handle tracking', '80 ms linear'], ['Ripple cycle', '760 ms'], ['Morph', '260 ms spring']]
       }
     },
+    'buttons-serene.html': {
+      title: 'Serene Buttons', tone: 'Serene · Soft utility, quiet confidence, gentle transitions', week: 'Week 8', back: 'week8.html',
+      sections: {
+        Layout: [['Page', 'White bg · centered frame'], ['Frame', '560 px · 4 : 3'], ['Row gap', '28 px'], ['Row alignment', 'Center · flex-wrap']],
+        Typography: [['Family', 'SF Pro Display / system-ui'], ['Button text', '13 px · 500'], ['Label', '9 px · 600 · 0.12 em uppercase'], ['State label', '8 px · 500 · 0.08 em uppercase']],
+        Spacing: [['Button height', '40 px'], ['Button padding', '10 px 20 px'], ['Icon-text gap', '7 px'], ['Icon-only padding', '10 px'], ['Button group gap', '0 px'], ['Row button gap', '10 px']],
+        Component: [['Border radius', '12 px'], ['Icon size', '16 × 16 px'], ['Group first/last radius', '12 px'], ['Focus ring', '2 px #7BAAC4 · 2 px offset']],
+        Colors: [['Primary fill', '#D4E5EF'], ['Primary text', '#3A6B8A'], ['Secondary fill', '#F0F3F5'], ['Secondary text', '#6A8595'], ['Tertiary border', '1 px #D4DDE3'], ['Disabled fill', '#EDF2F5'], ['Disabled text', '#B0C4D0']],
+        States: [['Default', 'Resting fill · 1 px shadow'], ['Hover', 'Darker fill · 8 px shadow lift'], ['Pressed', 'Darkest fill · scale(.96)'], ['Disabled', 'Faded fill · no shadow · default cursor']],
+        Motion: [['All transitions', '.25s cubic-bezier(.22,1,.36,1)'], ['Active press', 'scale(.96)'], ['Easing', 'ease-out spring feel']]
+      }
+    },
+    'buttons-playful.html': {
+      title: 'Playful Buttons', tone: 'Playful · Pixel art, 8-bit game UI, bouncy and fun', week: 'Week 8', back: 'week8.html',
+      sections: {
+        Layout: [['Page', 'White bg · centered frame'], ['Frame', '560 px · 4 : 3'], ['Row gap', '22 px'], ['Row alignment', 'Center · flex-wrap']],
+        Typography: [['Family', 'Silkscreen'], ['Button text', '11 px · 400'], ['Label', '9 px · 700 Silkscreen'], ['State label', '8 px · 400 Silkscreen']],
+        Spacing: [['Button height', '36 px'], ['Button padding', '8 px 16 px'], ['Icon-text gap', '6 px'], ['Icon-only padding', '8 px'], ['Button group gap', '0 px (shared border)'], ['Row button gap', '10 px']],
+        Component: [['Border', '2 px solid #2A2A2A'], ['Border radius', '0 px (pixel sharp)'], ['Icon size', '14 × 14 px (pixel SVG)'], ['Pixel shadow', '3 px / 0 blur'], ['Focus ring', '2 px #FF6B9D · 2 px offset']],
+        Colors: [['Primary fill', '#2A2A2A'], ['Primary text', '#FFFFFF'], ['Secondary fill', '#FFFFFF'], ['Secondary text', '#2A2A2A'], ['Tertiary border', '2 px dashed #2A2A2A'], ['Hover pink', '#FF6B9D'], ['Hover yellow', '#FFEAA7'], ['Hover cyan', '#E8F8FF / #55C6F0'], ['Disabled', '#D0D0D0']],
+        States: [['Default', 'Solid fill · 3 px hard shadow'], ['Hover', 'Color shift · rainbow cycle (primary)'], ['Pressed', 'Shadow collapse · translate(2px,2px)'], ['Disabled', 'Gray fill · gray shadow · default cursor']],
+        Motion: [['Press', 'translate(2px,2px) · .1s'], ['Rainbow cycle', '.8s linear infinite (primary hover)'], ['Active group', 'Instant fill swap']]
+      }
+    },
     'toolbar-amber-crt.html': {
       title: 'Amber CRT Toolbar', tone: 'Serene · Quiet phosphor glow, industrial calm, Alien Romulus-inspired retro-futuristic', week: 'Week 7', back: 'week7.html',
       sections: {
