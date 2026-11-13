@@ -11,40 +11,63 @@
     body{display:flex;align-items:center;justify-content:center;padding:24px}
 
     .panel{
-      width:380px;max-width:92vw;
-      border-radius:22px;
+      width:400px;max-width:92vw;
+      border-radius:28px;padding:6px;
       background:#e0e5ec;
-      box-shadow:8px 8px 16px #b8bec7,-8px -8px 16px #ffffff;
-      overflow:hidden;
+      border:1px solid rgba(255,255,255,.55);
+      box-shadow:10px 10px 20px #b0b6bf,-10px -10px 20px #ffffff;
+      display:flex;flex-direction:column;gap:2px;
     }
-
-    .section+.section{border-top:1px solid rgba(0,0,0,.04)}
 
     .section-head{
-      width:100%;display:flex;align-items:center;gap:10px;
-      padding:15px 20px;
+      width:100%;display:flex;align-items:center;gap:12px;
+      padding:10px 14px;border-radius:22px;
       background:#e0e5ec;border:none;
       font:600 12px/1 inherit;letter-spacing:.01em;color:#4a5568;
-      cursor:pointer;transition:all .25s ease;
+      cursor:pointer;transition:all .3s ease;
     }
-    .section-head:hover{background:#d8dde6}
+    .section-head:hover{background:#dbe0e8}
     .section-head:focus-visible{outline:2px solid #7ea8e8;outline-offset:-2px}
     .section.open .section-head{
-      background:#d6dbe3;
-      box-shadow:inset 2px 2px 5px #b8bec7,inset -2px -2px 5px #f0f4f8;
+      background:#d8dde5;
+      box-shadow:inset 3px 3px 6px #b8bec7,inset -3px -3px 6px #f0f4f8;
     }
-    .section-head svg.led{width:18px;height:18px;flex-shrink:0}
-    .section-head .title{flex:1}
+
+    .badge{
+      width:36px;height:36px;border-radius:50%;flex-shrink:0;
+      background:#e0e5ec;
+      box-shadow:3px 3px 6px #b8bec7,-3px -3px 6px #ffffff;
+      display:flex;align-items:center;justify-content:center;
+      transition:box-shadow .3s ease;
+    }
+    .badge svg.led{width:16px;height:16px}
+    .section.open .badge{
+      box-shadow:inset 2px 2px 4px #b8bec7,inset -2px -2px 4px #ffffff;
+    }
+
+    .section-head .title{flex:1;text-align:left}
     .section-head .tag{
       font:700 7px/1 inherit;letter-spacing:.12em;text-transform:uppercase;
-      color:#8a9bb0;padding:3px 7px;border-radius:4px;background:rgba(0,0,0,.04);
+      color:#8a9bb0;padding:3px 7px;border-radius:6px;background:rgba(0,0,0,.04);
     }
-    .section-head .chev{
-      width:7px;height:7px;flex-shrink:0;
+
+    .chev-wrap{
+      width:28px;height:28px;border-radius:50%;flex-shrink:0;
+      background:#e0e5ec;
+      box-shadow:2px 2px 4px #b8bec7,-2px -2px 4px #ffffff;
+      display:flex;align-items:center;justify-content:center;
+      transition:box-shadow .3s ease;
+    }
+    .section.open .chev-wrap{
+      box-shadow:inset 2px 2px 3px #b8bec7,inset -2px -2px 3px #ffffff;
+    }
+    .chev{
+      width:6px;height:6px;
       border-right:1.5px solid #8a9bb0;border-bottom:1.5px solid #8a9bb0;
-      transform:rotate(45deg);transition:transform .3s ease;
+      transform:rotate(45deg) translate(-1px,-1px);
+      transition:transform .3s ease;
     }
-    .section.open .section-head .chev{transform:rotate(-135deg)}
+    .section.open .chev{transform:rotate(-135deg) translate(-1px,-1px)}
 
     .section-body{
       display:grid;grid-template-rows:0fr;
@@ -52,13 +75,17 @@
     }
     .section.open .section-body{grid-template-rows:1fr}
     .section-body>.inner{overflow:hidden}
-    .section-body .content{
-      padding:10px 18px 18px;
+
+    .content{
+      margin:4px 6px 6px;padding:14px;
+      border-radius:20px;
+      background:rgba(208,213,220,.25);
+      box-shadow:inset 2px 2px 5px rgba(184,190,199,.35),inset -2px -2px 5px rgba(255,255,255,.65);
       display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;
       opacity:0;transform:translateY(-6px);
-      transition:opacity .35s ease .05s,transform .35s ease .05s;
+      transition:opacity .35s ease .08s,transform .35s ease .08s;
     }
-    .section.open .section-body .content{opacity:1;transform:translateY(0)}
+    .section.open .content{opacity:1;transform:translateY(0)}
 
     .btn{
       display:inline-flex;align-items:center;justify-content:center;gap:8px;
@@ -80,30 +107,26 @@
     .btn.primary:active:not(:disabled){box-shadow:inset 3px 3px 6px #b8bec7,inset -3px -3px 6px #ffffff;transform:scale(.97)}
     .btn.primary:disabled{box-shadow:2px 2px 4px #c8cdd5,-2px -2px 4px #f0f4f8;color:#a0adb8;cursor:default}
 
-    .btn.secondary{
-      box-shadow:3px 3px 7px #b8bec7,-3px -3px 7px #ffffff;
-    }
+    .btn.secondary{box-shadow:3px 3px 7px #b8bec7,-3px -3px 7px #ffffff}
     .btn.secondary:hover{box-shadow:5px 5px 10px #b8bec7,-5px -5px 10px #ffffff}
     .btn.secondary:active:not(:disabled){box-shadow:inset 2px 2px 5px #b8bec7,inset -2px -2px 5px #ffffff;transform:scale(.97)}
     .btn.secondary:disabled{box-shadow:1px 1px 3px #c8cdd5,-1px -1px 3px #f0f4f8;color:#a0adb8;cursor:default}
 
-    .btn.tertiary{
-      box-shadow:inset 2px 2px 5px #b8bec7,inset -2px -2px 5px #ffffff;
-    }
+    .btn.tertiary{box-shadow:inset 2px 2px 5px #b8bec7,inset -2px -2px 5px #ffffff}
     .btn.tertiary:hover{box-shadow:inset 3px 3px 7px #b0b6bf,inset -3px -3px 7px #ffffff}
     .btn.tertiary:active:not(:disabled){box-shadow:inset 4px 4px 9px #aeb4bd,inset -4px -4px 9px #ffffff;transform:scale(.97)}
     .btn.tertiary:disabled{box-shadow:inset 1px 1px 3px #c8cdd5,inset -1px -1px 3px #f0f4f8;color:#a0adb8;cursor:default}
 
     .btn-group{
-      display:inline-flex;border-radius:14px;overflow:hidden;
+      display:inline-flex;border-radius:16px;overflow:hidden;
       box-shadow:4px 4px 8px #b8bec7,-4px -4px 8px #ffffff;
     }
     .btn-group .btn{
       box-shadow:none;border-radius:0;
-      flex-direction:column;gap:3px;padding:8px 16px;min-height:54px;
+      flex-direction:column;gap:3px;padding:8px 18px;min-height:56px;
     }
-    .btn-group .btn:first-child{border-radius:14px 0 0 14px}
-    .btn-group .btn:last-child{border-radius:0 14px 14px 0}
+    .btn-group .btn:first-child{border-radius:16px 0 0 16px}
+    .btn-group .btn:last-child{border-radius:0 16px 16px 0}
     .btn-group .btn+.btn{box-shadow:inset 1px 0 0 #d0d5dc}
     .btn-group .btn:hover{background:#d8dde5}
     .btn-group .btn.active{
@@ -112,13 +135,13 @@
     }
     .btn-group .btn svg.led{width:18px;height:18px}
 
-    .states{display:flex;gap:10px;align-items:flex-start;justify-content:center}
-    .state-col{display:flex;flex-direction:column;align-items:center;gap:4px}
+    .states{display:flex;gap:12px;align-items:flex-start;justify-content:center}
+    .state-col{display:flex;flex-direction:column;align-items:center;gap:5px}
     .state-label{font:500 7px/1 inherit;color:#8a9bb0;letter-spacing:.08em;text-transform:uppercase}
 
     .led circle{transition:fill .3s ease}
 
-    html.is-preview .panel{width:100%;max-width:380px}
+    html.is-preview .panel{width:100%;max-width:400px}
   </style>
 </head>
 <body>
@@ -134,49 +157,53 @@
 <div class="panel">
 
   <div class="section open">
-    <button class="section-head" data-char="sword" data-led="#ffa726">
+    <button class="section-head">
+      <span class="badge" data-char="sword" data-led="#ffa726"></span>
       <span class="title">Actions</span>
       <span class="tag">Primary</span>
-      <span class="chev"></span>
+      <span class="chev-wrap"><span class="chev"></span></span>
     </button>
     <div class="section-body"><div class="inner"><div class="content">
       <button class="btn primary" data-char="sword" data-led="#ffa726">New Game</button>
-      <button class="btn primary" data-char="play" data-led="#42a5f5">Continue</button>
+      <button class="btn primary">Continue</button>
       <button class="btn primary icon-only" data-char="heart" data-led="#ec407a" aria-label="Lives"></button>
     </div></div></div>
   </div>
 
   <div class="section">
-    <button class="section-head" data-char="crown" data-led="#ffd54f">
+    <button class="section-head">
+      <span class="badge" data-char="crown" data-led="#ffd54f"></span>
       <span class="title">Utilities</span>
       <span class="tag">Secondary</span>
-      <span class="chev"></span>
+      <span class="chev-wrap"><span class="chev"></span></span>
     </button>
     <div class="section-body"><div class="inner"><div class="content">
       <button class="btn secondary" data-char="bag" data-led="#8d6e63">Inventory</button>
-      <button class="btn secondary" data-char="crown" data-led="#ffd54f">Scores</button>
+      <button class="btn secondary">Scores</button>
       <button class="btn secondary icon-only" data-char="speaker" data-led="#66bb6a" aria-label="Sound"></button>
     </div></div></div>
   </div>
 
   <div class="section">
-    <button class="section-head" data-char="gear" data-led="#78909c">
+    <button class="section-head">
+      <span class="badge" data-char="gear" data-led="#78909c"></span>
       <span class="title">Options</span>
       <span class="tag">Tertiary</span>
-      <span class="chev"></span>
+      <span class="chev-wrap"><span class="chev"></span></span>
     </button>
     <div class="section-body"><div class="inner"><div class="content">
       <button class="btn tertiary" data-char="help" data-led="#42a5f5">Rules</button>
-      <button class="btn tertiary" data-char="power" data-led="#ef5350">Quit</button>
+      <button class="btn tertiary">Quit</button>
       <button class="btn tertiary icon-only" data-char="gear" data-led="#78909c" aria-label="Settings"></button>
     </div></div></div>
   </div>
 
   <div class="section">
-    <button class="section-head" data-char="face_happy" data-led="#66bb6a">
+    <button class="section-head">
+      <span class="badge" data-char="face_happy" data-led="#66bb6a"></span>
       <span class="title">Difficulty</span>
       <span class="tag">Group</span>
-      <span class="chev"></span>
+      <span class="chev-wrap"><span class="chev"></span></span>
     </button>
     <div class="section-body"><div class="inner"><div class="content">
       <div class="btn-group">
@@ -188,10 +215,11 @@
   </div>
 
   <div class="section">
-    <button class="section-head" data-char="play" data-led="#ffa726">
+    <button class="section-head">
+      <span class="badge" data-char="play" data-led="#ffa726"></span>
       <span class="title">States</span>
       <span class="tag">Demo</span>
-      <span class="chev"></span>
+      <span class="chev-wrap"><span class="chev"></span></span>
     </button>
     <div class="section-body"><div class="inner"><div class="content">
       <div class="states">
@@ -360,7 +388,11 @@
 
     el._dots=dots;el._color=color;
     el._maxD=Math.max.apply(null,dots.map(function(c){return c._d}))||1;
-    el.insertBefore(svg,el.firstChild);
+    if(el.classList.contains('badge')){
+      el.appendChild(svg);
+    }else{
+      el.insertBefore(svg,el.firstChild);
+    }
   });
 
   function rainbow(el){
@@ -399,7 +431,7 @@
       document.querySelectorAll('.section.open').forEach(function(s){s.classList.remove('open')});
       if(!wasOpen){
         section.classList.add('open');
-        var btns=section.querySelectorAll('.section-body [data-char]:not(.section-head [data-char])');
+        var btns=section.querySelectorAll('.content [data-char]');
         btns.forEach(function(b,i){
           setTimeout(function(){
             rainbow(b);
@@ -411,6 +443,6 @@
   });
 })();
 </script>
-<script src="design-specs.js?v=12"></script>
+<script src="design-specs.js?v=13"></script>
 </body>
 </html>
