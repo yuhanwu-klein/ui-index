@@ -120,52 +120,52 @@
 <body>
 <div class="frame">
 
-  <!-- Primary -->
+  <!-- Primary — main game actions -->
   <div class="row">
     <span class="row-label">Primary</span>
     <button class="btn primary">
       <span class="px-star" style="background:#fff"></span>
-      Create
+      New Game
     </button>
-    <button class="btn primary">Save Game</button>
-    <button class="btn primary icon-only" aria-label="Heart">
+    <button class="btn primary">Continue</button>
+    <button class="btn primary icon-only" aria-label="Heart / Lives">
       <span class="px-heart" style="background:#fff"></span>
     </button>
   </div>
 
-  <!-- Secondary -->
+  <!-- Secondary — utility game actions -->
   <div class="row">
     <span class="row-label">Secondary</span>
     <button class="btn secondary">
       <svg viewBox="0 0 14 14"><rect x="1" y="1" width="4" height="4"/><rect x="1" y="9" width="4" height="4"/><rect x="9" y="1" width="4" height="4"/><rect x="9" y="9" width="4" height="4"/></svg>
-      Grid
+      Inventory
     </button>
-    <button class="btn secondary">Duplicate</button>
-    <button class="btn secondary icon-only" aria-label="Zoom">
-      <svg viewBox="0 0 14 14"><rect x="3" y="1" width="2" height="2"/><rect x="7" y="1" width="2" height="2"/><rect x="1" y="3" width="2" height="2"/><rect x="5" y="3" width="2" height="2"/><rect x="9" y="3" width="2" height="2"/><rect x="3" y="5" width="2" height="2"/><rect x="7" y="5" width="2" height="2"/><rect x="11" y="7" width="2" height="2"/><rect x="11" y="9" width="2" height="2"/></svg>
+    <button class="btn secondary">Leaderboard</button>
+    <button class="btn secondary icon-only" aria-label="Sound toggle">
+      <svg viewBox="0 0 14 14"><rect x="1" y="5" width="2" height="4"/><rect x="3" y="4" width="2" height="6"/><rect x="5" y="3" width="2" height="8"/><rect x="9" y="4" width="2" height="2"/><rect x="9" y="8" width="2" height="2"/><rect x="11" y="3" width="2" height="2"/><rect x="11" y="9" width="2" height="2"/></svg>
     </button>
   </div>
 
-  <!-- Tertiary -->
+  <!-- Tertiary — minor game actions -->
   <div class="row">
     <span class="row-label">Tertiary</span>
     <button class="btn tertiary">
-      <svg viewBox="0 0 14 14"><rect x="6" y="1" width="2" height="2"/><rect x="4" y="3" width="2" height="2"/><rect x="8" y="3" width="2" height="2"/><rect x="2" y="5" width="2" height="2"/><rect x="6" y="5" width="2" height="2"/><rect x="10" y="5" width="2" height="2"/><rect x="4" y="7" width="2" height="2"/><rect x="8" y="7" width="2" height="2"/><rect x="6" y="9" width="2" height="2"/></svg>
-      Info
+      <svg viewBox="0 0 14 14"><rect x="6" y="1" width="2" height="2"/><rect x="6" y="5" width="2" height="2"/><rect x="6" y="9" width="2" height="2"/><rect x="4" y="3" width="2" height="2"/><rect x="8" y="3" width="2" height="2"/><rect x="2" y="5" width="2" height="2"/><rect x="10" y="5" width="2" height="2"/></svg>
+      How to Play
     </button>
-    <button class="btn tertiary">Cancel</button>
-    <button class="btn tertiary icon-only" aria-label="Close">
-      <svg viewBox="0 0 14 14"><rect x="1" y="1" width="2" height="2"/><rect x="11" y="1" width="2" height="2"/><rect x="3" y="3" width="2" height="2"/><rect x="9" y="3" width="2" height="2"/><rect x="5" y="5" width="2" height="2"/><rect x="7" y="5" width="2" height="2"/><rect x="3" y="7" width="2" height="2"/><rect x="9" y="7" width="2" height="2"/><rect x="1" y="9" width="2" height="2"/><rect x="11" y="9" width="2" height="2"/></svg>
+    <button class="btn tertiary">Quit</button>
+    <button class="btn tertiary icon-only" aria-label="Settings">
+      <svg viewBox="0 0 14 14"><rect x="1" y="2" width="12" height="2"/><rect x="1" y="6" width="12" height="2"/><rect x="1" y="10" width="12" height="2"/><rect x="3" y="1" width="2" height="4"/><rect x="9" y="5" width="2" height="4"/><rect x="5" y="9" width="2" height="4"/></svg>
     </button>
   </div>
 
-  <!-- Button group -->
+  <!-- Button group — game mode select -->
   <div class="row">
     <span class="row-label">Button Group</span>
     <div class="btn-group">
-      <button class="btn active">1P</button>
-      <button class="btn">2P</button>
-      <button class="btn">VS</button>
+      <button class="btn active">Easy</button>
+      <button class="btn">Normal</button>
+      <button class="btn">Hard</button>
     </div>
   </div>
 
@@ -174,9 +174,9 @@
     <span class="row-label">States</span>
     <div class="states">
       <div style="text-align:center"><button class="btn primary">Play</button><div class="state-label">Enabled</div></div>
-      <div style="text-align:center"><button class="btn primary is-hover" style="background:#ff6b9d;border-color:#ff6b9d;box-shadow:3px 3px 0 #d44a7a">Hover</button><div class="state-label">Hover</div></div>
-      <div style="text-align:center"><button class="btn primary is-pressed" style="box-shadow:0 0 0;transform:translate(2px,2px)">Press</button><div class="state-label">Pressed</div></div>
-      <div style="text-align:center"><button class="btn primary" disabled>Nope</button><div class="state-label">Disabled</div></div>
+      <div style="text-align:center"><button class="btn primary is-hover" style="background:#ff6b9d;border-color:#ff6b9d;box-shadow:3px 3px 0 #d44a7a">Play</button><div class="state-label">Hover</div></div>
+      <div style="text-align:center"><button class="btn primary is-pressed" style="box-shadow:0 0 0;transform:translate(2px,2px)">Play</button><div class="state-label">Pressed</div></div>
+      <div style="text-align:center"><button class="btn primary" disabled>Play</button><div class="state-label">Disabled</div></div>
     </div>
   </div>
 
