@@ -189,14 +189,14 @@
         Motion: [['Range', '0–100% / 1% increments'], ['Handle tracking', '80 ms linear'], ['Ripple cycle', '760 ms'], ['Morph', '260 ms spring']]
       }
     },
-    'buttons-serene.html': {
-      title: 'Calm · Meditation App', tone: 'Serene · Soft utility, quiet confidence, slow breathing rhythm', week: 'Week 8', back: 'week8.html',
+    'portfolio.html': {
+      title: 'Design Portfolio', tone: 'Clean · Minimal arc carousel with full-body designer photos, navigation dots, and linked portfolio sites', week: 'Week 8', back: 'week8.html',
       sections: {
-        Arrangement: [['Frame', '560 px · 4 : 3 · centered'], ['Row rhythm', '28 px vertical breathing gap'], ['Button spacing', '10 px — loose, unhurried'], ['Duration group', 'Flush segments · 12 px end caps'], ['Hierarchy flow', 'Primary → Secondary → Tertiary → Group → States']],
-        Surface: [['Primary material', 'Frosted glass — #D4E5EF fill · 1 px diffuse shadow'], ['Secondary material', 'Matte fog — #F0F3F5 flat fill · no shadow'], ['Tertiary material', 'Transparent pane — 1 px #D4DDE3 inset border'], ['Roundness', '12 px — soft, pillowed corners'], ['Touch target', '40 px minimum height']],
-        Typography: [['Family', 'SF Pro Display / system-ui'], ['Button label', '13 px · weight 500 · −0.01 em'], ['Section label', '9 px · weight 600 · 0.12 em uppercase'], ['State caption', '8 px · weight 500 · muted']],
-        Palette: [['Action blue', '#3A6B8A text · #D4E5EF ground'], ['Quiet gray', '#6A8595 text · #F0F3F5 ground'], ['Border mist', '#D4DDE3 · #B8C8D2 hover'], ['Disabled wash', '#EDF2F5 ground · #B0C4D0 text'], ['Focus ring', '#7BAAC4 · 2 px · 2 px offset']],
-        Interaction: [['Hover', 'Fill deepens one stop · shadow lifts to 8 px'], ['Press', 'Fill deepens two stops · scale(.96)'], ['Disabled', 'Faded fill · no shadow · cursor default'], ['Duration select', 'Tinted fill swap on active segment'], ['Transition', '.25s cubic-bezier(.22,1,.36,1) — slow exhale easing']]
+        Layout: [['Frame', '680 px · centered · #F7F7F7 background'], ['Stage', '100% width · 360 px height · perspective 1200 px'], ['Card size', '140 × 210 px · 20 px radius'], ['Info', 'Name 20 px bold · role 13 px · link 12 px · View Web button']],
+        'Arc Carousel': [['Radius', '420 px virtual circle'], ['Angle spread', '22° per card position'], ['Y offset', 'R × (1 − cos θ) — center at peak, sides curve down'], ['Scale', '1.0 center → 0.55 at ±2 positions'], ['Rotation', '12° rotateY per offset — slight facing angle']],
+        Surface: [['Card', '#EEE background · 20 px radius · layered box-shadow'], ['Active shadow', '0 24 px 64 px rgba(0,0,0,.2)'], ['Drop shadow', 'Radial gradient ellipse under each card'], ['Button', '#222 pill · 999 px radius · 13 px 600 weight']],
+        Navigation: [['Arrows', '44 px circle · 1 px #DDD border · chevron SVG'], ['Dots', '7 px circles · active: 22 px pill #222'], ['Keyboard', 'Arrow left/right to navigate'], ['Card click', 'Click any visible card to jump to it']],
+        Interaction: [['Transition', '.65s cubic-bezier(.22,1,.36,1) — smooth arc motion'], ['Hover', 'Arrow border darkens · dot lightens'], ['Press', 'scale(.94) on arrows · scale(.96) on View Web'], ['Opacity', '1.0 center → 0.15 at edges — depth fading']]
       }
     },
     'buttons-playful.html': {

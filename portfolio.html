@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Design Portfolio</title>
+  <script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
+  <style>
+    *{box-sizing:border-box;margin:0}
+    html,body{height:100%;background:#f7f7f7;font-family:-apple-system,"SF Pro Display",system-ui,sans-serif;color:#222}
+    body{display:flex;align-items:center;justify-content:center;padding:24px;overflow:hidden}
+
+    .frame{
+      width:680px;max-width:96vw;
+      display:flex;flex-direction:column;align-items:center;
+    }
+
+    h1{font-size:32px;font-weight:800;letter-spacing:-.04em;text-align:center}
+    .sub{font-size:14px;color:#717171;text-align:center;margin-top:6px}
+
+    .stage{
+      width:100%;height:360px;
+      position:relative;
+      perspective:1200px;
+      margin-top:28px;
+    }
+
+    .card{
+      position:absolute;left:50%;top:50%;
+      width:140px;height:210px;
+      transform-origin:center center;
+      transition:all .65s cubic-bezier(.22,1,.36,1);
+      cursor:pointer;
+      will-change:transform,opacity;
+    }
+    .card.active{cursor:default}
+    .card .photo{
+      width:100%;height:100%;
+      border-radius:20px;overflow:hidden;
+      background:#eee;
+      box-shadow:0 16px 48px rgba(0,0,0,.12),0 2px 8px rgba(0,0,0,.06);
+      transition:box-shadow .65s cubic-bezier(.22,1,.36,1);
+    }
+    .card.active .photo{box-shadow:0 24px 64px rgba(0,0,0,.2),0 4px 12px rgba(0,0,0,.08)}
+    .card img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+    .shadow{
+      position:absolute;bottom:-8px;left:50%;
+      width:60%;height:10px;
+      background:radial-gradient(ellipse,rgba(0,0,0,.12) 0%,transparent 70%);
+      transform:translateX(-50%);
+      transition:opacity .65s ease;
+    }
+
+    .info{
+      text-align:center;margin-top:16px;
+      display:flex;flex-direction:column;align-items:center;gap:5px;
+      min-height:110px;
+    }
+    .d-name{font-size:20px;font-weight:700;letter-spacing:-.02em}
+    .d-role{font-size:13px;color:#717171;font-weight:500}
+    .d-link{
+      font-size:12px;color:#999;text-decoration:none;
+      letter-spacing:.01em;margin-top:2px;
+    }
+    .d-link:hover{color:#222;text-decoration:underline}
+
+    .view-btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:11px 32px;margin-top:8px;
+      border:none;border-radius:999px;
+      background:#222;color:#fff;
+      font:600 13px/1 inherit;letter-spacing:.01em;
+      text-decoration:none;cursor:pointer;
+      transition:background .2s ease,transform .15s ease;
+    }
+    .view-btn:hover{background:#444}
+    .view-btn:active{transform:scale(.96)}
+
+    .nav{
+      display:flex;align-items:center;gap:14px;margin-top:18px;
+    }
+    .nav-btn{
+      width:44px;height:44px;border-radius:50%;
+      border:1px solid #ddd;background:#fff;
+      color:#222;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      transition:all .2s ease;
+    }
+    .nav-btn:hover{border-color:#bbb;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .nav-btn:active{transform:scale(.94)}
+    .nav-btn:focus-visible{outline:2px solid #222;outline-offset:2px}
+    .nav-btn svg{width:16px;height:16px}
+
+    .dots{display:flex;gap:6px;align-items:center}
+    .dot{
+      width:7px;height:7px;border-radius:50%;
+      background:#ddd;border:none;cursor:pointer;padding:0;
+      transition:all .35s cubic-bezier(.22,1,.36,1);
+    }
+    .dot.active{background:#222;width:22px;border-radius:4px}
+    .dot:hover:not(.active){background:#bbb}
+
+    html.is-preview .frame{width:100%;max-width:680px}
+  </style>
+</head>
+<body>
+<div class="frame">
+
+  <h1>Design Portfolio</h1>
+  <p class="sub">Creative minds behind the work.</p>
+
+  <div class="stage" id="stage"></div>
+
+  <div class="info">
+    <div class="d-name" id="d-name"></div>
+    <div class="d-role" id="d-role"></div>
+    <a class="d-link" id="d-link" href="#" target="_blank" rel="noopener"></a>
+    <a class="view-btn" id="d-btn" href="#" target="_blank" rel="noopener">View Web</a>
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn" id="prev-btn" aria-label="Previous">
+      <svg viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="dots" id="dots"></div>
+    <button class="nav-btn" id="next-btn" aria-label="Next">
+      <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var designers=[
+    {name:'Ravi Kapoor',role:'Product Designer',url:'https://ravikapoor.design',img:'person-1.jpg'},
+    {name:'Jaylen Moore',role:'UX Engineer',url:'https://jaylenmoore.co',img:'person-2.jpg'},
+    {name:'Mei Lin',role:'Visual Designer',url:'https://meilin.studio',img:'person-3.jpg'},
+    {name:'Clara Schulz',role:'Brand Designer',url:'https://claraschulz.com',img:'person-4.jpg'},
+    {name:'Sora Park',role:'Art Director',url:'https://sorapark.art',img:'person-5.jpg'}
+  ];
+
+  var stage=document.getElementById('stage');
+  var cards=[];
+  var active=0;
+  var n=designers.length;
+  var ARC_R=420;
+  var ARC_ANGLE=22;
+
+  designers.forEach(function(d,i){
+    var card=document.createElement('div');
+    card.className='card';
+    var photo=document.createElement('div');
+    photo.className='photo';
+    var img=document.createElement('img');
+    img.src=d.img;img.alt=d.name;img.draggable=false;
+    photo.appendChild(img);
+    card.appendChild(photo);
+    var shadow=document.createElement('div');
+    shadow.className='shadow';
+    card.appendChild(shadow);
+    card.addEventListener('click',function(){if(i!==active){active=i;layout()}});
+    stage.appendChild(card);
+    cards.push(card);
+  });
+
+  var dotsEl=document.getElementById('dots');
+  designers.forEach(function(_,i){
+    var dot=document.createElement('button');
+    dot.className='dot';dot.setAttribute('aria-label','Designer '+(i+1));
+    dot.addEventListener('click',function(){active=i;layout()});
+    dotsEl.appendChild(dot);
+  });
+
+  function layout(){
+    cards.forEach(function(card,i){
+      var offset=i-active;
+      if(offset>Math.floor(n/2))offset-=n;
+      if(offset<-Math.floor(n/2))offset+=n;
+
+      var absOff=Math.abs(offset);
+      var angle=offset*ARC_ANGLE*Math.PI/180;
+      var x=ARC_R*Math.sin(angle);
+      var y=ARC_R*(1-Math.cos(angle));
+      var s=Math.max(.55,1-absOff*.14);
+      var o=absOff>2?0:Math.max(.15,1-absOff*.35);
+      var ry=-offset*12;
+
+      card.style.transform='translateX(calc(-50% + '+Math.round(x)+'px)) translateY(calc(-50% + '+Math.round(y)+'px)) scale('+s.toFixed(3)+') rotateY('+ry+'deg)';
+      card.style.opacity=o.toFixed(2);
+      card.style.zIndex=10-absOff;
+      card.style.pointerEvents=absOff>2?'none':'auto';
+      card.classList.toggle('active',i===active);
+
+      var sh=card.querySelector('.shadow');
+      if(sh)sh.style.opacity=absOff>2?0:Math.max(0,1-absOff*.4);
+    });
+
+    var d=designers[active];
+    document.getElementById('d-name').textContent=d.name;
+    document.getElementById('d-role').textContent=d.role;
+    var linkEl=document.getElementById('d-link');
+    linkEl.href=d.url;linkEl.textContent=d.url.replace('https://','');
+    document.getElementById('d-btn').href=d.url;
+
+    dotsEl.querySelectorAll('.dot').forEach(function(dot,i){
+      dot.classList.toggle('active',i===active);
+    });
+  }
+
+  document.getElementById('prev-btn').addEventListener('click',function(){
+    active=(active-1+n)%n;layout();
+  });
+  document.getElementById('next-btn').addEventListener('click',function(){
+    active=(active+1)%n;layout();
+  });
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){active=(active-1+n)%n;layout()}
+    if(e.key==='ArrowRight'){active=(active+1)%n;layout()}
+  });
+
+  layout();
+})();
+</script>
+<script src="design-specs.js?v=18"></script>
+</body>
+</html>
