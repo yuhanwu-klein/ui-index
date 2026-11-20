@@ -38,15 +38,17 @@ body{
 
 .blob{
   position:absolute;width:50px;height:50px;border-radius:50%;
-  background:linear-gradient(140deg,#f78dba,#e45f96 45%,#c94580);
-  box-shadow:0 6px 24px rgba(200,60,110,.4),0 2px 4px rgba(0,0,0,.06),inset 0 1.5px 0 rgba(255,255,255,.4);
+  background:linear-gradient(160deg,rgba(230,160,190,.65),rgba(190,90,130,.72) 50%,rgba(155,60,105,.78));
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow:0 4px 20px rgba(160,50,90,.3),0 1px 2px rgba(0,0,0,.08),inset 0 1px 1px rgba(255,255,255,.3),inset 0 -2px 4px rgba(120,30,70,.2);
   pointer-events:none;will-change:transform;
   transform:translate(-50%,-50%);
 }
 .blob::after{
-  content:'';position:absolute;top:4px;left:18%;right:18%;height:28%;
+  content:'';position:absolute;top:3px;left:15%;right:15%;height:40%;
   border-radius:50%;
-  background:linear-gradient(180deg,rgba(255,255,255,.5),transparent);
+  background:linear-gradient(180deg,rgba(255,255,255,.45) 0%,rgba(255,255,255,.1) 50%,transparent);
 }
 
 .items{
