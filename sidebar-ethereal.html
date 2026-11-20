@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sidebar · Editorial</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:-apple-system,"SF Pro Display",system-ui,sans-serif}
+body{
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;position:relative;
+  background:#F2F0EB;
+}
+
+/* Grain */
+body::before{
+  content:'';position:fixed;inset:0;z-index:100;pointer-events:none;opacity:.3;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size:128px 128px;
+}
+
+/* Organic decorations */
+.organic{position:fixed;pointer-events:none;z-index:0;opacity:.1;transition:transform .15s ease-out}
+.organic-1{top:6%;left:5%}
+.organic-2{bottom:10%;right:6%}
+.organic-3{top:14%;right:18%}
+
+/* ── Sidebar scene ── */
+.sidebar-scene{perspective:1200px;perspective-origin:50% 50%}
+
+.sidebar-wrap{position:relative;transform-style:preserve-3d}
+.sidebar-wrap::before{
+  content:'';position:absolute;inset:12px -4px -12px 4px;
+  background:rgba(26,26,24,.12);border-radius:22px;
+  transform:translateZ(-30px);filter:blur(2px);
+}
+.sidebar-wrap::after{
+  content:'';position:absolute;inset:6px -2px -6px 2px;
+  background:rgba(26,26,24,.06);border-radius:21px;
+  transform:translateZ(-15px);filter:blur(1px);
+}
+
+/* ── Sidebar ── */
+.sidebar{
+  position:relative;z-index:10;width:256px;padding:20px 12px;
+  display:flex;flex-direction:column;
+  background:#1A1A18;border:1px solid rgba(255,255,255,.08);border-radius:20px;
+  box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 -1px 0 rgba(0,0,0,.2) inset,
+    0 20px 60px rgba(26,26,24,.25),0 4px 12px rgba(26,26,24,.15);
+  transition:width .5s cubic-bezier(.32,1,.23,1),transform .3s,box-shadow .3s;
+  overflow:visible;flex-shrink:0;transform:translateZ(0);transform-style:preserve-3d;
+}
+.sidebar.collapsed{width:68px}
+.sidebar::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);z-index:5;
+}
+
+/* ── Brand ── */
+.brand{display:flex;align-items:center;gap:12px;padding:4px 8px;margin-bottom:12px;min-height:36px;overflow:hidden}
+.brand-icon{
+  width:28px;height:28px;border-radius:8px;flex-shrink:0;background:#F2F0EB;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .4s cubic-bezier(.4,0,.2,1),box-shadow .4s;
+  box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+.brand-icon:hover{transform:rotateY(15deg) rotateX(-5deg) scale(1.05);box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.brand-icon svg{width:14px;height:14px;color:#1A1A18;stroke-width:2}
+.brand-text{font:600 13px/1 "SF Mono","Courier New",monospace;color:#F2F0EB;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;transition:opacity .2s}
+.collapsed .brand-text{opacity:0;pointer-events:none;width:0;overflow:hidden}
+.collapsed .brand{justify-content:center;padding:4px 0;gap:0}
+
+/* ── Search ── */
+.search{
+  display:flex;align-items:center;gap:10px;padding:8px 10px;margin:0 0 6px;min-height:36px;border-radius:10px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,.2) inset,0 1px 0 rgba(255,255,255,.03);
+  cursor:pointer;transition:all .3s;
+}
+.search:hover{background:rgba(255,255,255,.08)}
+.search svg{width:16px;height:16px;color:rgba(255,255,255,.35);flex-shrink:0}
+.search-text{font:400 11.5px/1 "SF Mono","Courier New",monospace;color:rgba(255,255,255,.3);letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;transition:opacity .2s}
+.search-kbd{margin-left:auto;font:500 10px/1 "SF Mono","Courier New",monospace;color:rgba(255,255,255,.25);padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.06);white-space:nowrap;transition:opacity .2s;box-shadow:0 1px 0 rgba(255,255,255,.04),0 1px 2px rgba(0,0,0,.15)}
+.collapsed .search-text,.collapsed .search-kbd{opacity:0;pointer-events:none;width:0;flex:none;overflow:hidden;margin:0;padding:0}
+.collapsed .search{justify-content:center;padding:8px;gap:0}
+
+/* ── Category ── */
+.category{margin-top:16px}
+.category:first-of-type{margin-top:6px}
+.cat-header{font:500 10px/1 "SF Mono","Courier New",monospace;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);padding:6px 12px;white-space:nowrap;overflow:hidden;transition:opacity .2s .05s,height .35s,padding .35s,margin .35s}
+.collapsed .cat-header{opacity:0;height:0;padding:0;overflow:hidden;transition:opacity .1s,height .35s,padding .35s}
+.collapsed .category{margin-top:6px}
+
+.nav-list{position:relative}
+
+/* ── Pill ── */
+.pill{
+  position:absolute;left:0;right:-12px;height:40px;top:0;
+  background:rgba(242,240,235,.10);border:1px solid rgba(242,240,235,.06);
+  border-radius:10px 0 0 10px;border-right-color:transparent;
+  pointer-events:none;z-index:0;
+  box-shadow:0 0 12px rgba(242,240,235,.04),0 1px 0 rgba(255,255,255,.03) inset;
+  transition:top .4s cubic-bezier(.4,0,.2,1),height .3s,opacity .3s,
+    right .5s cubic-bezier(.32,1,.23,1),border-radius .5s cubic-bezier(.32,1,.23,1),border-right-color .3s;
+}
+.pill::before{
+  content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:3px;height:16px;border-radius:0 3px 3px 0;
+  background:#F2F0EB;opacity:.7;box-shadow:0 0 8px rgba(242,240,235,.3);
+  transition:height .3s cubic-bezier(.4,0,.2,1);
+}
+.pill::after{
+  content:'';position:absolute;left:100%;top:-10px;bottom:-10px;width:10px;
+  pointer-events:none;
+  background:
+    radial-gradient(circle 10px at 0 0,#1A1A18 9px,transparent 10px) top left / 10px 10px no-repeat,
+    radial-gradient(circle 10px at 0 100%,#1A1A18 9px,transparent 10px) bottom left / 10px 10px no-repeat,
+    #F2F0EB;
+  transition:opacity .3s;
+}
+.collapsed .pill{left:4px;right:4px;border-radius:10px;border-right-color:rgba(242,240,235,.06)}
+.collapsed .pill::before{opacity:0}
+.collapsed .pill::after{opacity:0}
+
+/* ── Nav Item ── */
+.nav-item{
+  position:relative;z-index:1;height:40px;padding:0 12px;border-radius:10px;cursor:pointer;
+  color:rgba(255,255,255,.5);opacity:0;transform:translateX(-8px);
+  will-change:transform;
+}
+.nav-item.entered{opacity:1;transform:translate3d(0,0,0);transition:color .25s,opacity .35s ease,transform .35s ease}
+.nav-item:active{background:rgba(255,255,255,.08)}
+.nav-item.selected{color:#F2F0EB;background:transparent}
+
+.item-inner{display:flex;align-items:center;gap:12px;width:100%;height:100%;overflow:hidden}
+
+/* Icon — magnetic will drive transform via JS */
+.nav-icon{
+  width:20px;height:20px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  transition:transform .12s ease-out;
+}
+.nav-icon svg{width:20px;height:20px;transition:transform .15s ease-out}
+
+/* Label */
+.nav-label{
+  flex:1;font:400 12px/1.2 "SF Mono","Courier New",monospace;letter-spacing:.06em;
+  text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  transition:opacity .25s ease .08s;
+}
+.selected .nav-label{font-weight:600}
+.collapsed .nav-label{opacity:0;width:0;flex:none;overflow:hidden;pointer-events:none;transition:opacity .1s}
+
+/* Typewriter caret */
+.caret{
+  display:inline-block;width:1.5px;height:13px;
+  background:#F2F0EB;vertical-align:-1px;margin-left:2px;
+  animation:blink .7s step-end infinite;
+}
+.caret.typing{animation:none;opacity:1}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.collapsed .caret{display:none}
+
+/* Right slot */
+.nav-slot{flex-shrink:0;transition:opacity .25s ease .08s}
+.slot-badge{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:rgba(242,240,235,.12);color:rgba(242,240,235,.7);font:600 10px/18px "SF Mono","Courier New",monospace;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.slot-count{font:500 11px/1 "SF Mono","Courier New",monospace;color:rgba(255,255,255,.25);letter-spacing:.04em}
+.slot-chevron svg{width:14px;height:14px;color:rgba(255,255,255,.25)}
+.collapsed .nav-slot{opacity:0;width:0;overflow:hidden;pointer-events:none;transition:opacity .1s}
+
+.nav-item[data-badge]::after{content:'';display:none;position:absolute;top:7px;right:12px;width:7px;height:7px;border-radius:50%;background:#F2F0EB;z-index:3;box-shadow:0 0 6px rgba(242,240,235,.4)}
+.collapsed .nav-item[data-badge]::after{display:block}
+
+.nav-tooltip{
+  position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%) translateX(4px);
+  padding:6px 12px;border-radius:8px;background:#F2F0EB;color:#1A1A18;
+  font:500 10.5px/1 "SF Mono","Courier New",monospace;letter-spacing:.06em;text-transform:uppercase;
+  white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s,transform .2s;
+  z-index:100;box-shadow:0 4px 16px rgba(26,26,24,.12),0 1px 3px rgba(26,26,24,.08);
+}
+.collapsed .nav-item:hover .nav-tooltip{opacity:1;transform:translateY(-50%) translateX(0)}
+.collapsed .nav-item{padding:0}
+.collapsed .item-inner{justify-content:center;gap:0}
+
+/* ── Toggle ── */
+.sidebar-toggle{margin-top:auto;display:flex;align-items:center;gap:12px;padding:0 12px;height:40px;border-radius:10px;cursor:pointer;color:rgba(255,255,255,.25);transition:all .25s;opacity:0;transform:translateX(-8px);overflow:hidden}
+.sidebar-toggle.entered{opacity:1;transform:translateX(0);transition:all .25s,opacity .35s ease,transform .35s ease}
+.sidebar-toggle:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.4)}
+.sidebar-toggle svg{width:18px;height:18px;flex-shrink:0;transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.collapsed .sidebar-toggle{justify-content:center;padding:0;gap:0}
+.collapsed .toggle-text{width:0;flex:none;overflow:hidden}
+.collapsed .sidebar-toggle svg{transform:rotate(180deg)}
+.toggle-text{font:400 11px/1 "SF Mono","Courier New",monospace;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;transition:opacity .2s}
+.collapsed .toggle-text{opacity:0;pointer-events:none}
+
+/* ── Top bar ── */
+.top-bar{position:fixed;top:20px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;z-index:20}
+.back{min-height:32px;display:inline-flex;align-items:center;padding:0 14px;border:1px solid rgba(26,26,24,.1);border-radius:999px;color:#1A1A18;background:rgba(255,255,255,.5);font:600 11px/1 "SF Mono","Courier New",monospace;text-decoration:none;letter-spacing:.04em;text-transform:uppercase;transition:all .25s;backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(26,26,24,.06)}
+.back:hover{background:rgba(255,255,255,.8);border-color:rgba(26,26,24,.2)}
+.btn-sm{min-height:32px;padding:0 12px;border-radius:999px;border:1px solid rgba(26,26,24,.1);background:rgba(255,255,255,.5);font:500 11px/1 "SF Mono","Courier New",monospace;color:#1A1A18;cursor:pointer;letter-spacing:.04em;text-transform:uppercase;transition:all .25s;backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(26,26,24,.06)}
+.btn-sm:hover{background:rgba(255,255,255,.8);border-color:rgba(26,26,24,.2)}
+
+.floor-shadow{
+  position:absolute;bottom:-40px;left:50%;width:200px;height:20px;
+  transform:translateX(-50%);
+  background:radial-gradient(ellipse,rgba(26,26,24,.12) 0%,transparent 70%);
+  pointer-events:none;z-index:0;transition:width .45s,opacity .3s;
+}
+</style>
+</head>
+<body>
+
+<svg class="organic organic-1" data-depth="0.03" width="160" height="160" viewBox="0 0 160 160" fill="none" stroke="#1A1A18" stroke-width="1.2">
+  <path d="M80 18c34 2 56 25 54 58s-27 57-61 56S19 106 21 73 46 16 80 18z" stroke-dasharray="4 6"/>
+  <circle cx="80" cy="76" r="24" stroke-dasharray="3 5"/>
+  <line x1="80" y1="52" x2="80" y2="100" stroke-width=".7"/>
+  <line x1="56" y1="76" x2="104" y2="76" stroke-width=".7"/>
+</svg>
+<svg class="organic organic-2" data-depth="0.05" width="120" height="120" viewBox="0 0 120 120" fill="none" stroke="#1A1A18" stroke-width="1">
+  <circle cx="60" cy="60" r="48"/>
+  <circle cx="60" cy="60" r="24" stroke-dasharray="4 4"/>
+  <line x1="60" y1="12" x2="60" y2="108" stroke-width=".5" stroke-dasharray="2 4"/>
+  <line x1="12" y1="60" x2="108" y2="60" stroke-width=".5" stroke-dasharray="2 4"/>
+</svg>
+<svg class="organic organic-3" data-depth="0.02" width="90" height="90" viewBox="0 0 90 90" fill="none" stroke="#1A1A18" stroke-width="1">
+  <path d="M45 8c20 0 36 16 36 36s-16 36-36 36S9 64 9 44 25 8 45 8z"/>
+  <line x1="45" y1="26" x2="45" y2="62" stroke-width=".7"/>
+  <line x1="27" y1="44" x2="63" y2="44" stroke-width=".7"/>
+</svg>
+
+<div class="top-bar">
+  <a class="back" href="week9.html">&larr; Week 9</a>
+  <button class="btn-sm" id="replay-btn">&circlearrowright; Replay</button>
+</div>
+
+<div class="sidebar-scene">
+  <div class="sidebar-wrap" id="sidebar-wrap">
+    <nav class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="5" height="5" rx="1"/><rect x="11" y="4" width="5" height="5" rx="1"/><rect x="7" y="11" width="5" height="5" rx="1"/></svg></div>
+        <span class="brand-text">Egstad</span>
+      </div>
+      <div class="search">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5"/><path d="M13 13l4 4"/></svg>
+        <span class="search-text">Search…</span>
+        <span class="search-kbd">⌘K</span>
+      </div>
+
+      <div class="category">
+        <div class="cat-header">Main</div>
+        <div class="nav-list" id="list-main">
+          <div class="pill" id="pill-main"></div>
+          <div class="nav-item selected" data-id="home" data-label="Home">
+            <div class="item-inner"><div class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9v7h10V9"/><path d="M3 10.5L10 4l7 6.5"/><path d="M8.5 16v-4h3v4"/></svg></div><span class="nav-label">Home</span></div>
+            <span class="nav-tooltip">Home</span>
+          </div>
+          <div class="nav-item" data-id="inbox" data-badge="3" data-label="Inbox">
+            <div class="item-inner"><div class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="14" rx="2"/><path d="M3 11h4l1.5 2h3l1.5-2h4"/></svg></div><span class="nav-label">Inbox</span><span class="nav-slot"><span class="slot-badge">3</span></span></div>
+            <span class="nav-tooltip">Inbox</span>
+          </div>
+          <div class="nav-item" data-id="calendar" data-label="Calendar">
+            <div class="item-inner"><div class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v4"/><path d="M13 2v4"/><rect x="3" y="4" width="14" height="13" rx="2"/><path d="M3 8h14"/></svg></div><span class="nav-label">Calendar</span></div>
+            <span class="nav-tooltip">Calendar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="cat-header">Workspace</div>
+        <div class="nav-list" id="list-workspace">
+          <div class="pill" id="pill-workspace" style="opacity:0"></div>
+          <div class="nav-item" data-id="projects" data-label="Projects">
+            <div class="item-inner"><div class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8v7a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M2 8V6a2 2 0 012-2h4l2 2h6a2 2 0 012 2"/></svg></div><span class="nav-label">Projects</span><span class="nav-slot"><span class="slot-count">12</span></span></div>
+            <span class="nav-tooltip">Projects</span>
+          </div>
+          <div class="nav-item" data-id="collections" data-label="Collections">
+            <div class="item-inner"><div class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9a1 1 0 011 1v14"/><path d="M5 18V4a1 1 0 011-1"/><path d="M5 18l5.5-3.5L16 18"/></svg></div><span class="nav-label">Collections</span><span class="nav-slot"><span class="slot-chevron"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg></span></span></div>
+            <span class="nav-tooltip">Collections</span>
+          </div>
+          <div class="nav-item" data-id="analytics" data-label="Analytics">
+            <div class="item-inner"><div class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h14"/><path d="M6 13v4"/><path d="M10 8v9"/><path d="M14 4v13"/></svg></div><span class="nav-label">Analytics</span></div>
+            <span class="nav-tooltip">Analytics</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="category">
+        <div class="cat-header">Account</div>
+        <div class="nav-list" id="list-account">
+          <div class="pill" id="pill-account" style="opacity:0"></div>
+          <div class="nav-item" data-id="profile" data-label="Profile">
+            <div class="item-inner"><div class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="3"/><path d="M4 17c0-3 2.5-5.5 6-5.5s6 2.5 6 5.5"/></svg></div><span class="nav-label">Profile</span></div>
+            <span class="nav-tooltip">Profile</span>
+          </div>
+          <div class="nav-item" data-id="settings" data-label="Settings">
+            <div class="item-inner"><div class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h14"/><circle cx="7" cy="5" r="1.5" fill="currentColor"/><path d="M3 10h14"/><circle cx="13" cy="10" r="1.5" fill="currentColor"/><path d="M3 15h14"/><circle cx="9" cy="15" r="1.5" fill="currentColor"/></svg></div><span class="nav-label">Settings</span></div>
+            <span class="nav-tooltip">Settings</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-toggle" id="toggle-btn">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l-6 6 6 6"/><path d="M18 4l-6 6 6 6"/></svg>
+        <span class="toggle-text">Collapse</span>
+      </div>
+    </nav>
+  </div>
+  <div class="floor-shadow"></div>
+</div>
+
+<script>
+(function(){
+  var sidebar=document.getElementById('sidebar');
+  var sidebarWrap=document.getElementById('sidebar-wrap');
+  var toggleBtn=document.getElementById('toggle-btn');
+  var replayBtn=document.getElementById('replay-btn');
+  var allItems=document.querySelectorAll('.nav-item');
+  var organics=document.querySelectorAll('.organic');
+  var lists={
+    main:{el:document.getElementById('list-main'),pill:document.getElementById('pill-main'),items:document.querySelectorAll('#list-main .nav-item')},
+    workspace:{el:document.getElementById('list-workspace'),pill:document.getElementById('pill-workspace'),items:document.querySelectorAll('#list-workspace .nav-item')},
+    account:{el:document.getElementById('list-account'),pill:document.getElementById('pill-account'),items:document.querySelectorAll('#list-account .nav-item')}
+  };
+
+  var mouseX=0,mouseY=0,tiltX=0,tiltY=0,curX=0,curY=0;
+  var mouseInSidebar=false;
+  var typing=false;
+
+  // ── Track mouse ──
+  document.addEventListener('mousemove',function(e){
+    mouseX=e.clientX;mouseY=e.clientY;
+    curX=(e.clientX/window.innerWidth-0.5)*2;
+    curY=(e.clientY/window.innerHeight-0.5)*2;
+  });
+  sidebar.addEventListener('mouseenter',function(){mouseInSidebar=true});
+  sidebar.addEventListener('mouseleave',function(){mouseInSidebar=false});
+
+  // ── Animation loop: 2.5D tilt + magnetic cursor ──
+  function tick(){
+    tiltX+=(curX-tiltX)*0.08;
+    tiltY+=(curY-tiltY)*0.08;
+    sidebarWrap.style.transform='rotateY('+(tiltX*3).toFixed(2)+'deg) rotateX('+(tiltY*-2).toFixed(2)+'deg)';
+
+    organics.forEach(function(el){
+      var d=parseFloat(el.getAttribute('data-depth'))||0.02;
+      el.style.transform='translate('+(tiltX*d*120).toFixed(1)+'px,'+(tiltY*d*80).toFixed(1)+'px)';
+    });
+
+    // Magnetic cursor
+    allItems.forEach(function(item){
+      var icon=item.querySelector('.nav-icon');
+      if(!mouseInSidebar||sidebar.classList.contains('collapsed')){
+        item.style.transform='';
+        icon.style.transform='';
+        return;
+      }
+      var r=item.getBoundingClientRect();
+      var cx=r.left+r.width/2,cy=r.top+r.height/2;
+      var dx=mouseX-cx,dy=mouseY-cy;
+      var dist=Math.sqrt(dx*dx+dy*dy);
+      var threshold=120;
+      if(dist<threshold&&dist>0){
+        var str=1-dist/threshold;
+        str=str*str;
+        var tx=dx*str*0.08;
+        var ty=dy*str*0.06;
+        item.style.transform='translate3d('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px,0)';
+        var rotY=(dx/dist)*str*12;
+        var rotX=(dy/dist)*str*-6;
+        var sc=1+str*0.12;
+        icon.style.transform='rotateY('+rotY.toFixed(1)+'deg) rotateX('+rotX.toFixed(1)+'deg) scale('+sc.toFixed(3)+')';
+      }else{
+        item.style.transform='';
+        icon.style.transform='';
+      }
+    });
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  // ── Pill ──
+  function movePill(listKey,itemIdx){
+    var list=lists[listKey];
+    if(!list)return;
+    var item=list.items[itemIdx];
+    if(!item)return;
+    list.pill.style.top=item.offsetTop+'px';
+    list.pill.style.height=item.offsetHeight+'px';
+    list.pill.style.opacity='1';
+  }
+  function clearPills(){
+    Object.keys(lists).forEach(function(k){lists[k].pill.style.opacity='0'});
+  }
+
+  // ── Typewriter ──
+  function getLabel(item){return item.querySelector('.nav-label')}
+  function getLabelText(item){return item.getAttribute('data-label')||''}
+
+  function addCaret(item){
+    var label=getLabel(item);
+    var existing=label.querySelector('.caret');
+    if(!existing){
+      var c=document.createElement('span');
+      c.className='caret';
+      label.appendChild(c);
+    }
+  }
+  function removeCaret(item){
+    var label=getLabel(item);
+    var c=label.querySelector('.caret');
+    if(c)c.remove();
+  }
+  function setCaretTyping(item,v){
+    var c=getLabel(item).querySelector('.caret');
+    if(c){if(v)c.classList.add('typing');else c.classList.remove('typing')}
+  }
+
+  function clearTextNodes(el){
+    var nodes=[];
+    for(var j=0;j<el.childNodes.length;j++){if(el.childNodes[j].nodeType===3)nodes.push(el.childNodes[j])}
+    nodes.forEach(function(n){n.remove()});
+  }
+
+  function typewrite(item,text,cb){
+    var label=getLabel(item);
+    var caret=label.querySelector('.caret');
+    var i=0;
+    function step(){
+      if(i<=text.length){
+        clearTextNodes(label);
+        if(i>0){
+          var tn=document.createTextNode(text.slice(0,i));
+          if(caret)label.insertBefore(tn,caret);
+          else label.appendChild(tn);
+        }
+        i++;
+        setTimeout(step,45+Math.random()*25);
+      }else{
+        if(cb)cb();
+      }
+    }
+    step();
+  }
+
+  function erasewrite(item,cb){
+    var label=getLabel(item);
+    var text=getLabelText(item);
+    var caret=label.querySelector('.caret');
+    var len=text.length;
+    function step(){
+      if(len>=0){
+        clearTextNodes(label);
+        if(len>0){
+          var tn=document.createTextNode(text.slice(0,len));
+          if(caret)label.insertBefore(tn,caret);
+          else label.appendChild(tn);
+        }
+        len--;
+        setTimeout(step,30+Math.random()*15);
+      }else{
+        if(cb)cb();
+      }
+    }
+    step();
+  }
+
+  // ── Select with typewriter ──
+  function selectItem(newItem){
+    if(typing)return;
+    var oldItem=document.querySelector('.nav-item.selected');
+    if(oldItem===newItem)return;
+
+    var isCollapsed=sidebar.classList.contains('collapsed');
+    typing=true;
+
+    // Move pill immediately for responsiveness
+    clearPills();
+    var listKey=newItem.closest('.nav-list').id.replace('list-','');
+    var list=lists[listKey];
+    var idx=Array.prototype.indexOf.call(list.items,newItem);
+
+    if(isCollapsed||!oldItem){
+      // Instant switch in collapsed mode
+      allItems.forEach(function(el){el.classList.remove('selected')});
+      newItem.classList.add('selected');
+      movePill(listKey,idx);
+      typing=false;
+      return;
+    }
+
+    // Typewriter: erase old → switch → type new
+    setCaretTyping(oldItem,true);
+    erasewrite(oldItem,function(){
+      removeCaret(oldItem);
+      allItems.forEach(function(el){el.classList.remove('selected')});
+      newItem.classList.add('selected');
+      movePill(listKey,idx);
+
+      var newLabel=getLabel(newItem);
+      clearTextNodes(newLabel);
+      addCaret(newItem);
+      setCaretTyping(newItem,true);
+      typewrite(newItem,getLabelText(newItem),function(){
+        setCaretTyping(newItem,false);
+        typing=false;
+      });
+    });
+  }
+
+  // ── Construction animation ──
+  function constructIcon(item){
+    var svg=item.querySelector('.nav-icon svg');
+    var id=item.getAttribute('data-id');
+    var parts=svg.querySelectorAll('path,rect,circle,line');
+    var delay=id==='settings'?55:70;
+    for(var i=0;i<parts.length;i++){
+      var p=parts[i];
+      var filled=p.getAttribute('fill')&&p.getAttribute('fill')!=='none';
+      if(filled){
+        p.style.transformBox='fill-box';
+        p.style.transformOrigin='center';
+        p.style.transition='none';
+        p.style.transform='scale(0)';
+        p.style.opacity='0';
+      }else{
+        var len=p.getTotalLength?p.getTotalLength():60;
+        p.style.transition='none';
+        p.style.strokeDasharray=len;
+        p.style.strokeDashoffset=len;
+      }
+    }
+    svg.style.transition='none';
+    svg.style.transform='perspective(60px) rotateY(-20deg)';
+    void svg.offsetWidth;
+    svg.style.transition='transform .5s cubic-bezier(.4,0,.2,1)';
+    for(var i=0;i<parts.length;i++){
+      (function(p,idx){
+        var filled=p.getAttribute('fill')&&p.getAttribute('fill')!=='none';
+        setTimeout(function(){
+          if(filled){
+            p.style.transition='transform .3s cubic-bezier(.34,1.56,.64,1),opacity .15s ease-out';
+            p.style.transform='scale(1)';
+            p.style.opacity='1';
+          }else{
+            var dur=p.tagName==='rect'?'.4':'.25';
+            p.style.transition='stroke-dashoffset '+dur+'s ease-out';
+            p.style.strokeDashoffset='0';
+          }
+        },idx*delay+30);
+      })(parts[i],i);
+    }
+    setTimeout(function(){svg.style.transform='perspective(60px) rotateY(4deg)'},80);
+    setTimeout(function(){
+      svg.style.transition='transform .3s ease-out';
+      svg.style.transform='';
+    },parts.length*delay+200);
+    setTimeout(function(){
+      for(var j=0;j<parts.length;j++){
+        var p=parts[j];
+        p.style.strokeDasharray='';p.style.strokeDashoffset='';
+        p.style.transition='';p.style.transform='';
+        p.style.transformBox='';p.style.transformOrigin='';
+        p.style.opacity='';
+      }
+      svg.style.transition='';svg.style.transform='';
+    },parts.length*delay+600);
+  }
+  allItems.forEach(function(item){
+    item.addEventListener('click',function(){
+      constructIcon(item);
+      selectItem(item);
+    });
+  });
+
+  // ── Init labels + caret ──
+  function initLabels(){
+    allItems.forEach(function(item){
+      var label=getLabel(item);
+      clearTextNodes(label);
+      label.appendChild(document.createTextNode(getLabelText(item)));
+      if(item.classList.contains('selected')){
+        addCaret(item);
+      }else{
+        removeCaret(item);
+      }
+    });
+  }
+
+  // ── Entrance ──
+  function entrance(){
+    allItems.forEach(function(item){item.classList.remove('entered')});
+    toggleBtn.classList.remove('entered');
+    clearPills();
+
+    allItems.forEach(function(item,i){
+      setTimeout(function(){
+        item.classList.add('entered');
+        if(item.classList.contains('selected')){
+          var listKey=item.closest('.nav-list').id.replace('list-','');
+          var list=lists[listKey];
+          var idx=Array.prototype.indexOf.call(list.items,item);
+          movePill(listKey,idx);
+        }
+      },(i+1)*65);
+    });
+    setTimeout(function(){
+      toggleBtn.classList.add('entered');
+      initLabels();
+    },(allItems.length+1)*65);
+  }
+
+  // ── Toggle ──
+  var toggling=false;
+  toggleBtn.addEventListener('click',function(){
+    if(toggling||typing)return;
+    toggling=true;
+    var isCollapsing=!sidebar.classList.contains('collapsed');
+
+    if(isCollapsing){
+      var items=Array.prototype.slice.call(allItems).reverse();
+      items.forEach(function(item,i){
+        setTimeout(function(){
+          item.style.transition='opacity .15s ease, transform .15s ease';
+          item.style.opacity='0';item.style.transform='translateX(-6px)';
+        },i*30);
+      });
+      clearPills();
+      setTimeout(function(){
+        sidebar.classList.add('collapsed');
+        setTimeout(function(){
+          allItems.forEach(function(item){
+            item.style.transition='opacity .2s ease, transform .2s ease';
+            item.style.opacity='1';item.style.transform='translateX(0)';
+          });
+          setTimeout(function(){
+            allItems.forEach(function(item){item.style.transition='';item.style.opacity='';item.style.transform=''});
+            allItems.forEach(function(item){
+              if(item.classList.contains('selected')){
+                var lk=item.closest('.nav-list').id.replace('list-','');
+                var l=lists[lk];
+                var ix=Array.prototype.indexOf.call(l.items,item);
+                movePill(lk,ix);
+              }
+            });
+            toggling=false;
+          },250);
+        },300);
+      },allItems.length*30+80);
+    }else{
+      allItems.forEach(function(item){item.style.opacity='0';item.style.transform='translateX(-6px)'});
+      sidebar.classList.remove('collapsed');
+      setTimeout(function(){
+        allItems.forEach(function(item,i){
+          setTimeout(function(){
+            item.style.transition='opacity .25s ease, transform .25s ease';
+            item.style.opacity='1';item.style.transform='translateX(0)';
+            if(item.classList.contains('selected')){
+              var lk=item.closest('.nav-list').id.replace('list-','');
+              var l=lists[lk];
+              var ix=Array.prototype.indexOf.call(l.items,item);
+              movePill(lk,ix);
+            }
+          },i*40);
+        });
+        setTimeout(function(){
+          allItems.forEach(function(item){item.style.transition='';item.style.opacity='';item.style.transform=''});
+          initLabels();
+          toggling=false;
+        },allItems.length*40+300);
+      },350);
+    }
+  });
+
+  // ── Replay ──
+  replayBtn.addEventListener('click',function(){
+    if(toggling||typing)return;
+    allItems.forEach(function(el){el.classList.remove('selected');removeCaret(el)});
+    allItems[0].classList.add('selected');
+    entrance();
+  });
+
+  window.addEventListener('resize',function(){
+    allItems.forEach(function(item){
+      if(item.classList.contains('selected')){
+        var lk=item.closest('.nav-list').id.replace('list-','');
+        var l=lists[lk];
+        var ix=Array.prototype.indexOf.call(l.items,item);
+        movePill(lk,ix);
+      }
+    });
+  });
+
+  entrance();
+})();
+</script>
+</body>
+</html>
