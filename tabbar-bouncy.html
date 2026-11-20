@@ -32,23 +32,33 @@ body{
 
 .glass{
   position:absolute;inset:0;
-  background:#f5f3f8;
+  background:#f4f7f8;
   will-change:clip-path;
 }
 
 .blob{
   position:absolute;width:50px;height:50px;border-radius:50%;
-  background:linear-gradient(160deg,rgba(140,180,230,.65),rgba(70,120,195,.72) 50%,rgba(45,85,160,.78));
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.25);
-  box-shadow:0 4px 20px rgba(40,80,160,.3),0 1px 2px rgba(0,0,0,.08),inset 0 1px 1px rgba(255,255,255,.3),inset 0 -2px 4px rgba(25,50,120,.2);
+  background:linear-gradient(165deg,rgba(195,225,225,.35),rgba(170,210,215,.40) 40%,rgba(150,200,210,.44) 70%,rgba(140,195,205,.38));
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:.8px solid rgba(255,255,255,.55);
+  box-shadow:
+    0 6px 24px rgba(120,180,185,.15),
+    0 1px 3px rgba(0,0,0,.03),
+    inset 0 1px 0 rgba(255,255,255,.6),
+    inset 0 -1px 2px rgba(100,170,180,.1);
   pointer-events:none;will-change:transform;
   transform:translate(-50%,-50%);
 }
+.blob::before{
+  content:'';position:absolute;inset:-1px;border-radius:50%;
+  background:conic-gradient(from 160deg,transparent 40%,rgba(180,225,230,.5) 48%,rgba(220,245,245,.7) 52%,transparent 60%);
+  mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 1.5px));
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 1.5px));
+}
 .blob::after{
-  content:'';position:absolute;top:3px;left:15%;right:15%;height:40%;
+  content:'';position:absolute;top:4px;left:16%;right:16%;height:36%;
   border-radius:50%;
-  background:linear-gradient(180deg,rgba(255,255,255,.45) 0%,rgba(255,255,255,.1) 50%,transparent);
+  background:linear-gradient(180deg,rgba(255,255,255,.5) 0%,rgba(220,240,240,.15) 60%,transparent);
 }
 
 .items{
@@ -69,7 +79,7 @@ body{
   transition:transform .45s cubic-bezier(.34,1.56,.64,1),stroke .25s;
 }
 .tab.off svg{stroke:rgba(120,110,135,.55)}
-.tab.on svg{stroke:#fff;transform:scale(1.15);filter:drop-shadow(0 0 6px rgba(255,255,255,.7)) drop-shadow(0 0 14px rgba(80,130,220,.5))}
+.tab.on svg{stroke:#fff;transform:scale(1.15);filter:drop-shadow(0 0 5px rgba(255,255,255,.6)) drop-shadow(0 0 12px rgba(140,210,215,.4))}
 
 html.is-preview body{padding:0;align-items:flex-end}
 html.is-preview .bar{width:100%;animation:none;transform:none;opacity:1}
