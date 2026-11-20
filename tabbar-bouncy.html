@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tab Bar · Bouncy</title>
+<script>if(new URLSearchParams(location.search).has('preview'))document.documentElement.classList.add('is-preview')</script>
+<style>
+*{margin:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{
+  background:#1a0826;
+  font-family:-apple-system,"SF Pro Display","SF Pro Text",system-ui,sans-serif;
+  user-select:none;-webkit-user-select:none;
+}
+
+/* ---- Tab bar ---- */
+.bar{
+  position:fixed;bottom:0;left:0;right:0;height:96px;
+  z-index:100;overflow:visible;
+  transform:translateY(100%);
+  animation:slideUp .55s cubic-bezier(.34,1.56,.64,1) .2s forwards;
+}
+@keyframes slideUp{to{transform:none}}
+
+.glass{
+  position:absolute;inset:0;
+  background:rgba(255,255,255,.65);
+  backdrop-filter:blur(50px) saturate(1.8);
+  -webkit-backdrop-filter:blur(50px) saturate(1.8);
+  will-change:clip-path;
+}
+.glass::after{
+  content:'';position:absolute;inset:0;
+  clip-path:inherit;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.35),transparent 3px);
+}
+
+.blob{
+  position:absolute;width:54px;height:54px;border-radius:50%;
+  background:linear-gradient(140deg,#f78dba,#e45f96 45%,#c94580);
+  box-shadow:0 8px 28px rgba(200,60,110,.45),0 -4px 16px rgba(240,80,140,.15),0 2px 4px rgba(0,0,0,.08),inset 0 1.5px 0 rgba(255,255,255,.4);
+  pointer-events:none;will-change:transform;
+  transform:translate(-50%,-50%);
+}
+.blob::after{
+  content:'';position:absolute;top:5px;left:18%;right:18%;height:28%;
+  border-radius:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.5),transparent);
+}
+
+.items{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:space-around;
+  padding:0 10px 24px;
+}
+
+.tab{
+  display:flex;align-items:center;justify-content:center;
+  width:52px;height:52px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  position:relative;z-index:2;
+}
+.tab svg{
+  width:25px;height:25px;
+  stroke-linecap:round;stroke-linejoin:round;fill:none;stroke-width:1.7;
+  transition:transform .45s cubic-bezier(.34,1.56,.64,1),stroke .25s;
+}
+.tab.off svg{stroke:rgba(80,50,90,.45)}
+.tab.on svg{stroke:#fff;transform:scale(1.15)}
+
+@supports not (backdrop-filter:blur(1px)){.glass{background:rgba(255,255,255,.92)}}
+html.is-preview .bar{position:absolute;animation:none;transform:none}
+</style>
+</head>
+<body>
+<nav class="bar" id="bar">
+  <div class="glass" id="gl"></div>
+  <div class="blob" id="bl"></div>
+  <div class="items" id="it"></div>
+</nav>
+<script>
+(function(){
+  var tabs=[
+    {name:'Home',
+     svg:'<path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V19a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1V9.5"/>'},
+    {name:'Explore',
+     svg:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/>'},
+    {name:'Favorites',
+     svg:'<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>'},
+    {name:'Alerts',
+     svg:'<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>'},
+    {name:'Profile',
+     svg:'<circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-7 8-7s8 3 8 7"/>'}
+  ];
+
+  var active=0,tabEls=[],centers=[],barW,barH;
+  var gl=document.getElementById('gl');
+  var bl=document.getElementById('bl');
+  var it=document.getElementById('it');
+
+  tabs.forEach(function(t,i){
+    var el=document.createElement('div');
+    el.className='tab '+(i===active?'on':'off');
+    el.innerHTML='<svg viewBox="0 0 24 24">'+t.svg+'</svg>';
+    el.addEventListener('click',function(){pick(i)});
+    it.appendChild(el);tabEls.push(el);
+  });
+
+  /* Spring physics */
+  function Spring(val,stiff,damp){
+    this.v=val;this.t=val;this.vel=0;this.s=stiff;this.d=damp;
+  }
+  Spring.prototype.tick=function(dt){
+    this.vel+=(-this.s*(this.v-this.t)-this.d*this.vel)*dt;
+    this.v+=this.vel*dt;
+  };
+  Spring.prototype.settled=function(){
+    return Math.abs(this.v-this.t)<.25&&Math.abs(this.vel)<.2;
+  };
+
+  var spX,spSc,raf=0;
+
+  function measure(){
+    var br=document.getElementById('bar').getBoundingClientRect();
+    barW=br.width;barH=br.height;
+    centers=tabEls.map(function(el){
+      var r=el.getBoundingClientRect();
+      return r.left-br.left+r.width/2;
+    });
+  }
+
+  /* Morphing bar shape — Gaussian bump with concave dips (Mexican-hat wavelet) */
+  function barPath(cx){
+    var base=26,amp=22,sig=42,n=100;
+    var d='M0 '+barH+' L0 '+base;
+    for(var i=0;i<=n;i++){
+      var x=i/n*barW;
+      var norm=(x-cx)/sig;
+      var g=Math.exp(-norm*norm/2);
+      var y=base-amp*g+amp*.18*norm*norm*g;
+      d+=' L'+x.toFixed(1)+' '+Math.max(1,y).toFixed(1);
+    }
+    return d+' L'+barW+' '+barH+' Z';
+  }
+
+  function render(){
+    gl.style.clipPath="path('"+barPath(spX.v)+"')";
+    bl.style.left=spX.v+'px';
+    bl.style.top='36px';
+    bl.style.transform='translate(-50%,-50%) scale('+spSc.v.toFixed(3)+')';
+  }
+
+  function animate(){
+    var last=performance.now();
+    function step(now){
+      var dt=Math.min((now-last)/1e3,.033);last=now;
+      spX.tick(dt);spSc.tick(dt);
+      render();
+      if(spX.settled()&&spSc.settled()){
+        spX.v=spX.t;spSc.v=spSc.t;render();raf=0;return;
+      }
+      raf=requestAnimationFrame(step);
+    }
+    if(!raf)raf=requestAnimationFrame(step);
+  }
+
+  function pick(i){
+    if(i===active)return;
+    tabEls[active].className='tab off';
+    active=i;
+    tabEls[active].className='tab on';
+    spX.t=centers[i];
+    spSc.v=.8;spSc.t=1;spSc.vel=0;
+    animate();
+  }
+
+  window.addEventListener('resize',function(){
+    measure();if(spX){spX.v=spX.t=centers[active]}render();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'&&active>0)pick(active-1);
+    if(e.key==='ArrowRight'&&active<tabs.length-1)pick(active+1);
+  });
+
+  requestAnimationFrame(function(){
+    measure();
+    spX=new Spring(centers[active],180,12);
+    spSc=new Spring(1,300,20);
+    render();
+  });
+})();
+</script>
+</body>
+</html>
