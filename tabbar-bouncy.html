@@ -9,42 +9,42 @@
 *{margin:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 body{
-  background:#1a0826;
+  background:#fff;
   font-family:-apple-system,"SF Pro Display","SF Pro Text",system-ui,sans-serif;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:60px;
   user-select:none;-webkit-user-select:none;
 }
 
-/* ---- Tab bar ---- */
 .bar{
-  position:fixed;bottom:0;left:0;right:0;height:96px;
-  z-index:100;overflow:visible;
-  transform:translateY(100%);
-  animation:slideUp .55s cubic-bezier(.34,1.56,.64,1) .2s forwards;
+  position:relative;
+  width:375px;height:88px;
+  overflow:visible;
+  transform:translateY(16px);opacity:0;
+  animation:fadeIn .5s cubic-bezier(.34,1.56,.64,1) .15s forwards;
 }
-@keyframes slideUp{to{transform:none}}
+@keyframes fadeIn{to{transform:none;opacity:1}}
+
+.shadow-wrap{
+  position:absolute;inset:0;
+  filter:drop-shadow(0 2px 20px rgba(0,0,0,.08)) drop-shadow(0 0 1px rgba(0,0,0,.04));
+}
 
 .glass{
   position:absolute;inset:0;
-  background:rgba(255,255,255,.65);
-  backdrop-filter:blur(50px) saturate(1.8);
-  -webkit-backdrop-filter:blur(50px) saturate(1.8);
+  background:#f5f3f8;
   will-change:clip-path;
-}
-.glass::after{
-  content:'';position:absolute;inset:0;
-  clip-path:inherit;pointer-events:none;
-  background:linear-gradient(180deg,rgba(255,255,255,.35),transparent 3px);
 }
 
 .blob{
-  position:absolute;width:54px;height:54px;border-radius:50%;
+  position:absolute;width:50px;height:50px;border-radius:50%;
   background:linear-gradient(140deg,#f78dba,#e45f96 45%,#c94580);
-  box-shadow:0 8px 28px rgba(200,60,110,.45),0 -4px 16px rgba(240,80,140,.15),0 2px 4px rgba(0,0,0,.08),inset 0 1.5px 0 rgba(255,255,255,.4);
+  box-shadow:0 6px 24px rgba(200,60,110,.4),0 2px 4px rgba(0,0,0,.06),inset 0 1.5px 0 rgba(255,255,255,.4);
   pointer-events:none;will-change:transform;
   transform:translate(-50%,-50%);
 }
 .blob::after{
-  content:'';position:absolute;top:5px;left:18%;right:18%;height:28%;
+  content:'';position:absolute;top:4px;left:18%;right:18%;height:28%;
   border-radius:50%;
   background:linear-gradient(180deg,rgba(255,255,255,.5),transparent);
 }
@@ -52,30 +52,32 @@ body{
 .items{
   position:absolute;inset:0;
   display:flex;align-items:center;justify-content:space-around;
-  padding:0 10px 24px;
+  padding:0 8px 12px;
 }
 
 .tab{
   display:flex;align-items:center;justify-content:center;
-  width:52px;height:52px;cursor:pointer;
+  width:48px;height:48px;cursor:pointer;
   -webkit-tap-highlight-color:transparent;touch-action:manipulation;
   position:relative;z-index:2;
 }
 .tab svg{
-  width:25px;height:25px;
+  width:23px;height:23px;
   stroke-linecap:round;stroke-linejoin:round;fill:none;stroke-width:1.7;
   transition:transform .45s cubic-bezier(.34,1.56,.64,1),stroke .25s;
 }
-.tab.off svg{stroke:rgba(80,50,90,.45)}
-.tab.on svg{stroke:#fff;transform:scale(1.15)}
+.tab.off svg{stroke:rgba(140,130,150,.35);filter:blur(.3px)}
+.tab.on svg{stroke:#fff;transform:scale(1.15);filter:drop-shadow(0 0 6px rgba(255,255,255,.7)) drop-shadow(0 0 14px rgba(233,100,160,.5))}
 
-@supports not (backdrop-filter:blur(1px)){.glass{background:rgba(255,255,255,.92)}}
-html.is-preview .bar{position:absolute;animation:none;transform:none}
+html.is-preview body{padding:0;align-items:flex-end}
+html.is-preview .bar{width:100%;animation:none;transform:none;opacity:1}
 </style>
 </head>
 <body>
 <nav class="bar" id="bar">
-  <div class="glass" id="gl"></div>
+  <div class="shadow-wrap">
+    <div class="glass" id="gl"></div>
+  </div>
   <div class="blob" id="bl"></div>
   <div class="items" id="it"></div>
 </nav>
@@ -130,10 +132,12 @@ html.is-preview .bar{position:absolute;animation:none;transform:none}
     });
   }
 
-  /* Morphing bar shape — Gaussian bump with concave dips (Mexican-hat wavelet) */
+  /* Morphing bar shape with rounded bottom corners */
   function barPath(cx){
-    var base=26,amp=22,sig=42,n=100;
-    var d='M0 '+barH+' L0 '+base;
+    var base=24,amp=20,sig=38,n=80,R=24;
+    var d='M '+R+' '+barH;
+    d+=' Q 0 '+barH+' 0 '+(barH-R);
+    d+=' L0 '+base;
     for(var i=0;i<=n;i++){
       var x=i/n*barW;
       var norm=(x-cx)/sig;
@@ -141,13 +145,17 @@ html.is-preview .bar{position:absolute;animation:none;transform:none}
       var y=base-amp*g+amp*.18*norm*norm*g;
       d+=' L'+x.toFixed(1)+' '+Math.max(1,y).toFixed(1);
     }
-    return d+' L'+barW+' '+barH+' Z';
+    d+=' L'+barW+' '+(barH-R);
+    d+=' Q '+barW+' '+barH+' '+(barW-R)+' '+barH;
+    d+=' Z';
+    return d;
   }
 
   function render(){
     gl.style.clipPath="path('"+barPath(spX.v)+"')";
+    var blobY=(88-12)/2;
     bl.style.left=spX.v+'px';
-    bl.style.top='36px';
+    bl.style.top=blobY+'px';
     bl.style.transform='translate(-50%,-50%) scale('+spSc.v.toFixed(3)+')';
   }
 
