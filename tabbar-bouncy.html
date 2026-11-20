@@ -92,13 +92,21 @@ body{
   transition:transform .45s cubic-bezier(.34,1.56,.64,1),stroke .25s;
 }
 .tab.off svg{stroke:rgba(120,125,140,.4);filter:blur(.7px)}
-.tab.on svg{stroke:rgba(20,40,110,.85);stroke-width:2;transform:scale(1.15)}
+.tab.on svg{stroke:rgba(20,40,110,.85);stroke-width:2;transform:scale(1.12,1.18);filter:url(#glass)}
 
 html.is-preview body{padding:0;align-items:flex-end}
 html.is-preview .bar{width:100%;animation:none;transform:none;opacity:1}
 </style>
 </head>
 <body>
+<svg style="position:absolute;width:0;height:0" aria-hidden="true">
+  <defs>
+    <filter id="glass">
+      <feTurbulence type="turbulence" baseFrequency=".04 .06" numOctaves="2" seed="3" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="4.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
 <nav class="bar" id="bar">
   <div class="shadow-wrap">
     <div class="glass" id="gl"></div>
